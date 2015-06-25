@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <ImageView
+        android:id="@+id/imgIcon"
+        android:layout_width="@dimen/main_item_icon_height"
+        android:layout_height="@dimen/main_item_icon_height"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/main_item_icon_margin_right"
+        android:layout_marginRight="@dimen/main_item_icon_margin_right"
+        android:src="@drawable/ic_launcher" />
+
+    <com.HomeCenter2.ui.ScheduleImageView
+        android:id="@+id/imgOn"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="@dimen/main_item_icon_margin_right"
+        android:layout_marginLeft="@dimen/main_item_icon_margin_right"
+        android:layout_marginRight="@dimen/main_item_icon_margin_right"
+        android:layout_marginTop="@dimen/main_item_icon_margin_right"
+        android:src="@drawable/btn_on_icon" />
+
+    <LinearLayout
+        android:id="@+id/linearTitle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/imgOn"
+        android:layout_toRightOf="@id/imgIcon"
+        android:gravity="center_vertical"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/txtTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="device"
+            android:textAppearance="?android:attr/textAppearanceLarge" >
+        </TextView>
+
+        <LinearLayout
+            android:id="@+id/linearId"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textViewId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:text="@string/rid"
+                    android:textAppearance="?android:attr/textAppearanceMedium" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/txtRoomId"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:text="Content"
+                    android:textAppearance="?android:attr/textAppearanceMedium" >
+                </TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                >
+
+				<TextView
+                    android:id="@+id/txtOther"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"        
+                    android:text="@string/lid"            
+                    android:textAppearance="?android:attr/textAppearanceMedium" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/txtLockId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"                    
+                    android:ellipsize="marquee"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    >
+                </TextView>
+
+                
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

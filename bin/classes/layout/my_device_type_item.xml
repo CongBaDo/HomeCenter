@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.HomeCenter2.ui.CheckableLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/main_item_height" >
+
+    <CheckedTextView
+        android:id="@+id/img_choose_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/main_item_icon_margin_right"
+        android:layout_marginRight="@dimen/main_item_icon_margin_right"
+        android:checkMark="@drawable/checkbox" />
+
+    <ImageView
+        android:id="@+id/imgIcon"
+        android:layout_width="@dimen/main_item_icon_height"
+        android:layout_height="@dimen/main_item_icon_height"
+        android:layout_alignParentLeft="true"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/main_item_icon_margin_right"
+        android:layout_marginLeft="@dimen/main_item_icon_margin_right"
+        android:layout_marginRight="@dimen/main_item_icon_margin_right"
+        android:layout_marginTop="@dimen/main_item_icon_margin_right"
+        android:src="@drawable/ic_launcher" />
+
+    <TextView
+        android:id="@+id/txtTitle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceLarge" >
+    </TextView>
+
+</com.HomeCenter2.ui.CheckableLinearLayout>

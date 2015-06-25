@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.HomeCenter2.ui.CheckableLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/main_item_height" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/main_item_height"
+        android:layout_weight="1" >
+
+        <ImageView
+            android:id="@+id/imgIcon"
+            android:layout_width="@dimen/main_item_icon_height"
+            android:layout_height="@dimen/main_item_icon_height"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            
+            android:layout_marginLeft="@dimen/main_item_icon_margin_right"
+            android:layout_marginRight="@dimen/main_item_icon_margin_right"            
+            android:src="@drawable/ic_launcher"/>
+
+        <TextView
+            android:id="@+id/txtContent"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/main_item_icon_margin_right"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="abc"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/txtTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/txtContent"
+            android:layout_toRightOf="@id/imgIcon"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="abcdef"
+            android:textAppearance="?android:attr/textAppearanceLarge" >
+        </TextView>
+    </RelativeLayout>
+
+    <CheckedTextView
+        android:id="@+id/img_choose_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/main_item_icon_margin_right"
+        android:layout_marginRight="@dimen/main_item_icon_margin_right"
+        android:checkMark="@drawable/checkbox" />
+
+</com.HomeCenter2.ui.CheckableLinearLayout>

@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="app_name">VietHomeSystem</string>
+    <string name="home">Home</string>
+    <string name="settings">Settings</string>
+    <string name="config">Config</string>
+    <string name="connect">Connect</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
+    <string name="exit">Exit</string>
+
+    <!-- login -->
+    <string name="showpw">Show password.</string>
+    <string name="refreshpw">Refresh</string>
+    <string name="server_address">Server Address</string>
+    <string name="server">Server</string>
+    <string name="port_number">Port</string>
+    
+
+    <!-- Switch preference -->
+    <string name="nw_setting_on">On</string>
+    <string name="nw_setting_off">Off</string>
+    <string name="nw_wifi_title">Wi-Fi</string>
+    <string name="switch_on">ON</string>
+    <string name="switch_off">OFF</string>
+
+    <!-- tab -->
+    <string name="room_in_house_tab">room_in_house</string>
+
+    <!-- setting -->
+    <string name="admin">Admin</string>
+    <string name="username">Username:</string>
+    <string name="password">Password</string>
+    <string name="ip_address">IP Address</string>
+    <string name="light_level_trigger">Light level Trigger</string>
+    <string name="smoke_level_trigger">Smoke level Trigger</string>
+    <string name="temperature_trigger">Temperature Trigger</string>
+    <string name="phone01">Phone# 1</string>
+    <string name="phone02">Phone# 2</string>
+    <string name="phone03">Phone# 3</string>
+    <string name="gsm_message">GSM Message</string>
+    <string name="alarm">Alarm!! There is intruder inside the house</string>
+
+    <!-- devices types -->
+    <string name="area">Area</string>
+    <string name="room">Room</string>
+    <string name="temperature">Temperature</string>
+    <string name="light">Light</string>
+    <string name="fan">Fan</string>
+    <string name="cock">Cock</string>
+    <string name="motion">Motion</string>
+    <string name="doorstatus">DoorStatus</string>
+    <string name="lamp">Lamp</string>
+    <string name="doorlock">DoorLock</string>
+    <string name="rollerShutter">RollerShutter</string>
+    <string name="empty">Empty</string>
+    <string name="device">Device</string>
+    <string name="fridge">Fridge</string>
+    <string name="plug_device">Plug device</string>
+    <string name="smoke">Smoke</string>
+    <string name="camera">Camera</string>
+    <string name="devices">Devices</string>
+
+    <!-- Device -->
+    <string name="temp_c">&#x2103;</string>
+    <string name="light_x">X</string>
+    <string name="on">ON</string>
+    <string name="off">OFF</string>
+    <string name="close">Close</string>
+    <string name="open">Open</string>
+    <string name="lock">Lock</string>
+    <string name="unlock">Unlock</string>
+    <string name="save">Save</string>    
+    <string name="room_gsm">GSM</string>
+    <string name="room_audio">Audio</string>
+    <string name="speak">Speak</string>
+
+    <!-- Dialog -->
+    <string name="warning">Warning</string>
+    <string name="info">Information</string>
+    <string name="messsage_warning_when_disible_room">All devices in your room will be disibled.</string>
+    <string name="messsage_warning_when_disible_device">The device will be disibled</string>
+    <string name="message_info_room_added">Room is added.</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+    <string name="type_device">Type of device</string>
+
+    <!-- add device -->
+    <string name="id">Id:</string>
+    <string name="name">Name:</string>
+
+    <!-- setup content device -->
+    <string name="change_icon">Change type</string>
+    <string name="turn_on">Turn ON</string>
+    <string name="turn_off">Turn OFF</string>
+    <!--
+    <string name="hour">Hour</string>
+    <string name="minute">Min</string>
+    <string name="day">Day</string>
+    <string name="month">Month</string>
+    -->
+    <string name="repeat">Repeat:</string>
+    <string name="mon">Mon</string>
+    <string name="tue">Tue</string>
+    <string name="wed">Wed</string>
+    <string name="thu">Thu</string>
+    <string name="fri">Fri</string>
+    <string name="sat">Sat</string>
+    <string name="sun">Sun</string>
+    <string name="everyday">EveryDay</string>
+    
+    <string name="smart_energy">Smart Energy</string>
+    <string name="turned_on_when">Turned-On when</string>
+    <string name="turned_off_when">Turned-Off when</string>
+
+    <!-- Login -->
+    <string name="login_fail">Username or Password is wrong</string>
+    <string name="login_progress">Connecting...</string>
+    <string name="server_fail">Server Address or Port is wrong</string>
+
+    <!-- Config -->
+    <string name="save_config_success">Save Config is successful.</string>
+    <string name="save_config_fail">Save Config is fail.</string>
+    <string name="rid">Room Id:</string>
+    <string name="lid">Lock Id:</string>
+
+    <!-- Set on or off a device -->
+    <string name="set_on_off_fail">Set Device is fail.</string>
+
+    <!-- Socket -->
+    <string name="connect_socket_fail">Connect socket is fail.</string>
+
+    <!-- MainMenuItem -->
+    <string name="my_account_menu_item">My account</string>
+    <string name="my_protection_menu_item">My protection</string>
+    <string name="my_devices_menu_item">My devices</string>
+    <string name="my_sensors_menu_item">My sensors</string>
+    <string name="my_cameras_menu_item">My cameras</string>
+    <string name="my_remote_menu_item">My remotes</string>
+    <string name="my_parameters_menu_item">My parameters</string>
+    <string name="my_audio_menu_item">My Audio</string>
+    <string name="my_energy_menu_item">My Energy</string>
+
+    <!-- Refresh list view -->
+    <string name="pull_to_refresh_pull_label">Pull to refresh&#8230;</string>
+    <string name="pull_to_refresh_release_label">Release to refresh&#8230;</string>
+    <string name="pull_to_refresh_refreshing_label">Updating&#8230;</string>
+    <string name="pull_to_refresh_tap_label">Tap to refresh&#8230;</string>
+    <string name="pulldown_refresh_text">Pull down to refresh</string>
+
+    <!-- Air Condition Remote -->
+    <string name="air_fan">Fan</string>
+    <string name="air_swing">Swing</string>
+    <string name="account">My account</string>
+    <string name="infomation">Infomation</string>
+    <string name="control">Control</string>
+    <string name="update">Update</string>
+    <string name="schedule">Schedule</string>
+
+    <!-- Detail screen -->
+    <string name="schedule01">Schedule 1:</string>
+    <string name="schedule02">Schedule 2:</string>
+    <string name="schedule03">Schedule 3:</string>
+    <string name="schedule04">Schedule 4:</string>
+    <string name="day">Day: </string>
+    <string name="time">Time: </string>
+
+    <!-- Audio -->
+    <string name="speaker">Speaker</string>
+    <string name="intercom_connection1">Intercom Connection 1</string>
+    <string name="intercom_connection2">Intercom Connection 2</string>
+    <string name="intercom_connection3">Intercom Connection 3</string>
+    <string name="intercom_connection4">Intercom Connection 4</string>
+    
+    <!-- Energy -->
+    <string name="from">From:</string>
+    <string name="to">To:</string>
+    <string name="duration">Duration:</string>
+    <string name="total">Total:</string>
+    <string name="by">&#160;&#160;=&#160;&#160;</string>
+    <string name="kilowatt">&#160;kw</string>
+    
+    <!-- Schedule remote -->
+    <string name="media_button">Media button</string>
+    
+    <string name="time_on">Time On:</string>
+    <string name="time_off">Time Off:</string>
+    
+    <string name="all_room">All Room</string>
+    
+    <string name="time_server">Time</string>
+    <string name="sync">Sync</string>
+    <string name="remote_doorlock">Remote</string>
+    <string name="none_temperature">X</string>
+
+    <string name="active">Active</string>
+    <string name="deactive">DeActive</string>
+    <string name="remote">Remote</string>
+    <string name="local">Local</string>
+    <string name="sensors">Sensors</string>
+</resources>

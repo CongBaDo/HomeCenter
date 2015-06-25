@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lnDetailS01"
+    style="@style/schedule_main_linear_layout" >
+
+    <LinearLayout
+        android:id="@+id/lnHeaderS01"
+        style="@style/schedule_header" >
+
+        <RelativeLayout
+            android:id="@+id/rltHeaderS01"
+            style="@style/schedule_rlt_header"
+            android:layout_width="match_parent" >
+
+            <TextView
+                android:id="@+id/editTimeS01"
+                style="@style/schedule_txt_time"
+                android:text="12:59" />
+
+            <com.HomeCenter2.ui.ScheduleImageView
+                android:id="@+id/imgOnOffS01"
+                style="@style/schedule_on_off" >
+            </com.HomeCenter2.ui.ScheduleImageView>
+        </RelativeLayout>
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rltContentS01"
+        style="@style/schedule_rlt_Content" >
+
+        <LinearLayout
+            android:id="@+id/lnBodyS01"
+            style="@style/schedule_linear_body" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal" >
+
+                <RadioButton
+                    android:id="@+id/rbtnDMY01"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" 
+                     android:layout_marginTop="8dp"/>
+
+                <TextView
+                    android:id="@+id/editDayS01"
+                    style="@style/schedule_txt_day"
+                    android:layout_marginTop="8dp"
+                    android:text="12:11:2014" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal" >
+
+                <RadioButton
+                    android:id="@+id/rbtnDay01"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <include layout="@layout/detail_day_shedule_01" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal" >
+
+                <!-- TMT -->
+
+                <com.HomeCenter2.ui.ScheduleImageView
+                    android:id="@+id/swS01"
+                    style="@style/schedule_add_delete" />
+
+                <!-- <ImageButton
+                    android:id="@+id/btnSyncS01"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/btn_day"
+                    android:src="@android:drawable/ic_menu_save" /> -->
+
+                    <ImageButton
+                        android:id="@+id/btnSyncS01"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="20dp"
+                        android:background="@drawable/ic_turn_on_" />
+
+            </RelativeLayout>
+
+
+
+            <View
+                android:id="@+id/view2"
+                style="@style/schedule_view"
+                android:layout_marginTop="16dp" />
+        </LinearLayout>
+
+        <com.HomeCenter2.ui.FootLayout
+            android:id="@+id/lnFootS01"
+            style="@style/schedule_linear_foot"
+            android:layout_below="@+id/lnBodyS01" >
+
+            <ImageView
+                android:id="@+id/imageView2"
+                style="@style/schedule_image_foot" >
+            </ImageView>
+
+            <TextView
+                android:id="@+id/tvDayInWeekS01"
+                style="@style/schedule_txt_foot_day"
+                android:text="Sat,Sun,Mon,Tue,Wed,Thu,Fri"/>
+        </com.HomeCenter2.ui.FootLayout>
+    </RelativeLayout>
+
+</LinearLayout>

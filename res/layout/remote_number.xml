@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:layout_marginTop="20dp"
+    android:orientation="vertical" >
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal" >
+
+        <ImageButton
+            android:id="@+id/imbNu1"
+            style="@style/btn_number"            
+            android:src="@drawable/number_1"/>
+
+        <ImageButton
+            android:id="@+id/imbNu2"
+            style="@style/btn_number"
+            android:src="@drawable/number_2" />
+
+        <ImageButton
+            android:id="@+id/imbNu3"
+            style="@style/btn_number"
+            android:src="@drawable/number_3" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal" >
+
+        <ImageButton
+            android:id="@+id/imbNu4"
+            style="@style/btn_number"
+            android:src="@drawable/number_4" />
+
+        <ImageButton
+            android:id="@+id/imbNu5"
+            style="@style/btn_number"
+            android:src="@drawable/number_5" />
+
+        <ImageButton
+            android:id="@+id/imbNu6"
+            style="@style/btn_number"
+            android:src="@drawable/number_6" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal" >
+
+        <ImageButton
+            android:id="@+id/imbNu7"
+            style="@style/btn_number"
+            android:src="@drawable/number_7" />
+
+        <ImageButton
+            android:id="@+id/imbNu8"
+            style="@style/btn_number"
+            android:src="@drawable/number_8" />
+
+        <ImageButton
+            android:id="@+id/imbNu9"
+            style="@style/btn_number"
+            android:src="@drawable/number_9" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal" >
+
+        <ImageButton
+            android:id="@+id/imbNuC"
+            style="@style/btn_number"
+            android:src="@drawable/return000" />
+
+        <ImageButton
+            android:id="@+id/imbNu0"
+            style="@style/btn_number"
+            android:src="@drawable/number_0" />
+
+        <ImageButton
+            android:id="@+id/imbNuT"
+            style="@style/btn_number"
+            android:src="@drawable/pre_ch" />
+    </LinearLayout>
+
+</LinearLayout>

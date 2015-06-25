@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:background="@drawable/shadow_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <!-- row 1 -->
+         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal" >
+
+           <include layout="@layout/btn_air_on" />
+
+           <include layout="@layout/btn_air_off" />
+           
+        </LinearLayout>
+        
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal" >
+
+            <include layout="@layout/btn_air_18" />
+
+            <include layout="@layout/btn_air_20" />
+
+            <include layout="@layout/btn_air_22" />
+
+            <include layout="@layout/btn_air_24" />
+        </LinearLayout>
+
+        <!-- row 2 -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal" >
+
+            <include layout="@layout/view_empty" />
+
+            <include layout="@layout/view_empty" />
+
+            <include layout="@layout/btn_air_top" />
+
+            <include layout="@layout/view_empty" />
+
+            <include layout="@layout/view_empty" />
+        </LinearLayout>
+
+        <!-- row 3 -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal" >
+
+            <include layout="@layout/view_empty" />
+
+            <include layout="@layout/btn_air_fan" />
+
+            <include layout="@layout/view_empty" />
+
+            <include layout="@layout/btn_air_swing" />
+
+            <include layout="@layout/view_empty" />
+        </LinearLayout>
+
+        <!-- row 4 -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"            
+            android:orientation="horizontal" >
+
+            <include layout="@layout/view_empty" />
+
+            <include layout="@layout/view_empty" />
+
+            <include layout="@layout/btn_air_bottom" />
+
+            <include layout="@layout/view_empty" />
+
+            <include layout="@layout/view_empty" />
+        </LinearLayout>
+
+        <!-- row 5 -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal" >
+
+            <include layout="@layout/view_empty" />
+
+            <include layout="@layout/view_empty" />
+
+            <include layout="@layout/view_empty" />
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

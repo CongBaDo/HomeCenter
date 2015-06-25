@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/main_item_height" >
+
+    <ImageView
+        android:id="@+id/imgIcon"
+        android:layout_width="@dimen/main_item_icon_height"
+        android:layout_height="@dimen/main_item_icon_height"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="@dimen/sensor_item_icon_margin_right"
+        android:layout_marginLeft="@dimen/main_item_icon_margin_right"
+        android:layout_marginRight="@dimen/main_item_icon_margin_right"
+        android:layout_marginTop="@dimen/sensor_item_icon_margin_right"
+        android:padding="@dimen/main_item_icon_padding"
+        android:src="@drawable/ic_launcher"
+        android:background="@drawable/circle_btn_grey" />
+
+    <TextView
+        android:id="@+id/txtContent"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/main_item_icon_margin_right"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:text="abc"
+        android:textSize="@dimen/size_text_sensor" />
+
+    <TextView
+        android:id="@+id/txtTitle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/txtContent"
+        android:layout_toRightOf="@id/imgIcon"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:text="abcdef"
+        android:ellipsize="marquee"    
+        android:textAppearance="?android:attr/textAppearanceMedium" >
+    </TextView>
+
+</RelativeLayout>

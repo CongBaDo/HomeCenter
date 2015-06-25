@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="transfer_dialog_items">
+        <item>Move to my other device</item>
+        <item>Transfer to someone else</item>
+    </string-array>
+    <string-array name="active_im_session_dialog_items">
+        <item>Send Message</item>
+        <item>Close</item>
+        <item>Delete</item>
+    </string-array>
+    <string-array name="history_im_session_dialog_items">
+        <item>Send Message</item>
+        <item>Delete</item>
+    </string-array>
+    <string-array name="delete_groups_dialog_item">
+        <item>Remove Group only</item>
+        <item>Remove Group and Buddies</item>
+    </string-array>
+    <string-array name="call_history_dialog_items">
+        <item>Delete from call history</item>
+    </string-array>
+    <string-array name="menuToday">
+        <item>Open In Calender</item>
+    </string-array>
+    <string-array name="menuBuddies_online">
+        <item>Display Options</item>
+        <item>Notifications</item>
+        <item>Log Out</item>
+    </string-array>
+    <string-array name="menuBuddies_offline">
+        <item>Log In</item>
+    </string-array>
+    <string-array name="menuBuddies_offline_common_settings">
+        <item>Presence Log In</item>
+    </string-array>
+    <string-array name="editMenuBuddies">
+        <item>Organize buddies</item>
+        <item>Organize groups</item>
+    </string-array>
+    <string-array name="contact_dialog_item">
+        <item>Call</item>
+        <item>Delete</item>
+    </string-array>
+    <string-array name="directory_dialog_item">
+        <item>Call</item>
+    </string-array>
+    <string-array name="menuMessages">
+        <item>Delete</item>
+    </string-array>
+    <string-array name="audioTemp">
+        <item>Input1</item>
+        <item>Input2</item>
+        <item>Input3</item>
+        <item>Input4</item>
+        <item>Input5</item>
+        <item>Input6</item>
+        <item>Input7</item>
+        <item>Input8</item>
+    </string-array>
+
+</resources>

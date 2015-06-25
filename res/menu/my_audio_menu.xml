@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" 
+    xmlns:HomeCenter2="http://schemas.android.com/apk/res-auto">    
+  <item
+        android:id="@+id/speak_Menu"
+        android:title="@string/speak"
+        android:icon="@drawable/ic_micro"
+        HomeCenter2:showAsAction="always"/>
+  
+  <item
+        android:id="@+id/stop_speak_Menu"
+        android:title="@string/speak"
+        android:icon="@drawable/ic_stop_micro"
+        android:visible="false"
+        HomeCenter2:showAsAction="always"
+        />
+</menu>

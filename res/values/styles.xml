@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2007 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <drawable name="separator_red">#FFAE1200</drawable>
+    <drawable name="separator_green">#FF008115</drawable>
+    <drawable name="grayBg">#FF333333</drawable>
+
+    <style name="dial_btn">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+
+    <style name="btn_number">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">55dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:padding">100dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:background">@drawable/btn_rectangle_background</item>
+    </style>
+
+    <style name="btn_number_pink">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:background">@drawable/btn_cycle_pink_background</item>
+    </style>
+
+    <style name="btn_number_yellow">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:background">@drawable/btn_cycle_yellow_background</item>
+    </style>
+
+    <style name="btn_number_green">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:background">@drawable/btn_cycle_green_background</item>
+    </style>
+
+    <style name="btn_number_blue">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:background">@drawable/btn_cycle_blue_background</item>
+    </style>
+
+    <style name="cycle_btn">
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+
+    <style name="Incoming">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowBackground">@null</item>
+    </style>
+
+    <style name="IccPanel">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowBackground">@drawable/grayBg</item>
+    </style>
+
+    <style name="AlertPanel">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowBackground">@drawable/grayBg</item>
+    </style>
+
+    <style name="info_label">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textAppearance">@style/TextAppearance.info_label</item>
+        <item name="android:paddingRight">4dip</item>
+    </style>
+
+    <style name="info_layout">
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingLeft">10dip</item>
+        <item name="android:paddingTop">10dip</item>
+        <item name="android:paddingRight">10dip</item>
+        <item name="android:paddingBottom">10dip</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="entry_layout">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="TextAppearance" parent="android:TextAppearance"></style>
+
+    <style name="TextAppearance.info_label">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="incall_top_button" parent="android:Widget.Button">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_width">0sp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:padding">0dip</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+        <item name="android:textColor">#000</item>
+    </style>
+
+    <!-- Preference Style for the phone number preferences -->
+    <!-- Preference Style for the emergency callback mode -->
+    <!-- This styles is currently not used and just prepared for further usage -->
+    <style name="EmergencyCallBack">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:colorForeground">#fff</item>
+    </style>
+
+    <!-- Regular (non-toggle) buttons in the in-call onscreen touch UI. -->
+    <style name="InCallTouchButton">
+        <item name="android:gravity">center_horizontal|top</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_marginTop">1dip</item>
+        <item name="android:layout_marginBottom">1dip</item>
+        <item name="android:layout_marginLeft">1dip</item>
+        <item name="android:layout_marginRight">1dip</item>
+        <item name="android:paddingTop">64dip</item>
+        <item name="android:textColor">@color/toggle_btn_color</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">marquee</item>
+    </style>
+
+    <!--
+         Text label next to the small round ImageButtons at the upper corners 
+		of the in-call onscreen touch UI.
+    -->
+    <style name="InCallRoundButtonLabel">
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">5dip</item>
+        <item name="android:layout_marginRight">5dip</item>
+    </style>
+
+    <!--
+         Style for the LinearLayout used to hold the ImageButton and TextView 
+		for the small round buttons at the upper corners of the in-call onscreen 
+		touch UI.
+    -->
+
+    <style name="InCallRoundButtonContainer">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:layout_marginTop">10dip</item>
+    </style>
+
+    <style name="TextAppearance_SlidingTabNormal">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:layout_marginTop">10dip</item>
+    </style>
+
+    <style name="TextAppearance_SlidingTabActive">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:layout_marginTop">10dip</item>
+    </style>
+    <!-- Call history -->
+    <style name="TallTitleBarTheme" parent="android:Theme.NoTitleBar">
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="Theme.Transparent" parent="android:Theme.Dialog">
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+    </style>
+
+    <!--
+    <style name="Widget.Holo.CompoundButton.Switch" parent="android:Widget.CompoundButton">
+        <item name="track">@drawable/switch_track_holo_dark</item>
+        <item name="thumb">@drawable/switch_inner_holo_dark</item>
+        <item name="switchTextAppearance">@android:style/TextAppearance.Small</item>
+        <item name="textOn">@string/switch_on</item>
+        <item name="textOff">@string/switch_off</item>
+        <item name="thumbTextPadding">12dip</item>
+        <item name="switchMinWidth">96dip</item>
+        <item name="switchPadding">16dip</item>
+    </style>
+    -->
+    <!--
+    <style name="Widget.Holo.Light.CompoundButton.Switch" parent="android:Widget.CompoundButton">
+        <item name="track">@drawable/switch_track_holo_light</item>
+        <item name="thumb">@drawable/switch_inner_holo_light</item>
+        <item name="switchTextAppearance">@android:style/TextAppearance.Small</item>
+        <item name="textOn">@string/switch_on</item>
+        <item name="textOff">@string/switch_off</item>
+        <item name="thumbTextPadding">12dip</item>
+        <item name="switchMinWidth">96dip</item>
+        <item name="switchPadding">16dip</item>
+    </style>
+    -->
+    <style name="Preference.SwitchPreference" parent="">
+        <item name="android:layout">@layout/preference</item>
+        <item name="android:widgetLayout">@layout/preference_widget_switch</item>
+        <item name="switchTextOn">@string/switch_on</item>
+        <item name="switchTextOff">@string/switch_off</item>
+    </style>
+
+    <style name="txt_parameter">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>        
+        <item name="android:layout_marginLeft">@dimen/day_margin</item>
+    </style>
+
+    <style name="relative_parameter">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/margin_text_in_setting_screeen</item>        
+    </style>
+
+    <style name="edt_parameter">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/margin_text_in_setting_screeen</item>
+        <item name="android:layout_marginRight">@dimen/margin_text_in_setting_screeen</item>
+        
+        <item name="android:gravity">right</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:imeOptions">actionNext</item>
+        <item name="android:scrollHorizontally">true</item>
+                <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="audio_layout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/margin_group_layout</item>
+        <item name="android:layout_marginRight">@dimen/margin_group_layout</item>
+        <item name="android:background">@drawable/restangle_btn_grey</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="audio_layout_vertical">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/margin_group_layout</item>
+        <item name="android:layout_marginRight">@dimen/margin_group_layout</item>
+        <item name="android:background">@drawable/restangle_btn_grey</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="audio_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/margin_group_layout</item>
+        <item name="android:layout_marginRight">@dimen/margin_group_layout</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+    </style>
+
+    <style name="audio_toogle">
+        <item name="android:layout_width">@dimen/on_off_width</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="audio_button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+
+    <style name="enegy_relative">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/margin_group_layout</item>
+        <item name="android:layout_marginRight">@dimen/margin_group_layout</item>
+        <item name="android:background">@drawable/restangle_btn_grey</item>
+    </style>
+
+    <style name="schedule_main_linear_layout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:layout_marginLeft">12dp</item>
+        <item name="android:layout_marginRight">12dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+    </style>
+
+    <style name="schedule_checkbox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/margin_group_layout</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="schedule_checkbox1">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/margin_group_layout</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+    </style>
+
+    <style name="schedule_main_relative_layout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/margin_group_layout</item>
+    </style>
+
+    <style name="schedule_day_textview">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/day_margin</item>
+        <!-- <item name="android:textSize">@dimen/small_text_size</item> -->
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+    </style>
+
+    <style name="schedule_day_edittext">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:ems">10</item>
+        <item name="android:focusableInTouchMode">false</item>
+        <!-- <item name="android:textSize">@dimen/small_text_size</item> -->
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+    </style>
+
+    <style name="day_textview">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="mon_textview">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:text">@string/mon</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="tue_textview">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:text">@string/tue</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="web_textview">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:text">@string/wed</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="thu_textview">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:text">@string/thu</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="fri_textview">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:text">@string/fri</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="sat_textview">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:text">@string/sat</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="sun_textview">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:text">@string/sun</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="repeat_textview">
+        <item name="android:layout_margin">@dimen/margin_group_layout</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:text">@string/repeat</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+    </style>
+
+    <style name="device_turn_when_textview">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:text">CheckBox</item>
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:layout_marginBottom">6dp</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+    </style>
+
+    <style name="schedule_view">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">2dip</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:background">@android:color/holo_blue_bright</item>
+    </style>
+
+    <style name="schedule_txt_time">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content  </item>
+        <item name="android:textSize">25sp</item>
+        <item name="android:textColor">@color/white</item>            
+    </style>
+
+    <style name="schedule_txt_day">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content  </item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:paddingLeft">10dp</item>
+    </style>
+
+    <style name="schedule_switch">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
+    <style name="schedule_linear_day">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/btn_day</item>
+    </style>
+
+    <style name="day_view">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">4dip</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_marginLeft">6dp</item>
+        <item name="android:layout_marginRight">6dp</item>
+    </style>
+
+    <style name="schedule_txt_foot_day">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content  </item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_marginRight">8dp</item>
+    </style>
+
+    <style name="schedule_header">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/restangle_corner_top_blue_bright</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="schedule_rlt_header">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">45dp</item>         
+        <item name="android:layout_marginLeft">12dp</item>
+        <item name="android:layout_marginRight">12dp</item>
+    </style>
+
+    <style name="schedule_rlt_Content">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="schedule_on_off">
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:background">@drawable/btn_day</item>
+    </style>
+
+    <style name="schedule_linear_body">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">12dp</item>
+        <item name="android:layout_marginRight">12dp</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="schedule_linear_foot">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">12dp</item>
+        <item name="android:layout_marginRight">12dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="schedule_image_foot">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:src">@drawable/ic_action_collapse</item>
+    </style>
+
+    <style name="schedule_add_delete">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_marginLeft">12dp</item>
+        <item name="android:layout_marginRight">12dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+    </style>
+
+    <style name="btn_cycle">
+        <item name="android:layout_width">70dip</item>
+        <item name="android:layout_height">65dip</item>
+        <!-- <item name="android:layout_height">@dimen/main_item_icon_height</item> -->
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:background">@drawable/btn_cycle_volumn_background</item>
+    </style>
+
+    <style name="btn_oval">
+        <!-- <item name="android:layout_width">@dimen/main_item_icon_height</item>
+        <item name="android:layout_height">@dimen/remote_oval_icon_height</item>
+         -->
+        <item name="android:layout_width">80dip</item>
+        <item name="android:layout_height">65dip</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:background">@drawable/btn_cycle_volumn_background</item>
+    </style>
+
+</resources>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <dimen name="screen_header_text_size">18sp</dimen>
+	<!-- Header -->
+	<dimen name="previous_margin_left">3dip</dimen>
+	<dimen name="shoretel_margin_left">7dip</dimen>
+	<dimen name="shoretel_margin_right">8dip</dimen>
+	<dimen name="menu_margin_left">14dip</dimen>
+	<dimen name="header_icon_width">45dip</dimen>
+	<dimen name="ic_voice_width">28dip</dimen>
+	<dimen name="setting_item_margin_left">15dip</dimen>
+	<dimen name="setting_item_margin_right">6dip</dimen>
+	<dimen name="setting_item_margin_top">6dip</dimen>
+	<dimen name="setting_item_margin_bottom">6dip</dimen>
+	<dimen name="distance_views">4dip</dimen>
+	<dimen name="header_menu_height">60dip</dimen>
+	<dimen name="buddies_list_layout_margin">14dip</dimen>
+		<dimen name="slidingmenu_offset">60dip</dimen>
+	<dimen name="ic_number_margin">8dip</dimen>
+	<dimen name="width_menu_when_open">60dip</dimen>
+
+	<!-- main menu screen -->	
+    <dimen name="main_menu_item_height">48dp</dimen>
+    <dimen name="main_menu_item_icon_height">48dp</dimen>
+    <dimen name="main_menu_item_icon_margin">10dp</dimen>
+
+	<!-- main screen -->
+	<dimen name="call_button_height">79dip</dimen>
+	<dimen name="keypad_number_height">123dip</dimen>
+	<dimen name="keypad_number_text_size">40sp</dimen>
+	<dimen name="main_item_height">60dip</dimen>
+	<dimen name="main_item_icon_height">56dip</dimen>
+	<dimen name="main_item_icon_width">58dip</dimen>
+	<dimen name="main_item_on_icon_height">65dp</dimen>
+	<dimen name="main_item_on_icon_width">85dp</dimen>
+	<dimen name="main_item_icon_margin">10dip</dimen>
+	<dimen name="main_item_icon_margin_right">15dip</dimen>
+	<dimen name="main_item_icon_margin_header_right">25dip</dimen>
+	<dimen name="main_item_icon_padding">10dip</dimen>
+	<dimen name="sensor_item_icon_margin_right">8dip</dimen>
+	<dimen name="main_item_2_icon_margin_right">10dip</dimen>
+	
+	<!-- home screen -->
+	<dimen name="room_lv_margin">14dip</dimen>
+	
+	<!-- photo view -->
+	<dimen name="status_margin_left">16dip</dimen>
+	<dimen name="photo_margin_top">6dip</dimen>
+	<dimen name="photo_margin_botton">6dip</dimen>
+	
+	<!-- text size -->
+	<dimen name="small_text_size">20sp</dimen>
+	
+	<!-- Setting Screen -->
+	<dimen name="margin_text_in_setting_screeen">20dip</dimen>
+	
+
+	<!-- header device -->
+	<dimen name="height_header_device">26dip</dimen>
+	<dimen name="margin_text_header_device">4dip</dimen>	
+	<dimen name="height_content_device">65dip</dimen>
+	<dimen name="margin_content_device">8dip</dimen>
+	<dimen name="height_text_content_device">60dip</dimen>
+	<dimen name="size_text_content_device">40sp</dimen>
+	<dimen name="margin_device">8dip</dimen>
+	
+	<!-- device -->	
+	<dimen name="height_image_device">75dip</dimen>
+	<dimen name="width_image_device">75dip</dimen>
+	<!-- <dimen name="size_text_sensor">40sp</dimen> -->
+	<dimen name="size_text_sensor">20sp</dimen>
+	
+	<!-- about device -->
+	<dimen name="margin_group_layout">2dip</dimen>
+	<dimen name="wheel_height">50dip</dimen>
+	<dimen name="wheel_width">50dip</dimen>
+
+	<dimen name="master_size">280dip</dimen>
+	<dimen name="menu_size">280dip</dimen>
+	<dimen name="detail_size">600dip</dimen>	
+
+	<!-- actionbar drop_down navigation -->
+	<dimen name="drop_down_actionbar_height">40dip</dimen>
+	<dimen name="drop_down_actionbar_size">18sp</dimen>
+
+	<!-- Login -->	
+	<dimen name="icon_home_width">100dip</dimen>
+	<dimen name="icon_home_height">90dip</dimen>
+	<dimen name="text_home_size">80sp</dimen>
+	<dimen name="pw_height">50dip</dimen>
+	<dimen name="pw_margin">30dip</dimen>
+	<dimen name="pw_icon_height">40dip</dimen>
+	<dimen name="pw_icon_margin">10dip</dimen>
+	<dimen name="pw_layout_margin">1dip</dimen>
+	<dimen name="login_button_margin">20dip</dimen>
+	
+
+	<!-- Room -->	
+	<dimen name="room_on_off_icon_height">180dp</dimen>
+	
+	<!-- Detail Screen -->	
+	<dimen name="day_margin">10dp</dimen>
+	
+	<!-- Audio -->	
+	<dimen name="on_off_width">150dp</dimen>
+	
+	<!-- Remote -->
+	<dimen name="remote_oval_icon_height">70dip</dimen>
+</resources>

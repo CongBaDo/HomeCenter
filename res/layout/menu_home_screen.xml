@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <ExpandableListView
+        android:id="@+id/home_room_lv"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="@dimen/room_lv_margin"
+        android:layout_marginRight="@dimen/room_lv_margin"
+        android:childDivider="@color/transparent"
+        android:divider="#FFFFFF"
+        android:dividerHeight="0px"
+        android:fadeScrollbars="false"
+        android:groupIndicator="@color/transparent"
+        android:scrollbars="none"
+        android:scrollingCache="false"
+        android:smoothScrollbar="true" />
+
+</LinearLayout>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" 
+        android:background="@drawable/shadow_content">
+
+         <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal" >
+
+    			<include layout="@layout/btn_power" />
+    			<include layout="@layout/btn_tivi" />
+    			<include layout="@layout/btn_source" />		        
+        </LinearLayout>
+             
+        <include layout="@layout/remote_number" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical" >
+
+            <!-- row 1 -->
+
+            <include layout="@layout/remote_volumn_channel" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal" >
+
+                <include layout="@layout/btn_exit" />
+                <include layout="@layout/btn_channel_top" />
+                <include layout="@layout/btn_mute" />
+            </LinearLayout>
+
+            <!-- row 2 -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal" >
+
+                <include layout="@layout/btn_volumn_left" />
+
+                <include layout="@layout/btn_tv" />
+
+                <include layout="@layout/btn_volumn_right" />
+            </LinearLayout>
+
+            <!-- row 3 -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal" >
+
+                <include layout="@layout/btn_exit" />
+
+                <include layout="@layout/btn_channel_bottom" />
+
+                <include layout="@layout/btn_mute" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal" >
+
+            <include layout="@layout/btn_return" />
+
+            <include layout="@layout/btn_menu" />
+
+            <include layout="@layout/btn_tool" />
+
+            <include layout="@layout/btn_info" />
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

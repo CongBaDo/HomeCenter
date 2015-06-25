@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:HomeCenter2="http://schemas.android.com/apk/res-auto" >
+    
+    <item
+        android:id="@+id/control_menu"
+        HomeCenter2:showAsAction="collapseActionView"
+        android:checkable="true"
+        android:title="@string/control"/>
+    <item
+        android:id="@+id/update_menu"
+        HomeCenter2:showAsAction="collapseActionView"
+        android:checkable="true"
+        android:title="@string/update"/>
+    <item
+        android:id="@+id/schedule_menu"
+        HomeCenter2:showAsAction="collapseActionView"
+        android:checkable="true"
+        android:title="@string/schedule"/>
+
+</menu>

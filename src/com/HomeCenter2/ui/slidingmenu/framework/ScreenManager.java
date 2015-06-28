@@ -69,11 +69,19 @@ public class ScreenManager {
 	public final static ScreenGroupEntry SCREEN_GROUP[] = {};
 
 	public final static ScreenEntry MENU_SCREEN_ENTRIES[] = {
+		
+			new ScreenEntry(HOUSE_GROUP_ID, MY_ACCOUNT_TAB_ID,
+				R.string.my_account_menu_item, R.drawable.ic_home,
+				R.drawable.ic_home_selected, MY_ACCOUNT_TAB,
+				MyParametersScreen.class),
+		
 			new ScreenEntry(HOUSE_GROUP_ID, MY_ACCOUNT_TAB_ID,
 					R.string.my_account_menu_item, R.drawable.ic_home,
 					R.drawable.ic_home_selected, MY_ACCOUNT_TAB,
 					MyParametersScreen.class),
 
+					
+					
 			new ScreenEntry(HOUSE_GROUP_ID, MY_DEVICES_TAB_ID,
 					R.string.my_devices_menu_item, R.drawable.ic_prise,
 					R.drawable.ic_prise_selected, MY_DEVICE_TAG,

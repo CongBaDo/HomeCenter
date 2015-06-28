@@ -133,6 +133,7 @@
     <string name="connect_socket_fail">Connect socket is fail.</string>
 
     <!-- MainMenuItem -->
+    <string name="my_main_screen">Home</string>
     <string name="my_account_menu_item">My account</string>
     <string name="my_protection_menu_item">My protection</string>
     <string name="my_devices_menu_item">My devices</string>

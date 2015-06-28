@@ -107,4 +107,6 @@
 	
 	<!-- Remote -->
 	<dimen name="remote_oval_icon_height">70dip</dimen>
+	
+	<dimen name="tool_width_room">48dp</dimen>
 </resources>

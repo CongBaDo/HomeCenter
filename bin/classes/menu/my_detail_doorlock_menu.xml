@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" 
-    xmlns:HomeCenter2="http://schemas.android.com/apk/res-auto">    
-  <item
-        android:id="@+id/remote_menu"
-        android:title="@string/remote_doorlock"        
-        HomeCenter2:showAsAction="always|withText"/>
-</menu>

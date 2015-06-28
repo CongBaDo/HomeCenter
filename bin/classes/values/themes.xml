@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <style name="Theme1" parent="Theme.AppCompat.Light.DarkActionBar">       
-        <item name="switchPreferenceStyle">@style/Preference.SwitchPreference</item>
-    </style>
-
-</resources>

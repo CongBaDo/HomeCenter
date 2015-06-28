@@ -30,7 +30,7 @@ public class MainScreen extends RADialerMainScreenAbstract implements
 		DialogFragmentWrapper.OnCreateDialogFragmentListener,
 		OnItemClickListener {
 
-	public static final String TAG = "TMT MainScreen";
+	public static final String TAG = "MainScreen";
 
 	public MainScreen(int title, String tag, SlidingBaseActivity context) {
 		super(MainScreen.class, title, tag, context);
@@ -153,6 +153,8 @@ public class MainScreen extends RADialerMainScreenAbstract implements
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int position,
 			long arg3) {
+		
+		Log.e(TAG, "onItemClick "+position+" "+ScreenManager.MENU_SCREEN_ENTRIES[position].getTag());
 		if (mContext.isMenuShowing()) {
 			mAdpater.updateCurrentPosition(position);
 

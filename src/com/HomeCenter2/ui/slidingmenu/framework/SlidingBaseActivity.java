@@ -265,6 +265,8 @@ public class SlidingBaseActivity extends ActionBarActivity implements
 		}
 		int pos = mViewManager.getPositionByTag(fragmentTag);
 		Fragment fragment = null;
+		
+		Log.i(TAG, "switchContentView "+pos+" "+fragmentTag);
 		if (pos == -1) {
 			fragment = (RADialerScreenAbstract) ScreenManager.getInstance()
 					.createScreenByPrimaryEntry(entry, this);

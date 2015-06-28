@@ -1,0 +1,18 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle" >
+
+    <solid android:color="@color/bg_tool_room" />
+
+    <stroke
+        android:width="1dp"
+        android:color="@color/blue_temp" />
+
+    <padding
+        android:bottom="2dp"
+        android:left="2dp"
+        android:right="2dp"
+        android:top="2dp" />
+    
+    <corners android:radius="4dp"/>
+
+</shape>

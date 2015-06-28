@@ -10,6 +10,8 @@
 	<color name="grey">#939494</color>
 	<color name="grey_light">#b6b6b6</color>
 	
+	<color name="bg_tool_room">#CCCFCFCF</color>
+	
 	<!-- setting main -->
 	<color name="bg_color_view_behind">#2F2F2F</color>	
 	
@@ -21,7 +23,6 @@
 	<color name="main_menu_item_bg_selected">#222222</color> <!-- gray black -->
 	
 	<!-- blue -->
-	<color name="blue_light">#ff0000ff</color> <!-- blue -->		
 	
 	<!-- orange -->
 	<color name="orange_light">#ff8800</color> <!-- blue -->

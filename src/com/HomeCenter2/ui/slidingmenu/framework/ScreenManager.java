@@ -21,6 +21,7 @@ import com.HomeCenter2.ui.mainS.MyAudioSystemScreen;
 import com.HomeCenter2.ui.mainS.MyCamerasScreen;
 import com.HomeCenter2.ui.mainS.MyDevicesScreen;
 import com.HomeCenter2.ui.mainS.MyEnergyScreen;
+import com.HomeCenter2.ui.mainS.RoomManagerScreen;
 import com.HomeCenter2.ui.mainS.MyParametersScreen;
 import com.HomeCenter2.ui.mainS.MyRemotesScreen;
 import com.HomeCenter2.ui.mainS.MySensorsScreen;
@@ -33,6 +34,7 @@ public class ScreenManager {
 	// Change mNameTV (no longer tabs)
 
 	public final static int MY_ACCOUNT_TAB_ID = 0;
+	public final static int MY_HOME_TAB_ID	= 1;
 	public final static int MY_DEVICES_TAB_ID = MY_ACCOUNT_TAB_ID + 2;
 	public final static int MY_SENSORS_TAB_ID = MY_ACCOUNT_TAB_ID + 3;
 	public final static int MY_CAMERAS_TAB_ID = MY_ACCOUNT_TAB_ID + 4;
@@ -45,6 +47,7 @@ public class ScreenManager {
 	public final static int CONFIG_TAG_ID = MY_ACCOUNT_TAB_ID + 11;
 
 	// Sub main screen
+	public final static String MY_HOME_TAB = "MyHomeScreen";
 	public final static String MY_ACCOUNT_TAB = "MyAccountScreen";
 	public final static String MY_DEVICE_TAG = "MyDeviceScreen";
 	public final static String MY_SENSORS_TAB = "MysSensorsScreen";
@@ -70,17 +73,15 @@ public class ScreenManager {
 
 	public final static ScreenEntry MENU_SCREEN_ENTRIES[] = {
 		
-			new ScreenEntry(HOUSE_GROUP_ID, MY_ACCOUNT_TAB_ID,
-				R.string.my_account_menu_item, R.drawable.ic_home,
-				R.drawable.ic_home_selected, MY_ACCOUNT_TAB,
-				MyParametersScreen.class),
+			new ScreenEntry(HOUSE_GROUP_ID, MY_HOME_TAB_ID,
+				R.string.my_main_screen, R.drawable.ic_launcher,
+				R.drawable.ic_prise_selected, MY_HOME_TAB,
+				RoomManagerScreen.class),
 		
 			new ScreenEntry(HOUSE_GROUP_ID, MY_ACCOUNT_TAB_ID,
 					R.string.my_account_menu_item, R.drawable.ic_home,
 					R.drawable.ic_home_selected, MY_ACCOUNT_TAB,
 					MyParametersScreen.class),
-
-					
 					
 			new ScreenEntry(HOUSE_GROUP_ID, MY_DEVICES_TAB_ID,
 					R.string.my_devices_menu_item, R.drawable.ic_prise,
@@ -272,6 +273,10 @@ public class ScreenManager {
 		int id = entry.getId();
 		SlidingBaseActivity slidingBaseActivity = (SlidingBaseActivity) activity;
 		switch (id) {
+		
+		case MY_HOME_TAB_ID:
+			fragment = new RoomManagerScreen(entry.getTitleId(), entry.getTag(), slidingBaseActivity);
+			break;
 
 		case MY_ACCOUNT_TAB_ID:
 			fragment = new MyParametersScreen(entry.getTitleId(),

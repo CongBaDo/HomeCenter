@@ -21,40 +21,46 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <FrameLayout
+        <!--
+             <FrameLayout
             android:id="@+id/frame_left"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="4dp"
+            android:background="@drawable/boder_tool_room" >
+        -->
+
+        <LinearLayout
+            android:id="@+id/contain_tool_left"
+            android:layout_width="@dimen/tool_width"
+            android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_marginBottom="16dp"
             android:layout_marginTop="16dp"
-            android:background="@drawable/boder_tool_room" >
+            android:background="@drawable/boder_tool_room"
+            android:orientation="vertical" >
 
-            <LinearLayout
+            <ImageView
+                android:id="@+id/img_expand_close_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:background="@drawable/icon_arrow_next"
+                android:padding="4dp" />
+
+            <GridView
+                android:id="@+id/grid_tool_left"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical" >
+                android:layout_height="wrap_content"
+                android:columnWidth="@dimen/tool_column_width"
+                android:numColumns="2"
+                android:stretchMode="columnWidth" >
+            </GridView>
+        </LinearLayout>
+        <!-- </FrameLayout> -->
 
-                <ImageView
-                    android:id="@+id/img_expand_close_left"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@drawable/icon_arrow_back"
-                    android:padding="4dp" />
 
-                <GridView
-                    android:id="@+id/grid_tool_left"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:numColumns="2"
-                    android:stretchMode="columnWidth" >
-                </GridView>
-            </LinearLayout>
-        </FrameLayout>
-
-        <FrameLayout
+        <!--
+             <FrameLayout
             android:id="@+id/frame_right"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -63,29 +69,35 @@
             android:layout_marginRight="4dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/boder_tool_room" >
+        -->
 
-            <LinearLayout
+        <LinearLayout
+            android:id="@+id/contain_tool_right"
+            android:layout_width="@dimen/tool_width"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/boder_tool_room"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/img_expand_close_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/icon_arrow_back"
+                android:padding="4dp" />
+
+            <GridView
+                android:id="@+id/grid_tool_right"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical" >
-
-                <ImageView
-                    android:id="@+id/img_expand_close_right"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@drawable/icon_arrow_back"
-                    android:padding="4dp" />
-
-                <GridView
-                    android:id="@+id/grid_tool_right"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:numColumns="2"
-                    android:stretchMode="columnWidth" >
-                </GridView>
-            </LinearLayout>
-        </FrameLayout>
+                android:layout_height="wrap_content"
+                android:columnWidth="@dimen/tool_column_width"
+                android:numColumns="2"
+                android:stretchMode="columnWidth" >
+            </GridView>
+        </LinearLayout>
+        <!-- </FrameLayout> -->
     </RelativeLayout>
 
 </LinearLayout>

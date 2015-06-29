@@ -229,6 +229,12 @@ public class HomeCenter2 extends SlidingBaseActivity implements
 		super.onCreate(savedInstanceState);
 		initLibsAndServices();
 		viewManager = getViewManager();
+		
+		DisplayMetrics metrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		
+		HomeScreenSetting.ScreenH = metrics.heightPixels;
+		HomeScreenSetting.ScreenW = metrics.widthPixels;
 	}
 
 	@Override

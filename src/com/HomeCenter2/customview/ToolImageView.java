@@ -4,17 +4,17 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-public class ToolItemView extends ImageView {
+public class ToolImageView extends ImageView {
 	 
-    public ToolItemView(Context context) {
+    public ToolImageView(Context context) {
         super(context);
     } 
  
-    public ToolItemView(Context context, AttributeSet attrs) {
+    public ToolImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
     } 
  
-    public ToolItemView(Context context, AttributeSet attrs, int defStyle) {
+    public ToolImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     } 
  

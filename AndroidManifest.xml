@@ -23,6 +23,7 @@
         <activity
             android:name="com.HomeCenter2.HomeCenter2"
             android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="landscape"
             android:label="@string/app_name"
             android:theme="@style/Theme1" >
             <intent-filter>

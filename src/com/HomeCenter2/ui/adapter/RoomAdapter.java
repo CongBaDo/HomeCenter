@@ -13,15 +13,15 @@ import android.widget.TextView;
 import com.HomeCenter2.R;
 import com.HomeCenter2.customview.ToolImageView;
 
-public class ToolAdapter extends BaseAdapter{
+public class RoomAdapter extends BaseAdapter{
 
-	private static final String TAG = "ToolAdapter";
+	private static final String TAG = "RoomAdapter";
 	
-	private int[] DRAWS = new int[]{R.drawable.ic_lamp_wht, R.drawable.ic_lock_wht, R.drawable.ic_fan_wht, R.drawable.ic_lamp_wht, R.drawable.ic_lock_wht, R.drawable.ic_fan_wht, R.drawable.ic_lock_wht, R.drawable.ic_fan_wht};
+	private int[] DRAWS = new int[]{R.drawable.ic_lamp_wht, R.drawable.ic_lock_wht, R.drawable.ic_fan_wht, R.drawable.ic_lamp_wht, R.drawable.ic_lock_wht, R.drawable.ic_fan_wht};
 	
 	private Context context;
 	
-	public ToolAdapter(Context context){
+	public RoomAdapter(Context context){
 		this.context = context;
 	}
 

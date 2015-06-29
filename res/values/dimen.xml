@@ -109,4 +109,7 @@
 	<dimen name="remote_oval_icon_height">70dip</dimen>
 	
 	<dimen name="tool_width_room">48dp</dimen>
+	
+	<dimen name="tool_column_width">50dp</dimen>
+	<dimen name="tool_width">120dp</dimen>
 </resources>

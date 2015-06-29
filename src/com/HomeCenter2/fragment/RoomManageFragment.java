@@ -1,18 +1,17 @@
 package com.HomeCenter2.fragment;
 
+import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.RelativeLayout.LayoutParams;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
+import com.HomeCenter2.HomeScreenSetting;
 import com.HomeCenter2.R;
 import com.HomeCenter2.ui.adapter.ToolAdapter;
 
@@ -26,7 +25,7 @@ public class RoomManageFragment extends Fragment implements OnClickListener{
 	private ImageView imgProcessLeft, imgProcessRight;
 	private boolean isLeftCollapse, isRightCollapse;
 	private ToolAdapter adapterLeft, adapterRight;
-	private FrameLayout frameLeft, frameRight;
+	private LinearLayout containToolLeft, containToolRight;
 	
 	public static RoomManageFragment newInstance(int position) {
 		RoomManageFragment f = new RoomManageFragment();
@@ -61,14 +60,12 @@ public class RoomManageFragment extends Fragment implements OnClickListener{
     	tvTitle = (TextView)view.findViewById(R.id.title_room);
     	gridToolLeft = (GridView)view.findViewById(R.id.grid_tool_left);
     	gridToolRight = (GridView)view.findViewById(R.id.grid_tool_right);
-    	gridToolLeft.setNumColumns(1);
-    	gridToolRight.setNumColumns(1);
     	
     	imgProcessLeft = (ImageView)view.findViewById(R.id.img_expand_close_left);
     	imgProcessRight = (ImageView)view.findViewById(R.id.img_expand_close_right);
     	
-    	frameLeft = (FrameLayout)view.findViewById(R.id.frame_left);
-    	frameRight = (FrameLayout)view.findViewById(R.id.frame_right);
+    	containToolLeft = (LinearLayout)view.findViewById(R.id.contain_tool_left);
+    	containToolRight = (LinearLayout)view.findViewById(R.id.contain_tool_right);
     	
     	tvTitle.setOnClickListener(this);
     	imgProcessLeft.setOnClickListener(this);
@@ -83,6 +80,24 @@ public class RoomManageFragment extends Fragment implements OnClickListener{
     	
     	gridToolLeft.setAdapter(adapterLeft);
     	gridToolRight.setAdapter(adapterRight);
+    	
+    	gridToolLeft.post(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				processLeftView(containToolLeft, isLeftCollapse);
+			}
+		});
+    	
+    	gridToolRight.post(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				processRightView(containToolRight, isRightCollapse);	
+			}
+		});
     }
 
     @Override
@@ -116,35 +131,48 @@ public class RoomManageFragment extends Fragment implements OnClickListener{
 		if(isLeftCollapse){
 			isLeftCollapse = false;
 			imgProcessLeft.setBackgroundResource(R.drawable.icon_arrow_next);
-			gridToolLeft.setNumColumns(2);
-			Toast.makeText(getActivity(), "Expand", Toast.LENGTH_SHORT).show();
 		}else{
 			isLeftCollapse = true;
 			imgProcessLeft.setBackgroundResource(R.drawable.icon_arrow_back);
-			gridToolLeft.setNumColumns(1);
-			Toast.makeText(getActivity(), "Collapse", Toast.LENGTH_SHORT).show();
 		}
+		processLeftView(containToolLeft, isLeftCollapse);
 	}
 	
 	private void manageRightArrow(){
-		LayoutParams params = new LayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		if(isRightCollapse){
 			isRightCollapse = false;
 			imgProcessRight.setBackgroundResource(R.drawable.icon_arrow_back);
-			gridToolRight.setNumColumns(2);
-			Toast.makeText(getActivity(), "Expand", Toast.LENGTH_SHORT).show();
 		}else{
 			isRightCollapse = true;
 			imgProcessRight.setBackgroundResource(R.drawable.icon_arrow_next);
-			gridToolRight.setNumColumns(1);
-			Toast.makeText(getActivity(), "Collapse", Toast.LENGTH_SHORT).show();
-			
 		}
-//		gridToolRight.setLayoutParams(params);
-		frameRight.setLayoutParams(params);
+		processRightView(containToolRight, isRightCollapse);
+	}
+	
+	public void processRightView(View v, boolean isCollapse) {
+		float width = v.getWidth();
+		if (isCollapse) {
+			ObjectAnimator translationRight = ObjectAnimator.ofFloat(v, "X", HomeScreenSetting.ScreenW - width);
+			translationRight.setDuration(500);
+			translationRight.start();
+		} else {
+			ObjectAnimator translationLeft = ObjectAnimator.ofFloat(v, "X", HomeScreenSetting.ScreenW - width/2);
+			translationLeft.setDuration(500);
+			translationLeft.start();
+		}
+	}
+	
+	public void processLeftView(View v, boolean isCollapse) {
+		float width = v.getWidth();
+		if (isCollapse) {
+			ObjectAnimator translationRight = ObjectAnimator.ofFloat(v, "X", 0);
+			translationRight.setDuration(500);
+			translationRight.start();
+		} else {
+			ObjectAnimator translationLeft = ObjectAnimator.ofFloat(v, "X", -width/2);
+			translationLeft.setDuration(500);
+			translationLeft.start();
+		}
 	}
 
-	private void updateToolView(){
-		
-	}
 }

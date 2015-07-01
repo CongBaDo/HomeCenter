@@ -52,7 +52,7 @@ public class RoomAdapter extends BaseAdapter{
 		
 		ViewHolder vh;
         if (convertView == null) {
-        	convertView = inflater.inflate(R.layout.item_tool_view, parent, false);
+        	convertView = inflater.inflate(R.layout.item_image_room_view, parent, false);
             vh = new ViewHolder();
             vh.imgTool = (ToolImageView) convertView.findViewById(R.id.img_tool);
             convertView.setTag(vh);

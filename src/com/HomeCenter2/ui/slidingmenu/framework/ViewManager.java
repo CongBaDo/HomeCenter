@@ -19,7 +19,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Adapter;
 
-import com.HomeCenter2.HomeCenter2;
+import com.HomeCenter2.HomeCenter2Activity;
 import com.HomeCenter2.HomeCenterUIEngine;
 import com.HomeCenter2.MainScreenPagerAdapter;
 import com.HomeCenter2.R;
@@ -159,7 +159,6 @@ public class ViewManager {
 			mListFragments.add(fragment);
 			mViewMap.put(tag, mLastViewPosition);
 			mLastViewPosition++;
-			;
 
 			if (!isFragmentPersistent) {
 				if (!mNonPersistentViewList.contains(fragment)) {
@@ -262,7 +261,7 @@ public class ViewManager {
 			}
 			
 			setCurrentPage(pos, addToBackStack);
-			HomeCenter2 activity =(HomeCenter2)mContext;
+			HomeCenter2Activity activity =(HomeCenter2Activity)mContext;
 			
 			String tag = getTagCurrentPage();
 			int positionInList = ScreenManager.getInstance().getPositionInListByTag(tag);

@@ -15,7 +15,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import com.HomeCenter2.HomeCenter2;
+import com.HomeCenter2.HomeCenter2Activity;
 import com.HomeCenter2.HomeCenterUIEngine;
 import com.HomeCenter2.R;
 import com.HomeCenter2.RegisterService;

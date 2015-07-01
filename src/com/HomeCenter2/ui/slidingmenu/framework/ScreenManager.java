@@ -13,7 +13,7 @@ import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.HomeCenter2.HomeCenter2;
+import com.HomeCenter2.HomeCenter2Activity;
 import com.HomeCenter2.HomeCenterUIEngine;
 import com.HomeCenter2.R;
 import com.HomeCenter2.RegisterService;
@@ -21,7 +21,7 @@ import com.HomeCenter2.ui.mainS.MyAudioSystemScreen;
 import com.HomeCenter2.ui.mainS.MyCamerasScreen;
 import com.HomeCenter2.ui.mainS.MyDevicesScreen;
 import com.HomeCenter2.ui.mainS.MyEnergyScreen;
-import com.HomeCenter2.ui.mainS.RoomManagerScreen;
+import com.HomeCenter2.ui.mainS.RoomManagerScreenFragment;
 import com.HomeCenter2.ui.mainS.MyParametersScreen;
 import com.HomeCenter2.ui.mainS.MyRemotesScreen;
 import com.HomeCenter2.ui.mainS.MySensorsScreen;
@@ -76,7 +76,7 @@ public class ScreenManager {
 			new ScreenEntry(HOUSE_GROUP_ID, MY_HOME_TAB_ID,
 				R.string.my_main_screen, R.drawable.ic_launcher,
 				R.drawable.ic_prise_selected, MY_HOME_TAB,
-				RoomManagerScreen.class),
+				RoomManagerScreenFragment.class),
 		
 			new ScreenEntry(HOUSE_GROUP_ID, MY_ACCOUNT_TAB_ID,
 					R.string.my_account_menu_item, R.drawable.ic_home,
@@ -275,7 +275,7 @@ public class ScreenManager {
 		switch (id) {
 		
 		case MY_HOME_TAB_ID:
-			fragment = new RoomManagerScreen(entry.getTitleId(), entry.getTag(), slidingBaseActivity);
+			fragment = new RoomManagerScreenFragment(entry.getTitleId(), entry.getTag(), slidingBaseActivity);
 			break;
 
 		case MY_ACCOUNT_TAB_ID:
@@ -308,7 +308,7 @@ public class ScreenManager {
 				uiEngine.setIsLogined(false);
 
 				uiEngine.closeSocket();
-				((HomeCenter2) activity).doExit(activity);
+				((HomeCenter2Activity) activity).doExit(activity);
 			}
 			break;
 		case MY_AUDIO_TAB_ID:

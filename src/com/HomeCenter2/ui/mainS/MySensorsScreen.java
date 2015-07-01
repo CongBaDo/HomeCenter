@@ -23,7 +23,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.HomeCenter2.HomeCenter2;
+import com.HomeCenter2.HomeCenter2Activity;
 import com.HomeCenter2.HomeCenterUIEngine;
 import com.HomeCenter2.R;
 import com.HomeCenter2.RegisterService;
@@ -57,8 +57,8 @@ public class MySensorsScreen extends RADialerMainScreenAbstract implements
 	private static final String TAG = "MySensorsScreen";
 	ListView mLVDevices;
 	MySensorsAdapter mSensorAdapter;
-	HomeCenterUIEngine mUiEngine = null;
 	House mHouse = null;
+	HomeCenterUIEngine mUiEngine = null;
 	RoomMenuAdapter mRoomDropDownAdapter;
 	protected Handler mHandler;
 	LayoutInflater mInflater;
@@ -80,7 +80,7 @@ public class MySensorsScreen extends RADialerMainScreenAbstract implements
 		/* mActionBarV7.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST); */
 		mUiEngine = RegisterService.getHomeCenterUIEngine();
 		if (mUiEngine == null) {
-			((HomeCenter2) mContext).doExit(mContext);
+			((HomeCenter2Activity) mContext).doExit(mContext);
 		}
 		mUiEngine.addStatusObserver(this);
 		mUiEngine.addXMLObserver(this);

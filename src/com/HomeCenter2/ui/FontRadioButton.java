@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.RadioButton;
 
-import com.HomeCenter2.HomeCenter2;
+import com.HomeCenter2.HomeCenter2Activity;
 
 public class FontRadioButton extends RadioButton {
 
@@ -24,6 +24,6 @@ public class FontRadioButton extends RadioButton {
 	}
 
 	private void initFont(Context context) {
-		HomeCenter2.initFont(context, this);
+		HomeCenter2Activity.initFont(context, this);
 	}
 }

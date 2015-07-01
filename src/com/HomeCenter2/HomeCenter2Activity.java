@@ -56,10 +56,12 @@ import android.widget.ToggleButton;
 
 import com.HomeCenter2.data.XMLHelper;
 import com.HomeCenter2.data.configManager;
+import com.HomeCenter2.fragment.RoomManageFragment;
 import com.HomeCenter2.house.House;
 import com.HomeCenter2.ui.listener.ConnectSocketListener;
 import com.HomeCenter2.ui.mainS.MyAudioSystemScreen;
 import com.HomeCenter2.ui.mainS.MyDevicesScreen;
+import com.HomeCenter2.ui.mainS.RoomManagerScreenFragment;
 import com.HomeCenter2.ui.menuscreen.MainScreen;
 import com.HomeCenter2.ui.slidingmenu.framework.OnPageScrolledCompleteListener;
 import com.HomeCenter2.ui.slidingmenu.framework.PageChangeAware;
@@ -69,13 +71,13 @@ import com.HomeCenter2.ui.slidingmenu.framework.ScreenManager;
 import com.HomeCenter2.ui.slidingmenu.framework.SlidingBaseActivity;
 import com.HomeCenter2.ui.slidingmenu.framework.ViewManager;
 
-public class HomeCenter2 extends SlidingBaseActivity implements
+public class HomeCenter2Activity extends SlidingBaseActivity implements
 		OnPageScrolledCompleteListener, OnPreferenceAttachedListener,
 		OnSharedPreferenceChangeListener, ConnectSocketListener {
 	public static ViewManager viewManager;
 	public static final String PREF_NAME = "HomeScreenSharedPref";
 
-	static HomeCenter2 app_context;
+	static HomeCenter2Activity app_context;
 	static final String TAG = "HomeCenter2";
 	HomeCenterUIEngine uiEngine;
 
@@ -207,7 +209,7 @@ public class HomeCenter2 extends SlidingBaseActivity implements
 
 	}
 
-	public HomeCenter2() {
+	public HomeCenter2Activity() {
 		super(R.string.app_name);
 	}
 
@@ -249,7 +251,7 @@ public class HomeCenter2 extends SlidingBaseActivity implements
 		return app_context;
 	}
 
-	public static HomeCenter2 getInstance() {
+	public static HomeCenter2Activity getInstance() {
 		return app_context;
 	}
 
@@ -260,7 +262,19 @@ public class HomeCenter2 extends SlidingBaseActivity implements
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+		
+		Log.e(TAG, "onActivityResult Nemo "+requestCode+" "+resultCode);
+		
 		switch (requestCode) {
+		
+		case configManager.RESULT_ROOM_INDEX:
+			Fragment frag = viewManager.getPageAdapter().getItem(0);
+			Log.v(TAG, "onActivityResult frag "+frag.getTag());
+			if (frag instanceof RoomManagerScreenFragment) {
+				Log.w(TAG, "onActivityResult Nemo "+requestCode);
+			}
+			break;
+		
 		case configManager.PROVISION_REQUEST:
 			if (this != null) {
 				if (RegisterService.getService() != null
@@ -539,7 +553,7 @@ public class HomeCenter2 extends SlidingBaseActivity implements
 	}
 
 	private void completeProvisioningAndExit() {
-		HomeCenter2.setClientEnabled(this, true);
+		HomeCenter2Activity.setClientEnabled(this, true);
 	}
 
 	private ServiceConnection mConnection = new ServiceConnection() {
@@ -562,7 +576,7 @@ public class HomeCenter2 extends SlidingBaseActivity implements
 			initDevice();
 			refresh();
 
-			boolean clientEnabled = isClientEnabled(HomeCenter2.this);
+			boolean clientEnabled = isClientEnabled(HomeCenter2Activity.this);
 			if (!TextUtils.isEmpty(forcedSwitchScreenTag)) {
 				tabIndex = viewManager.getScreenIndex(forcedSwitchScreenTag);
 				tabIndex = tabIndex >= 0 ? tabIndex : 0;
@@ -723,7 +737,7 @@ public class HomeCenter2 extends SlidingBaseActivity implements
 		}
 
 		if (app_context != null) {
-			HomeCenter2 app = (HomeCenter2) app_context;
+			HomeCenter2Activity app = (HomeCenter2Activity) app_context;
 			app.disconnectFromService();
 		}
 
@@ -812,7 +826,7 @@ public class HomeCenter2 extends SlidingBaseActivity implements
 						mIsAppInBackground = true;
 						return true;
 					} else {
-						HomeCenter2 activity = (HomeCenter2) fragment
+						HomeCenter2Activity activity = (HomeCenter2Activity) fragment
 								.getActivity();
 						if (activity != null) {
 							activity.switchToPreviousContentView(true);

@@ -1,5 +1,7 @@
 package com.HomeCenter2.ui.adapter;
 
+import java.util.List;
+
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.HomeCenter2.fragment.RoomManageFragment;
+import com.HomeCenter2.house.Room;
 
 /**
  * The main adapter that backs the ViewPager. A subclass of FragmentStatePagerAdapter as there
@@ -19,10 +22,12 @@ import com.HomeCenter2.fragment.RoomManageFragment;
 public class RoomManagerAdapter extends FragmentStatePagerAdapter {
 	private static final String TAG = "RoomManagerAdapter";
     private final int mSize;
+    private List<Room> rooms;
     
-    public RoomManagerAdapter(Context ctx, FragmentManager fm, int size) {
+    public RoomManagerAdapter(Context ctx, FragmentManager fm, List<Room> rooms) {
         super(fm);
-        mSize = size;
+        this.rooms = rooms;
+        mSize = rooms.size();
     }
     
     @Override

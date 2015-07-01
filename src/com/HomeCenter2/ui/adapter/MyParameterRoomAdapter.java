@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.HomeCenter2.HCRequest;
-import com.HomeCenter2.HomeCenter2;
+import com.HomeCenter2.HomeCenter2Activity;
 import com.HomeCenter2.R;
 import com.HomeCenter2.RegisterService;
 import com.HomeCenter2.data.configManager;

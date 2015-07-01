@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.Button;
 
-import com.HomeCenter2.HomeCenter2;
+import com.HomeCenter2.HomeCenter2Activity;
 
 public class FontButton extends Button {
 
@@ -24,6 +24,6 @@ public class FontButton extends Button {
 	}
 
 	private void initFont(Context context) {
-		HomeCenter2.initFont(context, this);
+		HomeCenter2Activity.initFont(context, this);
 	}
 }

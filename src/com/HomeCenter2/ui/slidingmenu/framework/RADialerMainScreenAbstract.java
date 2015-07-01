@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 
-import com.HomeCenter2.HomeCenter2;
+import com.HomeCenter2.HomeCenter2Activity;
 import com.HomeCenter2.HomeCenterUIEngine;
 import com.HomeCenter2.RegisterService;
 
@@ -101,7 +101,7 @@ public abstract class RADialerMainScreenAbstract extends RADialerScreenAbstract
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			HomeCenter2 activity = (HomeCenter2) getActivity();
+			HomeCenter2Activity activity = (HomeCenter2Activity) getActivity();
 			if (activity != null) {
 				// return activity.switchToPreviousContentView();
 			}

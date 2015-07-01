@@ -781,7 +781,7 @@ public class HomeCenterUIEngine extends Handler {
 		for (int i = 0; i < configManager.MAX_AREA; i++) {
 			area = new Area();
 			area.setId(i + 1);
-			area.setName(HomeCenter2.getContext().getString(R.string.area)
+			area.setName(HomeCenter2Activity.getContext().getString(R.string.area)
 					+ " " + i);
 			objects.add(area);
 
@@ -800,12 +800,12 @@ public class HomeCenterUIEngine extends Handler {
 					objects.add(room);
 					switch (temp) {
 					case 0:
-						String strAudio = HomeCenter2.getContext().getString(
+						String strAudio = HomeCenter2Activity.getContext().getString(
 								R.string.room_audio);
 						room.setName(strAudio);
 						break;
 					case 1:
-						String strGSM = HomeCenter2.getContext().getString(
+						String strGSM = HomeCenter2Activity.getContext().getString(
 								R.string.room_gsm);
 						room.setName(strGSM);
 
@@ -814,7 +814,7 @@ public class HomeCenterUIEngine extends Handler {
 						break;
 					}
 				} else {
-					room.setName(HomeCenter2.getContext().getString(
+					room.setName(HomeCenter2Activity.getContext().getString(
 							R.string.room)
 							+ " " + (j + 1));
 					room.setOtherType(false);
@@ -840,7 +840,7 @@ public class HomeCenterUIEngine extends Handler {
 
 	public Device initDevice(int id) {
 		Log.d(TAG, "initDevice::id:" + id);
-		Context context = HomeCenter2.getContext();
+		Context context = HomeCenter2Activity.getContext();
 		if (context == null)
 			return null;
 		switch (id) {

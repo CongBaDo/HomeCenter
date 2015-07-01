@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-import com.HomeCenter2.HomeCenter2;
+import com.HomeCenter2.HomeCenter2Activity;
 import com.HomeCenter2.HomeCenterUIEngine;
 import com.HomeCenter2.R;
 import com.HomeCenter2.RegisterService;
@@ -22,7 +22,7 @@ public class RemoteCameraScreen extends Fragment implements
 		View.OnClickListener {
 
 	private static final String TAG = "RemoteCameraScreen";
-	HomeCenter2 mContext;
+	HomeCenter2Activity mContext;
 	MyRemotesScreen mParentsScreen = null;
 	HomeCenterUIEngine mUiEngine = null;
 
@@ -37,7 +37,7 @@ public class RemoteCameraScreen extends Fragment implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		mContext = (HomeCenter2) getActivity();
+		mContext = (HomeCenter2Activity) getActivity();
 		RegisterService service = RegisterService.getService();
 		if (service != null) {
 			mUiEngine = service.getUIEngine();
@@ -135,7 +135,7 @@ public class RemoteCameraScreen extends Fragment implements
 		DetailDeviceScreen fragment = DetailDeviceScreen
 				.initializeDetailDeviceScreen(bundle, -1,
 						(SlidingBaseActivity) getActivity());
-		HomeCenter2 activity = (HomeCenter2) getActivity();
+		HomeCenter2Activity activity = (HomeCenter2Activity) getActivity();
 		activity.switchContentView(fragment, ScreenManager.DETAIL_DEVICE_TAG,
 				true, true, false);
 	}

@@ -30,7 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.HomeCenter2.HCRequest;
-import com.HomeCenter2.HomeCenter2;
+import com.HomeCenter2.HomeCenter2Activity;
 import com.HomeCenter2.HomeCenterUIEngine;
 import com.HomeCenter2.R;
 import com.HomeCenter2.RegisterService;
@@ -93,7 +93,7 @@ public class MyDevicesScreen extends RADialerMainScreenAbstract implements
 		super.onCreate(savedInstanceState);
 		mUiEngine = RegisterService.getHomeCenterUIEngine();
 		if (mUiEngine == null) {
-			((HomeCenter2) mContext).doExit(mContext);
+			((HomeCenter2Activity) mContext).doExit(mContext);
 		}
 
 		mUiEngine.addStatusObserver(this);
@@ -378,7 +378,7 @@ public class MyDevicesScreen extends RADialerMainScreenAbstract implements
 		DetailDeviceScreen fragment = DetailDeviceScreen
 				.initializeDetailDeviceScreen(bundle, -1,
 						(SlidingBaseActivity) mContext);
-		HomeCenter2 activity = (HomeCenter2) mContext;
+		HomeCenter2Activity activity = (HomeCenter2Activity) mContext;
 		activity.switchContentView(fragment, ScreenManager.DETAIL_DEVICE_TAG,
 				true, true, false);
 	}

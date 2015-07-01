@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/yellow_light"
-    android:orientation="vertical" >
+    android:orientation="vertical" xmlns:app="http://schemas.android.com/apk/res/com.HomeCenter2">
 
     <TextView
         android:id="@+id/title_room"
@@ -47,14 +47,14 @@
                 android:background="@drawable/icon_arrow_next"
                 android:padding="4dp" />
 
-            <GridView
+            <com.etsy.android.grid.StaggeredGridView
                 android:id="@+id/grid_tool_left"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:columnWidth="@dimen/tool_column_width"
-                android:numColumns="2"
+                app:column_count="2"
                 android:stretchMode="columnWidth" >
-            </GridView>
+            </com.etsy.android.grid.StaggeredGridView>
         </LinearLayout>
         <!-- </FrameLayout> -->
 
@@ -88,14 +88,14 @@
                 android:background="@drawable/icon_arrow_back"
                 android:padding="4dp" />
 
-            <GridView
+            <com.etsy.android.grid.StaggeredGridView
                 android:id="@+id/grid_tool_right"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:columnWidth="@dimen/tool_column_width"
-                android:numColumns="2"
+                app:column_count="2"
                 android:stretchMode="columnWidth" >
-            </GridView>
+            </com.etsy.android.grid.StaggeredGridView>
         </LinearLayout>
         <!-- </FrameLayout> -->
     </RelativeLayout>

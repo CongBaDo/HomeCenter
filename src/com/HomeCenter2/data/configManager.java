@@ -13,7 +13,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.HomeCenter2.HomeCenter2;
+import com.HomeCenter2.HomeCenter2Activity;
 import com.HomeCenter2.R;
 import com.HomeCenter2.house.DeviceType;
 import com.HomeCenter2.house.Schedule;
@@ -185,6 +185,7 @@ public class configManager {
 
 	public static final int PROVISION_REQUEST = 0;
 	public static final int RESULT_SPEECH = 1;	
+	public static final int RESULT_ROOM_INDEX = 113;
 
 	public static final int NO_INDEX_ROOM = -1;
 
@@ -433,7 +434,7 @@ public class configManager {
 	 */
 	private static void createDeviceTypes() {
 		deviceTypes = new ArrayList<DeviceType>();
-		Context context = HomeCenter2.getContext();
+		Context context = HomeCenter2Activity.getContext();
 		if (context == null) {
 			return;
 		}

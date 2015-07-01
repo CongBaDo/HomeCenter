@@ -4,15 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Dialog;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.speech.RecognizerIntent;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.text.TextUtils;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,7 +19,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -31,7 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.HomeCenter2.HCRequest;
-import com.HomeCenter2.HomeCenter2;
+import com.HomeCenter2.HomeCenter2Activity;
 import com.HomeCenter2.HomeCenterUIEngine;
 import com.HomeCenter2.R;
 import com.HomeCenter2.RegisterService;
@@ -45,7 +40,6 @@ import com.HomeCenter2.house.Room;
 import com.HomeCenter2.ui.DialogConfigDevice;
 import com.HomeCenter2.ui.DialogFragmentWrapper;
 import com.HomeCenter2.ui.DialogRoomMenu;
-import com.HomeCenter2.ui.RoomMenuListener;
 import com.HomeCenter2.ui.ScheduleImageView;
 import com.HomeCenter2.ui.ScheduleImageView.onCheckChangedListener;
 import com.HomeCenter2.ui.adapter.MyDevicesAdapter;
@@ -53,18 +47,16 @@ import com.HomeCenter2.ui.adapter.RoomManagerAdapter;
 import com.HomeCenter2.ui.adapter.RoomMenuAdapter;
 import com.HomeCenter2.ui.listener.StatusListener;
 import com.HomeCenter2.ui.listener.XMLListener;
-import com.HomeCenter2.ui.mainscreen.DetailDeviceScreen;
 import com.HomeCenter2.ui.slidingmenu.framework.RADialerMainScreenAbstract;
-import com.HomeCenter2.ui.slidingmenu.framework.ScreenManager;
 import com.HomeCenter2.ui.slidingmenu.framework.SlidingBaseActivity;
 
-public class RoomManagerScreen extends RADialerMainScreenAbstract implements
+public class RoomManagerScreenFragment extends RADialerMainScreenAbstract implements
 		OnItemLongClickListener, XMLListener,
 		DialogFragmentWrapper.OnCreateDialogFragmentListener,
 		OnItemClickListener, StatusListener,
 		View.OnClickListener, onCheckChangedListener {
 
-	private static final String TAG = "MyRoomManagerScreen";
+	private static final String TAG = "RoomManagerScreenFragment";
 	ListView mLVDevices;
 	MyDevicesAdapter mDeviceAdapter;
 	HomeCenterUIEngine mUiEngine = null;
@@ -87,8 +79,8 @@ public class RoomManagerScreen extends RADialerMainScreenAbstract implements
 	private ViewPager roomPager;
 	private RoomManagerAdapter roomAdapter;
 
-	public RoomManagerScreen(int title, String tag, SlidingBaseActivity context) {
-		super(RoomManagerScreen.class, title, tag, context);
+	public RoomManagerScreenFragment(int title, String tag, SlidingBaseActivity context) {
+		super(RoomManagerScreenFragment.class, title, tag, context);
 	}
 
 	@Override
@@ -96,7 +88,7 @@ public class RoomManagerScreen extends RADialerMainScreenAbstract implements
 		super.onCreate(savedInstanceState);
 		mUiEngine = RegisterService.getHomeCenterUIEngine();
 		if (mUiEngine == null) {
-			((HomeCenter2) mContext).doExit(mContext);
+			((HomeCenter2Activity) mContext).doExit(mContext);
 		}
 
 		mUiEngine.addStatusObserver(this);
@@ -137,12 +129,35 @@ public class RoomManagerScreen extends RADialerMainScreenAbstract implements
 	
 	private void initUI(View view){
 		roomPager = (ViewPager)view.findViewById(R.id.room_pager);
-		
+		roomPager.setOnPageChangeListener(new OnPageChangeListener() {
+			
+			@Override
+			public void onPageSelected(int arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onPageScrolled(int arg0, float arg1, int arg2) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onPageScrollStateChanged(int arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 	
 	private void initData(){
-		roomAdapter = new RoomManagerAdapter(getActivity(), getFragmentManager(), 10);
+		roomAdapter = new RoomManagerAdapter(getActivity(), getFragmentManager(), mHouse.getRooms() );
 		roomPager.setAdapter(roomAdapter);
+	}
+	
+	public void updateRoomIndex(int index){
+		roomPager.setCurrentItem(index);
 	}
 
 	@Override
@@ -249,7 +264,6 @@ public class RoomManagerScreen extends RADialerMainScreenAbstract implements
 				refreshList();
 			}
 		});
-
 	}
 
 	@Override

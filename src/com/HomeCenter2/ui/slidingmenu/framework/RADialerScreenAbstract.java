@@ -25,7 +25,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.HomeCenter2.HomeCenter2;
+import com.HomeCenter2.HomeCenter2Activity;
 import com.HomeCenter2.R;
 import com.HomeCenter2.ui.slidingmenu.framework.ActionBar.IActionBarListener;
 
@@ -72,7 +72,7 @@ public abstract class RADialerScreenAbstract extends DialogFragment implements
 	protected android.support.v7.app.ActionBar mActionBarV7;
 
 	protected PopupWindow mPopup;
-	protected HomeCenter2 mContext;
+	protected HomeCenter2Activity mContext;
 	protected ActionBar mActionBar;
 	protected View helpOverlayContainer;
 	protected ListView mVideosPopup;
@@ -98,12 +98,12 @@ public abstract class RADialerScreenAbstract extends DialogFragment implements
 			SlidingBaseActivity context) {
 		mClassName = clas;
 		mTitleId = title;
-		mContext = (HomeCenter2) context;
+		mContext = (HomeCenter2Activity) context;
 		mActionBar = null;
 		mTag = tag;
 	}
 
-	public HomeCenter2 getRadialerContext() {
+	public HomeCenter2Activity getRadialerContext() {
 		return mContext;
 	}
 

@@ -1,46 +1,47 @@
 package com.HomeCenter2.ui.adapter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.HomeCenter2.R;
 import com.HomeCenter2.customview.ToolImageView;
+import com.HomeCenter2.house.Device;
 
 public class ToolAdapter extends BaseAdapter{
 
 	private static final String TAG = "ToolAdapter";
 	
-	private int[] DRAWS = new int[]{R.drawable.ic_lamp_wht, R.drawable.ic_lock_wht, R.drawable.ic_fan_wht, R.drawable.ic_lamp_wht, R.drawable.ic_lock_wht, R.drawable.ic_fan_wht, R.drawable.ic_lock_wht, R.drawable.ic_fan_wht};
-	
 	private Context context;
+	private List<Device> devices;
 	
-	public ToolAdapter(Context context){
+	public ToolAdapter(Context context, List<Device> devices){
 		this.context = context;
+		this.devices = devices;
 	}
-
+	
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return DRAWS.length;
+		return devices.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
 		// TODO Auto-generated method stub
-		return DRAWS[position];
+		return devices.get(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
 		// TODO Auto-generated method stub
-		return DRAWS[position];
+		return position;
 	}
 
 	@Override
@@ -61,7 +62,7 @@ public class ToolAdapter extends BaseAdapter{
             vh = (ViewHolder) convertView.getTag();
         }
 		
-        vh.imgTool.setBackgroundResource(DRAWS[position]);
+        vh.imgTool.setBackgroundResource(devices.get(position).getIcon());
 		
 		return convertView;
 	}

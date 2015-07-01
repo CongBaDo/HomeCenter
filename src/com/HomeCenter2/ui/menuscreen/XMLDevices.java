@@ -20,7 +20,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.HomeCenter2.R;
-import com.HomeCenter2.HomeCenter2;
+import com.HomeCenter2.HomeCenter2Activity;
 import com.HomeCenter2.data.XMLHelper;
 import com.HomeCenter2.data.configManager;
 import com.HomeCenter2.house.Area;
@@ -43,7 +43,7 @@ import com.HomeCenter2.ui.slidingmenu.framework.SlidingBaseActivity;
 public class XMLDevices extends Fragment implements OnClickListener {
 
 	public static final String TAG = "TMT XMLDevices";
-	HomeCenter2 mContext;
+	HomeCenter2Activity mContext;
 	LinearLayout mDevicesLinear = null;
 	LayoutInflater mInflater;
 	List<Area> mAreas;
@@ -78,7 +78,7 @@ public class XMLDevices extends Fragment implements OnClickListener {
 	}
 
 	public XMLDevices(SlidingBaseActivity context) {
-		mContext = (HomeCenter2) context;
+		mContext = (HomeCenter2Activity) context;
 	}
 
 	@Override

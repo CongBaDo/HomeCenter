@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
-import com.HomeCenter2.HomeCenter2;
+import com.HomeCenter2.HomeCenter2Activity;
 
 public class FontEditText extends EditText {
 
@@ -24,6 +24,6 @@ public class FontEditText extends EditText {
 	}
 
 	private void initFont(Context context) {
-		HomeCenter2.initFont(context, this);
+		HomeCenter2Activity.initFont(context, this);
 	}
 }

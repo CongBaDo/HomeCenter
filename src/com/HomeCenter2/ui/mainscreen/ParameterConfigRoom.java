@@ -20,7 +20,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.HomeCenter2.HCRequest;
-import com.HomeCenter2.HomeCenter2;
+import com.HomeCenter2.HomeCenter2Activity;
 import com.HomeCenter2.HomeCenterUIEngine;
 import com.HomeCenter2.R;
 import com.HomeCenter2.RegisterService;
@@ -447,7 +447,7 @@ public class ParameterConfigRoom extends RADialerMainScreenAbstract implements
 		DetailDoorLockScreen fragment = DetailDoorLockScreen
 				.initializeDetailDeviceScreen(bundle, -1,
 						(SlidingBaseActivity) mContext);
-		HomeCenter2 activity = (HomeCenter2) mContext;
+		HomeCenter2Activity activity = (HomeCenter2Activity) mContext;
 		activity.switchContentView(fragment, ScreenManager.DETAIL_DEVICE_TAG,
 				true, true, false);
 	}
@@ -456,7 +456,7 @@ public class ParameterConfigRoom extends RADialerMainScreenAbstract implements
 		DetailGSM fragment = DetailGSM
 				.initializeDetailGSM(null, -1,
 						(SlidingBaseActivity) mContext);
-		HomeCenter2 activity = (HomeCenter2) mContext;
+		HomeCenter2Activity activity = (HomeCenter2Activity) mContext;
 		activity.switchContentView(fragment, ScreenManager.DETAIL_DEVICE_TAG,
 				true, true, false);
 	}

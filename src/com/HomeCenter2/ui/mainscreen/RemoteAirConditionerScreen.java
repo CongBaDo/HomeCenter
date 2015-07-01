@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-import com.HomeCenter2.HomeCenter2;
+import com.HomeCenter2.HomeCenter2Activity;
 import com.HomeCenter2.HomeCenterUIEngine;
 import com.HomeCenter2.R;
 import com.HomeCenter2.RegisterService;
@@ -153,7 +153,7 @@ public class RemoteAirConditionerScreen extends Fragment implements
 		DetailDeviceScreen fragment = DetailDeviceScreen
 				.initializeDetailDeviceScreen(bundle, -1,
 						(SlidingBaseActivity) getActivity());
-		HomeCenter2 activity = (HomeCenter2) getActivity();
+		HomeCenter2Activity activity = (HomeCenter2Activity) getActivity();
 		activity.switchContentView(fragment, ScreenManager.DETAIL_DEVICE_TAG,
 				true, true, false);
 	}

@@ -69,6 +69,8 @@ import com.HomeCenter2.ui.slidingmenu.framework.ScreenManager;
 import com.HomeCenter2.ui.slidingmenu.framework.SlidingBaseActivity;
 import com.HomeCenter2.ui.slidingmenu.framework.ViewManager;
 
+
+
 public class HomeCenter2 extends SlidingBaseActivity implements
 		OnPageScrolledCompleteListener, OnPreferenceAttachedListener,
 		OnSharedPreferenceChangeListener, ConnectSocketListener {

@@ -2,7 +2,6 @@ package com.HomeCenter2.ui.mainscreen;
 
 import java.util.List;
 
-import android.R.anim;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -26,7 +25,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -34,10 +32,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.HomeCenter2.HCRequest;
@@ -47,13 +42,9 @@ import com.HomeCenter2.RegisterService;
 import com.HomeCenter2.data.MyDate;
 import com.HomeCenter2.data.MyTime;
 import com.HomeCenter2.data.configManager;
-import com.HomeCenter2.house.Cock;
 import com.HomeCenter2.house.Device;
-import com.HomeCenter2.house.Fan;
-import com.HomeCenter2.house.Fridge;
-import com.HomeCenter2.house.Lamp;
+import com.HomeCenter2.house.DeviceTypeOnOff;
 import com.HomeCenter2.house.LampRoot;
-import com.HomeCenter2.house.PlugDevice;
 import com.HomeCenter2.house.Room;
 import com.HomeCenter2.house.StatusRelationship;
 import com.HomeCenter2.ui.DatePickerFragment;
@@ -77,8 +68,7 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 		FootLayout.onCheckChangedListener, XMLListener {
 
 	private static StatusRelationship mSR = null;
-	private Device[] mDevicetype;
-	private LayoutInflater mInflater = null;
+
 	private boolean mIsDevice = false;
 	private HomeCenterUIEngine uiEngine;
 	private Device mDevice = null;
@@ -102,11 +92,9 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 	private TextView mNameTv;
 	private EditText mNameEdit;
 	private FootLayout lnFootInfo;
-	private LinearLayout lnBodyInfo, mlnInfoDetail, mlnTypeDevice;
+	private LinearLayout lnBodyInfo, mlnInfoDetail;
 	ImageButton btnSynInfo, btnType01, btnType02, btnType03, btnType04,
 			btnType05;
-	private ImageView mIcon;
-
 	// Schedule 01
 	private DayLayout cbMonS1, cbTueS1, cbWedS1, cbThuS1, cbFriS1, cbSatS1,
 			cbSunS1;
@@ -166,32 +154,20 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mInflater = LayoutInflater.from(mContext);
-		mDevicetype = new Device[5];
-		mDevicetype[0] = new Lamp(mContext.getResources().getString(
-				R.string.lamp));
-		mDevicetype[1] = new Fan(mContext.getResources()
-				.getString(R.string.fan));
-		mDevicetype[2] = new Fridge(mContext.getResources().getString(
-				R.string.fridge));
-		mDevicetype[3] = new PlugDevice(mContext.getResources().getString(
-				R.string.plug_device));
-		mDevicetype[4] = new Cock(mContext.getResources().getString(
-				R.string.cock));
+		RegisterService service = RegisterService.getService();
+		if (service != null) {
+			uiEngine = service.getUIEngine();
+		}
 		setHasOptionsMenu(true);
-
 	}
 
 	@Override
 	protected View onCreateContentView(LayoutInflater inflater,
 			ViewGroup container, Bundle savedInstanceState) {
-		RegisterService service = RegisterService.getService();
-		if (service != null) {
-			uiEngine = service.getUIEngine();
-			if (uiEngine != null) {
-				uiEngine.addGettingSRObserver(this);
-				uiEngine.addXMLObserver(this);
-			}
+
+		if (uiEngine != null) {
+			uiEngine.addGettingSRObserver(this);
+			uiEngine.addXMLObserver(this);
 		}
 
 		Log.d(TAG, "onCreateConentView");
@@ -213,12 +189,6 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 			deviceId = mBundle.getString(configManager.BUTTON_BUNDLE);
 			name = mContext.getString(R.string.schedule) + " " + deviceId;
 		}
-
-		/*
-		 * List<Schedule> schs = new ArrayList<Schedule>(); for (int i = 0; i <
-		 * configManager.MAX_SCHEDULE; i++) { schs.add(new Schedule()); }
-		 * mDevice.setSchedules(schs);
-		 */
 
 		View view = inflater.inflate(R.layout.detail_device_screen, container,
 				false);
@@ -248,7 +218,7 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 		swOnOffS1.setChecked(false);
 
 		// Add - Delete
-		cbAddDeleteS1 = (ScheduleImageView) view.findViewById(R.id.imgOnOffS01); //TMT
+		cbAddDeleteS1 = (ScheduleImageView) view.findViewById(R.id.imgOnOffS01); // TMT
 		cbAddDeleteS1.setSrcCheched(R.drawable.ic_turn_on123);
 		cbAddDeleteS1.setSrcNonChecked(R.drawable.ic_turn_off123);
 		cbAddDeleteS1.setOnClickListener(this);
@@ -301,9 +271,9 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 		btnSyncS01 = (ImageButton) view.findViewById(R.id.btnSyncS01);
 		btnSyncS01.setOnClickListener(this);
 
-//		swOnOffS1.setChecked(false);//nganguyen changed ??? the same in 2,3,4
+		// swOnOffS1.setChecked(false);//nganguyen changed ??? the same in 2,3,4
 
-		//TMT
+		// TMT
 		rbDMYS01 = (RadioButton) view.findViewById(R.id.rbtnDMY01);
 		rbDMYS01.setOnCheckedChangeListener(this);
 		rbDayS01 = (RadioButton) view.findViewById(R.id.rbtnDay01);
@@ -332,14 +302,13 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 		swOnOffS2.setOnCheckChangedListener(this);
 		swOnOffS2.setChecked(false);
 
-		
 		// Add - Delete
 		cbAddDeleteS2 = (ScheduleImageView) view.findViewById(R.id.imgOnOffS02);
-		
+
 		cbAddDeleteS2.setSrcCheched(R.drawable.ic_turn_on123);
 		cbAddDeleteS2.setSrcNonChecked(R.drawable.ic_turn_off123);
 		cbAddDeleteS2.setOnClickListener(this);
-		cbAddDeleteS2.setOnCheckChangedListener(this);				
+		cbAddDeleteS2.setOnCheckChangedListener(this);
 
 		if (mIsDevice) {
 			swOnOffS2.setVisibility(View.VISIBLE);
@@ -385,14 +354,12 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 		cbSatS2.setChecked(false);
 		cbSunS2.setChecked(false);
 
-
-
 		btnSyncS02 = (ImageButton) view.findViewById(R.id.btnSyncS02);
 		btnSyncS02.setOnClickListener(this);
 
-//		cbAddDeleteS2.setChecked(false);
-//		swOnOffS2.setChecked(false);
-		
+		// cbAddDeleteS2.setChecked(false);
+		// swOnOffS2.setChecked(false);
+
 		rbDMYS02 = (RadioButton) view.findViewById(R.id.rbtnDMY02);
 		rbDMYS02.setOnCheckedChangeListener(this);
 		rbDayS02 = (RadioButton) view.findViewById(R.id.rbtnDay02);
@@ -444,8 +411,6 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 
 		// repeat
 
-
-
 		cbMonS3 = (DayLayout) view.findViewById(R.id.cbMonS3);
 		cbMonS3.setOnClickListener(this);
 
@@ -473,14 +438,14 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 		cbThuS3.setChecked(false);
 		cbSatS3.setChecked(false);
 		cbSunS3.setChecked(false);
-		
+
 		btnSyncS03 = (ImageButton) view.findViewById(R.id.btnSyncS03);
 		btnSyncS03.setOnClickListener(this);
 
-//		cbAddDeleteS3.setChecked(false);
-//		swOnOffS3.setChecked(false);
-		
-		//TMT
+		// cbAddDeleteS3.setChecked(false);
+		// swOnOffS3.setChecked(false);
+
+		// TMT
 		rbDMYS03 = (RadioButton) view.findViewById(R.id.rbtnDMY03);
 		rbDMYS03.setOnCheckedChangeListener(this);
 		rbDayS03 = (RadioButton) view.findViewById(R.id.rbtnDay03);
@@ -563,10 +528,10 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 		btnSyncS04 = (ImageButton) view.findViewById(R.id.btnSyncS04);
 		btnSyncS04.setOnClickListener(this);
 
-//		cbAddDeleteS4.setChecked(false);
-//		swOnOffS4.setChecked(false);
-		
-		//TMT
+		// cbAddDeleteS4.setChecked(false);
+		// swOnOffS4.setChecked(false);
+
+		// TMT
 		rbDMYS04 = (RadioButton) view.findViewById(R.id.rbtnDMY04);
 		rbDMYS04.setOnCheckedChangeListener(this);
 		rbDayS04 = (RadioButton) view.findViewById(R.id.rbtnDay04);
@@ -837,7 +802,7 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 		return relationTrigger.toString();
 
 	}
-	
+
 	private String saveShedule02(String devId) {
 		StringBuffer relationTrigger = new StringBuffer();
 		boolean isChecked = false;
@@ -896,7 +861,6 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 			relationTrigger.append("*");
 			relationTrigger.append(configManager.COMMAS);
 
-
 			// repeat days
 			relationTrigger.append(cbMonS2.isChecked() ? 1 : 0);
 			relationTrigger.append(cbTueS2.isChecked() ? 1 : 0);
@@ -926,68 +890,68 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 
 	}
 
-//	private String saveShedule02(String devId) {
-//		StringBuffer relationTrigger = new StringBuffer();
-//		boolean isChecked = false;
-//
-//		// 1 --> Add/Delete schedule (1,0)
-//		isChecked = cbAddDeleteS2.isChecked();
-//		relationTrigger.append(isChecked ? 1 : 0);
-//		relationTrigger.append(configManager.COMMAS);
-//
-//		// 0 --> on/off device (1,0)
-//		if (mIsDevice) {
-//			isChecked = swOnOffS2.isChecked();
-//
-//			relationTrigger.append(isChecked ? 1 : 0);
-//			relationTrigger.append(configManager.COMMAS);
-//
-//		} else {
-//			relationTrigger.append('r');
-//			relationTrigger.append(configManager.COMMAS);
-//		}
-//
-//		// 20 --> minute (1-59)
-//		// 1 --> hour (1-23)
-//		MyTime time = (MyTime) mTimeS02On.getTag();
-//		if (time != null) {
-//			relationTrigger.append(time.getMinute());
-//			relationTrigger.append(configManager.COMMAS);
-//
-//			relationTrigger.append(time.getHour());
-//			relationTrigger.append(configManager.COMMAS);
-//		}
-//
-//		// 31 --> day (1-31)
-//		// 12 --> month (1-12)
-//		MyDate date = (MyDate) mDayS02On.getTag();
-//		if (date != null) {
-//			relationTrigger.append(date.getDay());
-//			relationTrigger.append(configManager.COMMAS);
-//
-//			relationTrigger.append(date.getMonth());
-//			relationTrigger.append(configManager.COMMAS);
-//		}
-//
-//		// repeat days
-//		relationTrigger.append(cbMonS2.isChecked() ? 1 : 0);
-//		relationTrigger.append(cbTueS2.isChecked() ? 1 : 0);
-//		relationTrigger.append(cbWedS2.isChecked() ? 1 : 0);
-//		relationTrigger.append(cbThuS2.isChecked() ? 1 : 0);
-//		relationTrigger.append(cbFriS2.isChecked() ? 1 : 0);
-//		relationTrigger.append(cbSatS2.isChecked() ? 1 : 0);
-//		relationTrigger.append(cbSunS2.isChecked() ? 1 : 0);
-//
-//		// #8014# --> schedule index: 8 -->room;
-//		relationTrigger.append(configManager.COMMAS);
-//		relationTrigger.append(configManager.SHIFT3);
-//
-//		relationTrigger.append(roomId);
-//		relationTrigger.append(devId);
-//		relationTrigger.append(2);
-//		relationTrigger.append(configManager.SHIFT3);
-//		return relationTrigger.toString();
-//	}
+	// private String saveShedule02(String devId) {
+	// StringBuffer relationTrigger = new StringBuffer();
+	// boolean isChecked = false;
+	//
+	// // 1 --> Add/Delete schedule (1,0)
+	// isChecked = cbAddDeleteS2.isChecked();
+	// relationTrigger.append(isChecked ? 1 : 0);
+	// relationTrigger.append(configManager.COMMAS);
+	//
+	// // 0 --> on/off device (1,0)
+	// if (mIsDevice) {
+	// isChecked = swOnOffS2.isChecked();
+	//
+	// relationTrigger.append(isChecked ? 1 : 0);
+	// relationTrigger.append(configManager.COMMAS);
+	//
+	// } else {
+	// relationTrigger.append('r');
+	// relationTrigger.append(configManager.COMMAS);
+	// }
+	//
+	// // 20 --> minute (1-59)
+	// // 1 --> hour (1-23)
+	// MyTime time = (MyTime) mTimeS02On.getTag();
+	// if (time != null) {
+	// relationTrigger.append(time.getMinute());
+	// relationTrigger.append(configManager.COMMAS);
+	//
+	// relationTrigger.append(time.getHour());
+	// relationTrigger.append(configManager.COMMAS);
+	// }
+	//
+	// // 31 --> day (1-31)
+	// // 12 --> month (1-12)
+	// MyDate date = (MyDate) mDayS02On.getTag();
+	// if (date != null) {
+	// relationTrigger.append(date.getDay());
+	// relationTrigger.append(configManager.COMMAS);
+	//
+	// relationTrigger.append(date.getMonth());
+	// relationTrigger.append(configManager.COMMAS);
+	// }
+	//
+	// // repeat days
+	// relationTrigger.append(cbMonS2.isChecked() ? 1 : 0);
+	// relationTrigger.append(cbTueS2.isChecked() ? 1 : 0);
+	// relationTrigger.append(cbWedS2.isChecked() ? 1 : 0);
+	// relationTrigger.append(cbThuS2.isChecked() ? 1 : 0);
+	// relationTrigger.append(cbFriS2.isChecked() ? 1 : 0);
+	// relationTrigger.append(cbSatS2.isChecked() ? 1 : 0);
+	// relationTrigger.append(cbSunS2.isChecked() ? 1 : 0);
+	//
+	// // #8014# --> schedule index: 8 -->room;
+	// relationTrigger.append(configManager.COMMAS);
+	// relationTrigger.append(configManager.SHIFT3);
+	//
+	// relationTrigger.append(roomId);
+	// relationTrigger.append(devId);
+	// relationTrigger.append(2);
+	// relationTrigger.append(configManager.SHIFT3);
+	// return relationTrigger.toString();
+	// }
 
 	private String saveShedule03(String devId) {
 		StringBuffer relationTrigger = new StringBuffer();
@@ -1027,7 +991,7 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 			if (date != null) {
 				relationTrigger.append(date.getDay());
 				relationTrigger.append(configManager.COMMAS);
-				
+
 				relationTrigger.append(date.getMonth());
 				relationTrigger.append(configManager.COMMAS);
 
@@ -1071,7 +1035,7 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 		return relationTrigger.toString();
 
 	}
-	
+
 	private String saveShedule04(String devId) {
 		StringBuffer relationTrigger = new StringBuffer();
 		boolean isChecked = false;
@@ -1454,24 +1418,6 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 		case R.id.lnFootInfo:
 			lnFootInfo.toggle();
 			break;
-		case R.id.imgType01:
-			resetDeviceType(btnType01, false);
-			break;
-		case R.id.imgType02:
-			resetDeviceType(btnType02, false);
-			break;
-		case R.id.imgType03:
-			resetDeviceType(btnType03, false);
-			break;
-		case R.id.imgType04:
-			resetDeviceType(btnType04, false);
-			break;
-		case R.id.imgType05:
-			resetDeviceType(btnType05, false);
-			break;
-		case R.id.imgTypeDevice:
-			setAnimationTypeDevice(mlnTypeDevice, View.VISIBLE);
-			break;
 
 		// Turn when
 		case R.id.lnFootWhen:
@@ -1748,7 +1694,7 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 			CheckBox viewDevice = (CheckBox) buttonView;
 			setDeviceChecked(viewDevice, isChecked);
 			break;
-		case R.id.rbtnDMY01://TMT
+		case R.id.rbtnDMY01:// TMT
 			radioBtnChanged(rbDMYS01, isChecked, rbDayS01);
 			break;
 		case R.id.rbtnDay01:
@@ -1832,7 +1778,7 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 		cb.setChecked(isChecked);
 		if (isChecked) {
 			cb.setTypeface(Typeface.DEFAULT_BOLD);
-			cb.setTextColor(Color.parseColor("#00BFAf"));//(Color.RED);
+			cb.setTextColor(Color.parseColor("#00BFAf"));// (Color.RED);
 		} else {
 			cb.setTypeface(Typeface.DEFAULT);
 			cb.setTextColor(Color.BLACK);
@@ -2365,53 +2311,6 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 		return dialog;
 	}
 
-	private void initTypeDevice(View view) {
-		btnType01 = (ImageButton) view.findViewById(R.id.imgType01);
-		btnType01.setOnClickListener(this);
-
-		btnType02 = (ImageButton) view.findViewById(R.id.imgType02);
-		btnType02.setOnClickListener(this);
-
-		btnType03 = (ImageButton) view.findViewById(R.id.imgType03);
-		btnType03.setOnClickListener(this);
-
-		btnType04 = (ImageButton) view.findViewById(R.id.imgType04);
-		btnType04.setOnClickListener(this);
-
-		btnType05 = (ImageButton) view.findViewById(R.id.imgType05);
-		btnType05.setOnClickListener(this);
-
-		Device[] devices = uiEngine.getDeviceTypes();
-		if (devices == null && devices.length <= 0) {
-			return;
-		}
-
-		Device device = devices[0];
-		btnType01.setTag(device);
-		btnType01.setImageDrawable(mContext.getResources().getDrawable(
-				((Lamp) device).getLightIcon()));
-
-		device = devices[1];
-		btnType02.setTag(device);
-		btnType02.setImageDrawable(mContext.getResources().getDrawable(
-				((Fan) device).getLightIcon()));
-
-		device = devices[2];
-		btnType03.setTag(device);
-		btnType03.setImageDrawable(mContext.getResources().getDrawable(
-				((Fridge) device).getLightIcon()));
-
-		device = devices[3];
-		btnType04.setTag(device);
-		btnType04.setImageDrawable(mContext.getResources().getDrawable(
-				((PlugDevice) device).getLightIcon()));
-
-		device = devices[4];
-		btnType05.setTag(device);
-		btnType05.setImageDrawable(mContext.getResources().getDrawable(
-				((Cock) device).getLightIcon()));
-	}
-
 	private void initInformationDetail(View view) {
 		mNameTv = (TextView) view.findViewById(R.id.txtNameInfo);
 
@@ -2431,84 +2330,16 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 
 		mNameEdit = (EditText) view.findViewById(R.id.editNameAddDevice);
 
-		mlnTypeDevice = (LinearLayout) view.findViewById(R.id.lnTypeDevice);
-		setAnimationTypeDevice(mlnTypeDevice, View.GONE);
-
-		mIcon = (ImageView) view.findViewById(R.id.imgTypeDevice);
-		mIcon.setOnClickListener(this);
-
-		initTypeDevice(view);
-
 		lnFootInfo.setChecked(false);
 	}
 
-	public void resetDeviceType(ImageButton btn, boolean isSave) {
-		if (isSave) {
-			Device device = (Device) mIcon.getTag();
-			Device temp = null;
-			if (device instanceof Lamp) {
-				temp = new Lamp();
-				((Lamp) temp).copyToDevice((LampRoot) mDevice);
-			} else if (device instanceof Fan) {
-				temp = new Fan();
-				((Fan) temp).copyToDevice((LampRoot) mDevice);
-			} else if (device instanceof Cock) {
-				temp = new Cock();
-				((Cock) temp).copyToDevice((LampRoot) mDevice);
-			} else if (device instanceof Fridge) {
-				temp = new Fridge();
-				((Fridge) temp).copyToDevice((LampRoot) mDevice);
-
-			} else if (device instanceof PlugDevice) {
-				temp = new PlugDevice();
-				((PlugDevice) temp).copyToDevice((LampRoot) mDevice);
-			}
-			if (temp != null) {
-				mDevice = temp;
-			}
-			mIcon.setImageResource(mDevice.getIcon());
-			if (mDevice instanceof Lamp) {
-				Log.d(TAG, "lamp:");
-			} else if (mDevice instanceof Fan) {
-				Log.d(TAG, "fan:");
-			} else if (mDevice instanceof Cock) {
-				Log.d(TAG, "cock:");
-			} else if (mDevice instanceof Fridge) {
-				Log.d(TAG, "fridge:");
-			} else if (mDevice instanceof PlugDevice) {
-				Log.d(TAG, "plugdevice:");
-			}
-		} else {
-			Device device = (Device) btn.getTag();
-			mIcon.setTag(device);
-			mIcon.setImageResource(device.getIcon());
-			setAnimationTypeDevice(mlnTypeDevice, View.GONE);
-		}
-	}
-
 	private void saveInformation() {
-		resetDeviceType(null, true);
-
 		Bundle bundle = new Bundle();
 		String name = mNameEdit.getText().toString();
 		if (!TextUtils.isEmpty(name)) {
 			mDevice.setName(name);
 			bundle.putInt("id", mDevice.getId());
 			bundle.putString(configManager.NAME_BUNDLE, name);
-
-			if (mDevice instanceof Lamp) {
-				bundle.putInt("TypeDevice", configManager.LAMP);
-			} else if (mDevice instanceof Fan) {
-				bundle.putInt("TypeDevice", configManager.FAN);
-			} else if (mDevice instanceof Cock) {
-				bundle.putInt("TypeDevice", configManager.COCK);
-			} else if (mDevice instanceof Fridge) {
-				bundle.putInt("TypeDevice", configManager.FRIDGE);
-			} else if (mDevice instanceof PlugDevice) {
-				bundle.putInt("TypeDevice", configManager.PLUG_DEVICE);
-			}
-
-			// mNameTV.setText(name);
 			RegisterService service = RegisterService.getService();
 			if (service == null)
 				return;
@@ -2523,33 +2354,9 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 				Device dv = devices.get(i);
 				if (dv.getId() == mDevice.getId()) {
 					dv.setName(name);
-					if (mDevice instanceof Lamp) {
-						dv = (Lamp) mDevice;
-						devices.set(i, dv);
-						break;
-					} else if (mDevice instanceof Fan) {
-						dv = (Fan) mDevice;
-						devices.set(i, dv);
-						break;
-					} else if (mDevice instanceof Cock) {
-						dv = (Cock) mDevice;
-						devices.set(i, dv);
-						break;
-					} else if (mDevice instanceof Fridge) {
-						dv = (Fridge) mDevice;
-						devices.set(i, dv);
-						break;
-					} else if (mDevice instanceof PlugDevice) {
-						dv = (PlugDevice) mDevice;
-						devices.set(i, dv);
-						break;
-					}
-
 				}
 			}
-
 			uiEngine.saveRoom(room);
-
 		}
 	}
 
@@ -2564,19 +2371,6 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 					R.anim.bottom_to_top_pop_exit);
 			linear.startAnimation(animation);
 		}
-		linear.setVisibility(visible);
-	}
-
-	public void setAnimationTypeDevice(LinearLayout linear, int visible) {
-		/*
-		 * if(visible ==View.VISIBLE){ Animation animation =
-		 * AnimationUtils.loadAnimation(mContext,
-		 * R.anim.left_to_right_pop_exit); linear.startAnimation(animation);
-		 * }else{
-		 * 
-		 * Animation animation = AnimationUtils.loadAnimation(mContext,
-		 * R.anim.left_to_right_in_enter); linear.startAnimation(animation); }
-		 */
 		linear.setVisibility(visible);
 	}
 
@@ -2605,8 +2399,6 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 			Log.d(TAG, "TMT name: " + name);
 			mNameTv.setText(name);
 			mNameEdit.setText(name);
-			mIcon.setImageResource(mDevice.getIcon());
-			mIcon.setTag(mDevice);
 		} else {
 			mlnInfoDetail.setVisibility(View.GONE);
 		}

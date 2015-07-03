@@ -107,6 +107,5 @@ public class Light extends Device{
 	@Override
 	public void setOffIcon() {
 		icon = R.drawable.ic_objet_lumiere;
-	}
-	
+	}	
 }

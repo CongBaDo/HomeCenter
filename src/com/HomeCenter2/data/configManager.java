@@ -51,6 +51,7 @@ public class configManager {
 	public static String DEVICE = "device";
 
 	public static String TYPE = "type";
+	public static String TYPE_ON_OFF = "typeOnOff";
 	public static String ID = "id";
 	public static String NAME = "mNameTV";
 	public static String STATUS = "status";
@@ -88,19 +89,22 @@ public class configManager {
 	 * static final String ROLLER_DOWN_ID = "do";
 	 */
 
-	public static final int NORMAL = 0;
-	public static final int FAN = NORMAL + 1;
+	public static final int NORMAL = 0;	
 	public static final int LIGHT = NORMAL + 2;
 	public static final int TEMPERATURE = NORMAL + 3;
 	public static final int MOTION = NORMAL + 4;
-	public static final int DOOR_STATUS = NORMAL + 5;
-	public static final int LAMP = NORMAL + 6;
+	public static final int DOOR_STATUS = NORMAL + 5;	
 	public static final int ROLLER_SHUTTER = NORMAL + 7;
 	public static final int DOOR_LOCK = NORMAL + 8;
+	public static final int SMOKE = NORMAL + 11;
+	public static final int CAMERA = NORMAL + 12;	
+	public static final int ON_OFF = NORMAL + 14;
+	
+	
+	public static final int FAN = NORMAL + 1;
+	public static final int LAMP = NORMAL + 6;
 	public static final int FRIDGE = NORMAL + 9;
 	public static final int PLUG_DEVICE = NORMAL + 10;
-	public static final int SMOKE = NORMAL + 11;
-	public static final int CAMERA = NORMAL + 12;
 	public static final int COCK = NORMAL + 13;
 
 	// Postion of status relationship 20,1,31,12,0000000,1 //phut,h,d,m,rep,on

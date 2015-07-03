@@ -1,7 +1,5 @@
 package com.HomeCenter2.ui.mainscreen;
 
-import java.util.List;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -34,17 +32,10 @@ import com.HomeCenter2.HomeCenterUIEngine;
 import com.HomeCenter2.R;
 import com.HomeCenter2.RegisterService;
 import com.HomeCenter2.data.configManager;
-import com.HomeCenter2.house.Cock;
 import com.HomeCenter2.house.Device;
-import com.HomeCenter2.house.Fan;
-import com.HomeCenter2.house.Fridge;
-import com.HomeCenter2.house.Lamp;
-import com.HomeCenter2.house.PlugDevice;
-import com.HomeCenter2.house.Room;
 import com.HomeCenter2.house.StatusRelationship;
 import com.HomeCenter2.ui.DatePickerFragment;
 import com.HomeCenter2.ui.DialogFragmentWrapper;
-import com.HomeCenter2.ui.ExpandableHightListView;
 import com.HomeCenter2.ui.FootLayout;
 import com.HomeCenter2.ui.ScheduleImageView.onCheckChangedListener;
 import com.HomeCenter2.ui.TimePickerFragment;
@@ -59,7 +50,6 @@ public class DetailGSM extends RADialerMainScreenAbstract implements
 		FootLayout.onCheckChangedListener {
 
 	private static StatusRelationship mSR = null;
-	private Device[] mDevicetype;
 	private LayoutInflater mInflater = null;
 	private HomeCenterUIEngine uiEngine;
 
@@ -89,17 +79,6 @@ public class DetailGSM extends RADialerMainScreenAbstract implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mInflater = LayoutInflater.from(mContext);
-		mDevicetype = new Device[5];
-		mDevicetype[0] = new Lamp(mContext.getResources().getString(
-				R.string.lamp));
-		mDevicetype[1] = new Fan(mContext.getResources()
-				.getString(R.string.fan));
-		mDevicetype[2] = new Fridge(mContext.getResources().getString(
-				R.string.fridge));
-		mDevicetype[3] = new PlugDevice(mContext.getResources().getString(
-				R.string.plug_device));
-		mDevicetype[4] = new Cock(mContext.getResources().getString(
-				R.string.cock));
 		setHasOptionsMenu(true);
 
 	}
@@ -111,23 +90,23 @@ public class DetailGSM extends RADialerMainScreenAbstract implements
 
 		View view = inflater.inflate(R.layout.detail_device_screen, container,
 				false);
-		
+
 		LinearLayout layout = null;
 		layout = (LinearLayout) view.findViewById(R.id.lnInfoDevice);
-		layout.setVisibility(View.GONE);		
-		
-		layout= (LinearLayout) view.findViewById(R.id.lnDetailS01);
 		layout.setVisibility(View.GONE);
-		
+
+		layout = (LinearLayout) view.findViewById(R.id.lnDetailS01);
+		layout.setVisibility(View.GONE);
+
 		layout = (LinearLayout) view.findViewById(R.id.lnDetailS02);
 		layout.setVisibility(View.GONE);
-		
+
 		layout = (LinearLayout) view.findViewById(R.id.lnDetailS03);
 		layout.setVisibility(View.GONE);
-		
+
 		layout = (LinearLayout) view.findViewById(R.id.lnDetailS04);
 		layout.setVisibility(View.GONE);
-		
+
 		initView(view);
 		return view;
 	}
@@ -198,47 +177,6 @@ public class DetailGSM extends RADialerMainScreenAbstract implements
 
 		btnTurnWhen = (ImageButton) view.findViewById(R.id.btnSyncDevices);
 		btnTurnWhen.setOnClickListener(this);
-/*
-		Room room = (Room) uiEngine.getHouse().getRoomsById(roomId);
-
-		if (room != null) {
-			List<Device> listDevices = room.getDevices();
-			Device device = null;
-			int size = listDevices.size();
-			for (int i = 0; i < size; i++) {
-				device = listDevices.get(i);
-				int deviceId = device.getId();
-				if (deviceId == configManager.TEMPERATURE_1) {
-					cbTemp1.setText(device.getName());
-				} else if (deviceId == configManager.TEMPERATURE_2) {
-					cbTemp2.setText(device.getName());
-				} else if (deviceId == configManager.SMOKE_1) {
-					cbSmoke1.setText(device.getName());
-				} else if (deviceId == configManager.SMOKE_2) {
-					cbSmoke2.setText(device.getName());
-				} else if (deviceId == configManager.LIGHT_1) {
-					cbLight1.setText(device.getName());
-				} else if (deviceId == configManager.LIGHT_2) {
-					cbLight2.setText(device.getName());
-				} else if (deviceId == configManager.MOTION_1) {
-					cbMotion1.setText(device.getName());
-				} else if (deviceId == configManager.MOTION_2) {
-					cbMotion2.setText(device.getName());
-				} else if (deviceId == configManager.MOTION_3) {
-					cbMotion3.setText(device.getName());
-				} else if (deviceId == configManager.MOTION_4) {
-					cbMotion4.setText(device.getName());
-				} else if (deviceId == configManager.DOOR_STATUS_1) {
-					cbDoor1.setText(device.getName());
-				} else if (deviceId == configManager.DOOR_STATUS_2) {
-					cbDoor2.setText(device.getName());
-				} else if (deviceId == configManager.DOOR_STATUS_3) {
-					cbDoor3.setText(device.getName());
-				} else if (deviceId == configManager.DOOR_STATUS_4) {
-					cbDoor4.setText(device.getName());
-				}
-			}
-		}*/
 	}
 
 	private void initView(View view) {
@@ -529,7 +467,7 @@ public class DetailGSM extends RADialerMainScreenAbstract implements
 	@Override
 	public void onPageSelected() {
 		Log.d(TAG, "onPageSelected");
-		getDetailDevice();		
+		getDetailDevice();
 	}
 
 	@Override

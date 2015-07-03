@@ -48,6 +48,7 @@
     <string name="room">Room</string>
     <string name="temperature">Temperature</string>
     <string name="light">Light</string>
+    <string name="on_off">OnOff</string>
     <string name="fan">Fan</string>
     <string name="cock">Cock</string>
     <string name="motion">Motion</string>
@@ -201,4 +202,6 @@
     <string name="remote">Remote</string>
     <string name="local">Local</string>
     <string name="sensors">Sensors</string>
+    
+    
 </resources>

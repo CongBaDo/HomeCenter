@@ -6,30 +6,34 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.HomeCenter2.R;
+import com.HomeCenter2.HomeCenterUIEngine;
+import com.HomeCenter2.RegisterService;
 import com.HomeCenter2.data.configManager;
 
-public abstract class LampRoot extends Device {
-	private boolean state;	
+public class LampRoot extends Device {
+	private boolean state;
+	private int typeId;
 
 	public LampRoot() {
 		super();
-		setState(false);		
+		setState(false);
+		setTypeId(0);
 	}
-	
+
 	public LampRoot(String name) {
-		super();		
+		super();
 		setName(name);
 		setState(false);
+		setTypeId(0);
 	}
 
 	private static final String TAG = "TMT LampRoot";
 
-	public LampRoot(int id, String name, boolean state) {
+	public LampRoot(int id, String name, boolean state, int typeId) {
 		super(id, name);
-		setState(state);		
+		setState(state);
+		setTypeId(typeId);
 	}
 
 	public boolean isState() {
@@ -38,10 +42,16 @@ public abstract class LampRoot extends Device {
 
 	public void setState(boolean state) {
 		this.state = state;
-		if(this.state){
-			setOnIcon();
-		}else{
-			setOffIcon();
+		HomeCenterUIEngine uiEngine = RegisterService.getHomeCenterUIEngine();
+		if (uiEngine == null)
+			return;
+		DeviceTypeOnOff type = uiEngine.getDeviceTypeOnOff(getTypeId());
+		if (type == null)
+			return;
+		if (this.state) {
+			icon = type.getIconOn();
+		} else {
+			icon = type.getIconOff();
 		}
 	}
 
@@ -50,7 +60,11 @@ public abstract class LampRoot extends Device {
 
 		Element em = document.createElement(configManager.TYPE);
 		em.appendChild(document.createTextNode(String
-				.valueOf(configManager.LAMP)));
+				.valueOf(configManager.ON_OFF)));
+		childElement.appendChild(em);
+
+		em = document.createElement(configManager.TYPE_ON_OFF);
+		em.appendChild(document.createTextNode(String.valueOf(getTypeId())));
 		childElement.appendChild(em);
 
 		em = document.createElement(configManager.ID);
@@ -89,7 +103,9 @@ public abstract class LampRoot extends Device {
 				if (TextUtils.isEmpty(value)) {
 					continue;
 				}
-				if (name.equals(configManager.ID)) {
+				if (name.equals(configManager.TYPE_ON_OFF)) {
+					setTypeId(Integer.parseInt(value));
+				} else if (name.equals(configManager.ID)) {
 					setId(Integer.parseInt(value));
 				} else if (name.equals(configManager.NAME)) {
 					setName(value);
@@ -105,11 +121,23 @@ public abstract class LampRoot extends Device {
 			}
 		}
 	}
-	
-	public abstract void copyToDevice(LampRoot device);
-	
-	public abstract void setOnIcon();
-	
-	public abstract void setOffIcon();
-	
+
+	@Override
+	public void setOnIcon() {
+
+	}
+
+	@Override
+	public void setOffIcon() {
+		// TODO Auto-generated method stub
+	}
+
+	public int getTypeId() {
+		return typeId;
+	}
+
+	public void setTypeId(int typeId) {
+		this.typeId = typeId;
+	}
+
 }

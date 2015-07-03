@@ -239,12 +239,9 @@ public class Room implements Serializable {
 				int type = Integer.parseInt(value);
 				Device device = null;
 				switch (type) {
-				case configManager.FAN:
-					device = new Fan();
-					break;
-				case configManager.COCK:
-					device = new Cock();
-					break;
+				case configManager.ON_OFF:
+					device = new LampRoot();
+					break;				
 				case configManager.LIGHT:
 					device = new Light();
 					break;
@@ -257,29 +254,19 @@ public class Room implements Serializable {
 					break;
 				case configManager.DOOR_STATUS:
 					device = new DoorStatus();
-					break;
-				case configManager.LAMP:
-					device = new Lamp();
-					break;
+					break;				
 				case configManager.DOOR_LOCK:
 					device = new DoorLock();
 					break;
 				case configManager.ROLLER_SHUTTER:
 					device = new RollerShutter();
-					break;
-				case configManager.FRIDGE:
-					device = new Fridge();
-					break;
-				case configManager.PLUG_DEVICE:
-					device = new PlugDevice();
-					break;
+					break;				
 				case configManager.SMOKE:
 					device = new Smoke();
 					break;
 				case configManager.CAMERA:
 					device = new Camera();
 					break;
-
 				default:
 					break;
 				}
@@ -289,7 +276,6 @@ public class Room implements Serializable {
 					device.setRoomId(this.id);
 					device.readDeviceFromXML(lst);
 				}
-
 			}
 		}
 	}

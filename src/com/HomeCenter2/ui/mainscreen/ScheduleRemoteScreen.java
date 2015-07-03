@@ -27,12 +27,7 @@ import com.HomeCenter2.HomeCenterUIEngine;
 import com.HomeCenter2.R;
 import com.HomeCenter2.RegisterService;
 import com.HomeCenter2.data.configManager;
-import com.HomeCenter2.house.Cock;
 import com.HomeCenter2.house.Device;
-import com.HomeCenter2.house.Fan;
-import com.HomeCenter2.house.Fridge;
-import com.HomeCenter2.house.Lamp;
-import com.HomeCenter2.house.PlugDevice;
 import com.HomeCenter2.house.Room;
 import com.HomeCenter2.house.StatusRelationship;
 import com.HomeCenter2.ui.DatePickerFragment;
@@ -48,8 +43,7 @@ public class ScheduleRemoteScreen extends RADialerMainScreenAbstract implements
 		DialogFragmentWrapper.OnCreateDialogFragmentListener {
 
 	private final int CHANGE_TYPE_DIALOG = 0;
-	private static StatusRelationship mSR = null;
-	private Device[] mDevicetype;
+	private static StatusRelationship mSR = null;	
 	private LayoutInflater mInflater = null;
 
 	public ScheduleRemoteScreen(int title, String tag,SlidingBaseActivity context) {
@@ -78,20 +72,7 @@ public class ScheduleRemoteScreen extends RADialerMainScreenAbstract implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mInflater = LayoutInflater.from(mContext);
-		mDevicetype = new Device[5];
-
-		mDevicetype[0] = new Lamp(mContext.getResources().getString(
-				R.string.lamp));
-		mDevicetype[1] = new Fan(mContext.getResources()
-				.getString(R.string.fan));
-		mDevicetype[2] = new Fridge(mContext.getResources().getString(
-				R.string.fridge));
-		mDevicetype[3] = new PlugDevice(mContext.getResources().getString(				
-				R.string.plug_device));
-		mDevicetype[4] = new Cock(mContext.getResources().getString(
-				R.string.cock));
 		setHasOptionsMenu(true);
-
 	}
 
 	@Override

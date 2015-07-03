@@ -115,7 +115,6 @@ public class MyDevicesScreen extends RADialerMainScreenAbstract implements
 			mUiEngine.removeStatusObserver(this);
 			mUiEngine.removeXMLObserver(this);
 		}
-
 	}
 
 	@Override
@@ -160,13 +159,11 @@ public class MyDevicesScreen extends RADialerMainScreenAbstract implements
 	@Override
 	public void onScreenSlidingCompleted() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void loadHeader() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -340,8 +337,6 @@ public class MyDevicesScreen extends RADialerMainScreenAbstract implements
 	@Override
 	public Dialog onCreateDialog(int id) {
 		switch (id) {
-		case configManager.DIALOG_CHANGE_NAME:
-			return showChangeNameDialog();
 		case configManager.DIALOG_ROOM_MENU:
 			return DialogRoomMenu.showContentDeviceDialog(mContext, mInflater,
 					mRoomDropDownAdapter);
@@ -389,9 +384,9 @@ public class MyDevicesScreen extends RADialerMainScreenAbstract implements
 			@Override
 			public void run() {
 				Log.d(TAG, "changeStatusDevice");
-				if (isClicked) {					
+				if (isClicked) {
 					isClicked = false;
-				}else{
+				} else {
 					refreshList();
 				}
 

@@ -85,6 +85,7 @@ public class MyDevicesAdapter extends BaseAdapter implements OnClickListener,
 		//viewHolder.txtTitle.setTextColor(199999);
 		if (item instanceof LampRoot) {
 			LampRoot itemTemp = (LampRoot) item;
+			
 			if (itemTemp.isState()) {
 				viewHolder.deviceOn.setOnCheckChangedListener(null);
 				viewHolder.deviceOn.setChecked(true);

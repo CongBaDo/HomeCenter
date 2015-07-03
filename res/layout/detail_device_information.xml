@@ -52,59 +52,6 @@
                     android:singleLine="true"
                     android:textColor="@color/blue_light" />
             </LinearLayout>
-<!-- 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:orientation="horizontal" >
-
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/room"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/editNameRoom"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:enabled="false"
-                    android:gravity="right"
-                    android:text="hhhhh"
-                    android:textColor="@color/blue_light" />
-            </LinearLayout>
- -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"                
-                android:orientation="horizontal" >
-
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:text="@string/type_device"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textStyle="bold" />
-
-                <ImageButton
-                    android:id="@+id/imgTypeDevice"
-                    android:layout_width="@dimen/main_item_icon_height"
-                    android:layout_height="@dimen/main_item_icon_height"
-                    android:background="@drawable/btn_day"
-                    android:src="@android:drawable/ic_menu_delete" />
-            </LinearLayout>
-
-            <include layout="@layout/detail_device_list_information" />
 
             <ImageButton
                 android:id="@+id/btnSyncInfo"

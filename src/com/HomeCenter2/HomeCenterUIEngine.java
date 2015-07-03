@@ -1,13 +1,13 @@
 package com.HomeCenter2;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.InterruptedIOException;
 import java.net.Socket;
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -18,7 +18,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.os.NetworkOnMainThreadException;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
@@ -32,19 +31,15 @@ import com.HomeCenter2.data.configManager;
 import com.HomeCenter2.house.Area;
 import com.HomeCenter2.house.AudioHC;
 import com.HomeCenter2.house.Camera;
-import com.HomeCenter2.house.Cock;
 import com.HomeCenter2.house.Device;
+import com.HomeCenter2.house.DeviceTypeOnOff;
 import com.HomeCenter2.house.DoorLock;
 import com.HomeCenter2.house.DoorStatus;
-import com.HomeCenter2.house.Fan;
-import com.HomeCenter2.house.Fridge;
 import com.HomeCenter2.house.House;
 import com.HomeCenter2.house.KeyDoorLock;
-import com.HomeCenter2.house.Lamp;
 import com.HomeCenter2.house.LampRoot;
 import com.HomeCenter2.house.Light;
 import com.HomeCenter2.house.Motion;
-import com.HomeCenter2.house.PlugDevice;
 import com.HomeCenter2.house.RollerShutter;
 import com.HomeCenter2.house.Room;
 import com.HomeCenter2.house.Smoke;
@@ -79,7 +74,7 @@ public class HomeCenterUIEngine extends Handler {
 
 	private int mRoomCurrentIndex;
 
-	private Device[] mDeviceType = null;
+	private HashMap<Integer, DeviceTypeOnOff> mDeviceType = null;
 
 	public boolean isLogined() {
 		return mIsLogined;
@@ -877,16 +872,22 @@ public class HomeCenterUIEngine extends Handler {
 		case configManager.LAMP_4:
 		case configManager.LAMP_5:
 		case configManager.LAMP_6:
+			LampRoot lamp = new LampRoot();			
+			lamp.setName(context.getString(R.string.lamp));
+			lamp.setTypeId(0);
+			return lamp;
 		case configManager.LAMP_7:
 		case configManager.LAMP_8:
-		case configManager.LAMP_9:
-			Lamp lamp = new Lamp();
-			lamp.setName(context.getString(R.string.lamp));
-			return lamp;
+			LampRoot lamp1 = new LampRoot();
+			lamp1.setTypeId(1);
+			lamp1.setName(context.getString(R.string.fan));
+			return lamp1;
+		case configManager.LAMP_9:			
 		case configManager.FAN_1:
-			Fan fan = new Fan();
-			fan.setName(context.getString(R.string.fan));
-			return fan;
+			LampRoot lamp2 = new LampRoot();
+			lamp2.setTypeId(2);
+			lamp2.setName(context.getString(R.string.fridge));			
+			return lamp2;
 		case configManager.DOOR_LOCK_1:
 			DoorLock doorLock = new DoorLock();
 			doorLock.setName(context.getString(R.string.doorlock));
@@ -2223,24 +2224,48 @@ public class HomeCenterUIEngine extends Handler {
 		return audios;
 	}
 
-	public Device[] getDeviceTypes() {
+	public HashMap<Integer, DeviceTypeOnOff> getDeviceTypes() {
 		return mDeviceType;
 	}
+	
+	public DeviceTypeOnOff[] getArrayDeviceTypes() {
+		int size = mDeviceType.size();
+		DeviceTypeOnOff[] array = new DeviceTypeOnOff[size];
+		int i = 0;
+		DeviceTypeOnOff currentPagePosition = null;
+		for (Integer key : mDeviceType.keySet()) {
+			currentPagePosition = mDeviceType.get(key);
+			array[i++]=currentPagePosition;
+		}
+		return array;
+	}
 
+	public DeviceTypeOnOff getDeviceTypeOnOff(int id){
+		return mDeviceType.get(id);
+		
+	}
 	private void initDeviceTypes() {
-		mDeviceType = new Device[5];
+		
+		mDeviceType = new HashMap<Integer, DeviceTypeOnOff>();
 		RegisterService service = RegisterService.getService();
 		if (service == null)
 			return;
-		mDeviceType[0] = new Lamp(service.getResources().getString(
-				R.string.lamp));
-		mDeviceType[1] = new Fan(service.getResources().getString(R.string.fan));
-		mDeviceType[2] = new Fridge(service.getResources().getString(
-				R.string.fridge));
-		mDeviceType[3] = new PlugDevice(service.getResources().getString(
-				R.string.plug_device));
-		mDeviceType[4] = new Cock(service.getResources().getString(
-				R.string.cock));
+		
+		DeviceTypeOnOff item = new DeviceTypeOnOff(0, service.getResources().getString(R.string.lamp), R.drawable.ic_lamp_wht, R.drawable.ic_lamp_blk);
+		mDeviceType.put(0, item);
+		
+		item = new DeviceTypeOnOff(1, service.getResources().getString(R.string.fan), R.drawable.ic_fan_wht_43, R.drawable.ic_fan_blk_43);
+		mDeviceType.put(1, item);
+		
+		item = new DeviceTypeOnOff(2, service.getResources().getString(R.string.fridge), R.drawable.ic_fridge_wht_64, R.drawable.ic_fridge_blk_64);
+		mDeviceType.put(2, item);
+		
+		item = new DeviceTypeOnOff(3, service.getResources().getString(R.string.plug_device), R.drawable.ic_menu_prise_wht, R.drawable.ic_menu_prise_blk);
+		mDeviceType.put(3, item);
+		
+		
+		item = new DeviceTypeOnOff(4, service.getResources().getString(R.string.cock), R.drawable.ic_cock_wht_30, R.drawable.ic_cock_blk);
+		mDeviceType.put(4, item);		
 	}
 
 	// all infomations are gotten

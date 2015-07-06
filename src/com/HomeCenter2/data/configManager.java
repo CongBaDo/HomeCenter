@@ -21,8 +21,8 @@ import com.HomeCenter2.ui.DialogFragmentWrapper;
 
 public class configManager {
 
-	public static String FOLDERNAME = Environment.getExternalStorageDirectory()
-			.getAbsolutePath() + "/Devices";
+	public static String FOLDERNAME;// = Environment.getExternalStorageDirectory()
+//			.getAbsolutePath() + "/Devices";
 	public static String DEVICE_FILENAME = "devices.xml";
 	public static String CONFIG_FILENAME = "configs.xml";
 

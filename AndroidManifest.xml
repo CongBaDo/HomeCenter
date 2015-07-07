@@ -16,6 +16,7 @@
     </supports-screens>
 
     <application
+        android:name="com.HomeCenter2.HCApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_protection_totale"

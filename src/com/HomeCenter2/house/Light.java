@@ -12,7 +12,7 @@ import android.util.Log;
 import com.HomeCenter2.R;
 import com.HomeCenter2.data.configManager;
 
-public class Light extends Device{
+public class Light extends Sensor{
 	private int mLight;
 	
 	public Light(){

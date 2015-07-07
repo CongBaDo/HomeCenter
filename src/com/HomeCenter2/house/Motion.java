@@ -11,7 +11,7 @@ import android.util.Log;
 import com.HomeCenter2.R;
 import com.HomeCenter2.data.configManager;
 
-public class Motion extends Device{
+public class Motion extends Sensor{
 	private boolean state;
 	
 	public Motion(){

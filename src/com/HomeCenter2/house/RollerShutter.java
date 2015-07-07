@@ -12,7 +12,7 @@ import android.util.Log;
 import com.HomeCenter2.R;
 import com.HomeCenter2.data.configManager;
 
-public class RollerShutter extends Device{
+public class RollerShutter extends Control{
 	private int roller;
 	
 	public RollerShutter(){

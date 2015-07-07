@@ -5,6 +5,7 @@ import java.util.List;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -42,10 +43,12 @@ import com.HomeCenter2.RegisterService;
 import com.HomeCenter2.data.MyDate;
 import com.HomeCenter2.data.MyTime;
 import com.HomeCenter2.data.configManager;
+import com.HomeCenter2.house.Control;
 import com.HomeCenter2.house.Device;
 import com.HomeCenter2.house.DeviceTypeOnOff;
 import com.HomeCenter2.house.LampRoot;
 import com.HomeCenter2.house.Room;
+import com.HomeCenter2.house.Sensor;
 import com.HomeCenter2.house.StatusRelationship;
 import com.HomeCenter2.ui.DatePickerFragment;
 import com.HomeCenter2.ui.DayLayout;
@@ -609,7 +612,7 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 			Room room = (Room) uiEngine.getHouse().getRoomsById(roomId);
 
 			if (room != null) {
-				List<Device> listDevices = room.getDevices();
+				List<Sensor> listDevices = room.getSensors();
 				Device device = null;
 				int size = listDevices.size();
 				for (int i = 0; i < size; i++) {
@@ -2349,7 +2352,7 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 			}
 			Room room = (Room) uiEngine.getHouse().getRoomsById(roomId);
 
-			List<Device> devices = room.getDevices();
+			List<Control> devices = room.getControls();
 			for (int i = 0; i < devices.size(); i++) {
 				Device dv = devices.get(i);
 				if (dv.getId() == mDevice.getId()) {

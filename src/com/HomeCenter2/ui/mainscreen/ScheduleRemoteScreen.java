@@ -29,6 +29,7 @@ import com.HomeCenter2.RegisterService;
 import com.HomeCenter2.data.configManager;
 import com.HomeCenter2.house.Device;
 import com.HomeCenter2.house.Room;
+import com.HomeCenter2.house.Sensor;
 import com.HomeCenter2.house.StatusRelationship;
 import com.HomeCenter2.ui.DatePickerFragment;
 import com.HomeCenter2.ui.DialogFragmentWrapper;
@@ -159,7 +160,7 @@ public class ScheduleRemoteScreen extends RADialerMainScreenAbstract implements
 		btnTurnOnOffWhen.setOnClickListener(this);
 
 		if (mRoom != null) {
-			List<Device> listDevices = mRoom.getDevices();
+			List<Sensor> listDevices = mRoom.getSensors();
 			Device device = null;
 			int size = listDevices.size();
 			for (int i = 0; i < size; i++) {

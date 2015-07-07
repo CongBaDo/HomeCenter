@@ -12,7 +12,7 @@ import com.HomeCenter2.PInfo;
 import com.HomeCenter2.R;
 import com.HomeCenter2.data.configManager;
 
-public class Camera extends Device {
+public class Camera extends Control {
 	private boolean state;
 	private PInfo appInfo;
 

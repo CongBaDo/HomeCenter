@@ -20,6 +20,7 @@ import com.HomeCenter2.HomeCenter2Activity;
 import com.HomeCenter2.R;
 import com.HomeCenter2.RegisterService;
 import com.HomeCenter2.data.configManager;
+import com.HomeCenter2.house.Control;
 import com.HomeCenter2.house.Device;
 import com.HomeCenter2.house.DoorLock;
 import com.HomeCenter2.house.LampRoot;
@@ -178,7 +179,7 @@ public class MyParameterRoomAdapter extends BaseAdapter implements
 
 	
 	private boolean isTurnOnAll(Room room){
-		List<Device> devices = room.getDevices();		
+		List<Control> devices = room.getControls();		
 		Device item = null;
 		int size = devices.size();
 		boolean isTurnOnAll = true;

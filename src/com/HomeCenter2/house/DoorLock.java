@@ -14,7 +14,7 @@ import android.util.Log;
 import com.HomeCenter2.R;
 import com.HomeCenter2.data.configManager;
 
-public class DoorLock extends Device {
+public class DoorLock extends Control {
 	
 	private static final String TAG = "TMT DoorLock";
 	private boolean state;

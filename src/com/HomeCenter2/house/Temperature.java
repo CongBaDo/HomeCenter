@@ -11,7 +11,7 @@ import android.util.Log;
 import com.HomeCenter2.R;
 import com.HomeCenter2.data.configManager;
 
-public class Temperature extends Device {
+public class Temperature extends Sensor {
 	private int temperature;
 
 	public Temperature() {

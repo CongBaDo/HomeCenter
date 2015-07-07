@@ -38,6 +38,7 @@ import com.HomeCenter2.R;
 import com.HomeCenter2.RegisterService;
 import com.HomeCenter2.data.configManager;
 import com.HomeCenter2.house.Camera;
+import com.HomeCenter2.house.Control;
 import com.HomeCenter2.house.Device;
 import com.HomeCenter2.house.House;
 import com.HomeCenter2.house.Room;
@@ -215,7 +216,7 @@ public class MyCamerasScreen extends RADialerMainScreenAbstract implements
 		mTxtRoomName.setText(room.getName());
 		mImgRoomIcon.setImageResource(room.getIcon());
 
-		List<Device> devices = room.getDevices();
+		List<Control> devices = room.getControls();
 		ArrayList<Device> items = new ArrayList<Device>();
 		Device item = null;
 		int size = devices.size();

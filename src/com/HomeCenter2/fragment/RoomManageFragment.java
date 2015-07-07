@@ -69,7 +69,7 @@ public class RoomManageFragment extends Fragment implements OnClickListener{
         position = getArguments().getInt("no_page");
         room = mHouse.getRooms().get(position);
         
-        Log.w(TAG, "ROOM "+room.getName()+" "+room.getDevices());
+        Log.w(TAG, "ROOM "+room.getName()+" cs "+room.getControls());
 //        if ((savedInstanceState != null) && savedInstanceState.containsKey(KEY_CONTENT)) {
 //            mContent = savedInstanceState.getString(KEY_CONTENT);
 //        }
@@ -115,8 +115,8 @@ public class RoomManageFragment extends Fragment implements OnClickListener{
     private void initData(){
     	tvTitle.setText(room.getName());
     	
-    	adapterLeft = new ToolAdapter(getActivity(), room.getDevices());
-    	adapterRight = new ToolAdapter(getActivity(), room.getDevices());
+    	adapterLeft =  new ToolAdapter(getActivity(), room.getSensors());
+    	adapterRight = new ToolAdapter(getActivity(), room.getSensors());
     	
     	gridToolLeft.setAdapter(adapterLeft);
     	gridToolRight.setAdapter(adapterRight);

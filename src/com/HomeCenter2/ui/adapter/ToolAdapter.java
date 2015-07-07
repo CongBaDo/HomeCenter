@@ -1,6 +1,5 @@
 package com.HomeCenter2.ui.adapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -12,18 +11,18 @@ import android.widget.BaseAdapter;
 
 import com.HomeCenter2.R;
 import com.HomeCenter2.customview.ToolImageView;
-import com.HomeCenter2.house.Device;
+import com.HomeCenter2.house.Sensor;
 
 public class ToolAdapter extends BaseAdapter{
 
 	private static final String TAG = "ToolAdapter";
 	
 	private Context context;
-	private List<Device> devices;
+	private List<Sensor> devices;
 	
-	public ToolAdapter(Context context, List<Device> devices){
+	public ToolAdapter(Context context, List<Sensor> sensors){
 		this.context = context;
-		this.devices = devices;
+		this.devices = sensors;
 	}
 	
 	@Override

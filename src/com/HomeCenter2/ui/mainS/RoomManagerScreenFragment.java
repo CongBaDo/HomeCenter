@@ -31,6 +31,7 @@ import com.HomeCenter2.HomeCenterUIEngine;
 import com.HomeCenter2.R;
 import com.HomeCenter2.RegisterService;
 import com.HomeCenter2.data.configManager;
+import com.HomeCenter2.house.Control;
 import com.HomeCenter2.house.Device;
 import com.HomeCenter2.house.DoorLock;
 import com.HomeCenter2.house.House;
@@ -362,7 +363,7 @@ public class RoomManagerScreenFragment extends RADialerMainScreenAbstract implem
 
 	public void setOnOffAll(boolean isOn) {
 		setClicked(true);
-		List<Device> devices = mRoomCurrent.getDevices();
+		List<Control> devices = mRoomCurrent.getControls();
 		ArrayList<Device> items = new ArrayList<Device>();
 		Device item = null;
 		int size = devices.size();

@@ -11,7 +11,7 @@ import android.util.Log;
 import com.HomeCenter2.R;
 import com.HomeCenter2.data.configManager;
 
-public class DoorStatus extends Device{
+public class DoorStatus extends Sensor{
 	private boolean state;
 	
 	public DoorStatus(){

@@ -11,7 +11,7 @@ import com.HomeCenter2.HomeCenterUIEngine;
 import com.HomeCenter2.RegisterService;
 import com.HomeCenter2.data.configManager;
 
-public class LampRoot extends Device {
+public class LampRoot extends Control {
 	private boolean state;
 	private int typeId;
 

@@ -157,7 +157,6 @@ public class Area {
 		}else {
 			Log.d(TAG, "refreshRooms::"+ rooms.size() + "//////////////////");
 			refreshRoomsByActiveTemp();
-		}
-		
+		}		
 	}
 }

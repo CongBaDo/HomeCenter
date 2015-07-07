@@ -27,8 +27,9 @@ public class Room implements Serializable {
 	private String lockId;
 	private String idSever;
 	private String name;
-	private int areaId;	
-	private List<Device> devices;
+	private int areaId;
+	private List<Control> controls;
+	private List<Sensor> sensors;
 	private boolean active = false;
 	private boolean activeTemp = false;
 	private int energy = 0;
@@ -41,8 +42,9 @@ public class Room implements Serializable {
 		idSever = "";
 		name = "";
 		areaId = -1;
-		setState(configManager.ROOM_OFF_ALL);		
-		devices = new ArrayList<Device>();
+		setState(configManager.ROOM_OFF_ALL);
+		controls = new ArrayList<Control>();
+		sensors = new ArrayList<Sensor>();
 		active = false;
 		setLockId("");
 		setState(configManager.ROOM_OFF_ALL);
@@ -64,7 +66,8 @@ public class Room implements Serializable {
 		this.name = name;
 		this.areaId = floorId;
 		setState(configManager.ROOM_OFF_ALL);
-		devices = new ArrayList<Device>();
+		controls = new ArrayList<Control>();
+		sensors = new ArrayList<Sensor>();
 		active = false;
 		setLockId("");
 		setState(configManager.ROOM_OFF_ALL);
@@ -77,7 +80,8 @@ public class Room implements Serializable {
 		this.name = name;
 		this.areaId = floorId;
 		setState(configManager.ROOM_OFF_ALL);
-		devices = new ArrayList<Device>();
+		controls = new ArrayList<Control>();
+		sensors = new ArrayList<Sensor>();
 		active = false;
 		setLockId("");
 		setState(configManager.ROOM_OFF_ALL);
@@ -108,30 +112,23 @@ public class Room implements Serializable {
 		this.id = id;
 	}
 
-	public List<Device> getDevices() {
-		return devices;
-	}
-
-	public void setDevices(List<Device> devices) {
-		this.devices = devices;
-	}
-
-	public void clearAllDevices() {
-		if (devices != null) {
-			devices.clear();
-		}
-	}
-
 	public void addDevice(Device device) {
-		if (device != null && devices != null) {
-			device.setRoomId(this.id);
-			devices.add(device);
+		if (device instanceof Control) {
+			if (controls != null && controls != null) {
+				device.setRoomId(this.id);
+				controls.add((Control)device);
+			}
+		} else {
+			if (sensors != null && sensors != null) {
+				device.setRoomId(this.id);
+				sensors.add((Sensor) device);
+			}
 		}
 	}
 
 	public Element addRoomToXML(Document document) {
 		Element childElement = document.createElement(configManager.ROOM);
-
+		
 		Element em;
 
 		em = document.createElement(configManager.ID);
@@ -238,10 +235,12 @@ public class Room implements Serializable {
 			if (name.equals(configManager.TYPE)) {
 				int type = Integer.parseInt(value);
 				Device device = null;
+				boolean isControl = false;
 				switch (type) {
 				case configManager.ON_OFF:
 					device = new LampRoot();
-					break;				
+					isControl = true;
+					break;
 				case configManager.LIGHT:
 					device = new Light();
 					break;
@@ -254,13 +253,13 @@ public class Room implements Serializable {
 					break;
 				case configManager.DOOR_STATUS:
 					device = new DoorStatus();
-					break;				
+					break;
 				case configManager.DOOR_LOCK:
 					device = new DoorLock();
 					break;
 				case configManager.ROLLER_SHUTTER:
 					device = new RollerShutter();
-					break;				
+					break;
 				case configManager.SMOKE:
 					device = new Smoke();
 					break;
@@ -272,7 +271,11 @@ public class Room implements Serializable {
 				}
 				if (device != null) {
 					objects.add(device);
-					this.getDevices().add(device);
+					if (isControl) {
+						this.getControls().add((Control) device);
+					} else {
+						this.getSensors().add((Sensor) device);
+					}
 					device.setRoomId(this.id);
 					device.readDeviceFromXML(lst);
 				}
@@ -289,10 +292,18 @@ public class Room implements Serializable {
 	}
 
 	public void addAllObjectInHome(List<Object> objects) {
-		int size = devices.size();
+		// controls
+		int size = controls.size();
 		for (int i = 0; i < size; i++) {
-			objects.add(devices.get(i));
+			objects.add(controls.get(i));
 		}
+
+		// sensors
+		size = sensors.size();
+		for (int i = 0; i < size; i++) {
+			objects.add(sensors.get(i));
+		}
+
 	}
 
 	public boolean isActiveTemp() {
@@ -312,28 +323,36 @@ public class Room implements Serializable {
 	}
 
 	private void refreshDevicesByActive() {
-		int size = devices.size();
-		Device device = null;
-		for (int i = 0; i < size; i++) {
-			device = devices.get(i);
-			device.refreshActiveTempByActiveValue();
-		}
-	}
 
-	private void refreshDevicesByActiveTemp() {
-		int size = devices.size();
-		Device device = null;
-		for (int i = 0; i < size; i++) {
-			device = devices.get(i);
-			device.refreshActiveByActiveTempValue();
-		}
 	}
 
 	public void refreshDevicesInRoom(boolean isActive) {
 		if (isActive) {
-			refreshDevicesByActive();
+			int size = controls.size();
+			Device device = null;
+			for (int i = 0; i < size; i++) {
+				device = controls.get(i);
+				device.refreshActiveTempByActiveValue();
+			}
+
+			size = sensors.size();
+			for (int i = 0; i < size; i++) {
+				device = sensors.get(i);
+				device.refreshActiveTempByActiveValue();
+			}
 		} else {
-			refreshDevicesByActiveTemp();
+			int size = controls.size();
+			Device device = null;
+			for (int i = 0; i < size; i++) {
+				device = controls.get(i);
+				device.refreshActiveByActiveTempValue();
+			}
+
+			size = sensors.size();
+			for (int i = 0; i < size; i++) {
+				device = sensors.get(i);
+				device.refreshActiveByActiveTempValue();
+			}
 		}
 
 	}
@@ -349,29 +368,29 @@ public class Room implements Serializable {
 	public void addCamera() {
 		switch (id) {
 		case 1:
-			devices.add(new Camera(1, "camera " + id + "1", true));
-			devices.add(new Camera(1, "camera " + id + "2", true));
-			devices.add(new Camera(1, "camera " + id + "3", true));
-			devices.add(new Camera(1, "camera " + id + "4", true));
+			controls.add(new Camera(1, "camera " + id + "1", true));
+			controls.add(new Camera(1, "camera " + id + "2", true));
+			controls.add(new Camera(1, "camera " + id + "3", true));
+			controls.add(new Camera(1, "camera " + id + "4", true));
 			break;
 		case 2:
-			devices.add(new Camera(1, "camera " + id + "5", true));
-			devices.add(new Camera(1, "camera " + id + "6", true));
-			devices.add(new Camera(1, "camera " + id + "7", true));
+			controls.add(new Camera(1, "camera " + id + "5", true));
+			controls.add(new Camera(1, "camera " + id + "6", true));
+			controls.add(new Camera(1, "camera " + id + "7", true));
 			break;
 		case 3:
-			devices.add(new Camera(1, "camera " + id + "8", true));
-			devices.add(new Camera(1, "camera " + id + "9", true));
+			controls.add(new Camera(1, "camera " + id + "8", true));
+			controls.add(new Camera(1, "camera " + id + "9", true));
 			break;
 		case 4:
-			devices.add(new Camera(1, "camera " + id + "10", true));
-			devices.add(new Camera(1, "camera " + id + "11", true));
+			controls.add(new Camera(1, "camera " + id + "10", true));
+			controls.add(new Camera(1, "camera " + id + "11", true));
 			break;
 		default:
-			devices.add(new Camera(1, "camera " + id + "13", true));
-			devices.add(new Camera(1, "camera " + id + "14", true));
-			devices.add(new Camera(1, "camera " + id + "15", true));
-			devices.add(new Camera(1, "camera " + id + "16", true));
+			controls.add(new Camera(1, "camera " + id + "13", true));
+			controls.add(new Camera(1, "camera " + id + "14", true));
+			controls.add(new Camera(1, "camera " + id + "15", true));
+			controls.add(new Camera(1, "camera " + id + "16", true));
 			break;
 		}
 	}
@@ -403,14 +422,14 @@ public class Room implements Serializable {
 		this.state = state;
 	}
 
-	public void putState() {
-		int size = devices.size();
+	public void putStateControl() {
+		int size = controls.size();
 		Device item = null;
 		int isState = configManager.ROOM_OFF_ALL;
 		int countOn = 0;
 		int count = 0;
 		for (int i = 0; i < size; i++) {
-			item = devices.get(i);
+			item = controls.get(i);
 			if (item instanceof LampRoot) {
 				count++;
 				if (((LampRoot) item).isState()) {
@@ -435,13 +454,13 @@ public class Room implements Serializable {
 		return icon;
 	}
 
-	public Device getDeviceById(String id) {
-		if (devices == null) {
+	public Device getControlById(String id) {
+		if (controls == null) {
 			return null;
 		}
-		int size = devices.size();
+		int size = controls.size();
 		for (int i = 0; i < size; i++) {
-			Device device = devices.get(i);
+			Device device = controls.get(i);
 			if (id.compareTo(String.valueOf(device.getId())) == 0) {
 				return device;
 			}
@@ -450,12 +469,12 @@ public class Room implements Serializable {
 	}
 
 	public DoorLock getDoorLock() {
-		if (devices == null) {
+		if (controls == null) {
 			return null;
 		}
-		int size = devices.size();
+		int size = controls.size();
 		for (int i = 0; i < size; i++) {
-			Device device = devices.get(i);
+			Device device = controls.get(i);
 			if (device instanceof DoorLock) {
 				return (DoorLock) device;
 			}
@@ -469,6 +488,22 @@ public class Room implements Serializable {
 
 	public void setLockId(String lockId) {
 		this.lockId = lockId;
+	}
+
+	public List<Control> getControls() {
+		return controls;
+	}
+
+	public void setControls(List<Control> controls) {
+		this.controls = controls;
+	}
+
+	public List<Sensor> getSensors() {
+		return sensors;
+	}
+
+	public void setSensors(List<Sensor> sensors) {
+		this.sensors = sensors;
 	}
 
 }

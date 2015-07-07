@@ -35,6 +35,7 @@ import com.HomeCenter2.HomeCenterUIEngine;
 import com.HomeCenter2.R;
 import com.HomeCenter2.RegisterService;
 import com.HomeCenter2.data.configManager;
+import com.HomeCenter2.house.Control;
 import com.HomeCenter2.house.Device;
 import com.HomeCenter2.house.DoorLock;
 import com.HomeCenter2.house.House;
@@ -249,7 +250,7 @@ public class MyDevicesScreen extends RADialerMainScreenAbstract implements
 		mTxtRoomName.setText(room.getName());
 		mImgRoomIcon.setImageResource(room.getIcon());
 
-		List<Device> devices = room.getDevices();
+		List<Control> devices = room.getControls();
 		if (items == null) {
 			items = new ArrayList<Device>();
 		} else {
@@ -543,7 +544,7 @@ public class MyDevicesScreen extends RADialerMainScreenAbstract implements
 
 	public void setOnOffAll(boolean isOn) {
 		setClicked(true);
-		List<Device> devices = mRoomCurrent.getDevices();
+		List<Control> devices = mRoomCurrent.getControls();
 		ArrayList<Device> items = new ArrayList<Device>();
 		Device item = null;
 		int size = devices.size();

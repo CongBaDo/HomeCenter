@@ -31,6 +31,7 @@ import com.HomeCenter2.data.configManager;
 import com.HomeCenter2.house.Area;
 import com.HomeCenter2.house.AudioHC;
 import com.HomeCenter2.house.Camera;
+import com.HomeCenter2.house.Control;
 import com.HomeCenter2.house.Device;
 import com.HomeCenter2.house.DeviceTypeOnOff;
 import com.HomeCenter2.house.DoorLock;
@@ -42,6 +43,7 @@ import com.HomeCenter2.house.Light;
 import com.HomeCenter2.house.Motion;
 import com.HomeCenter2.house.RollerShutter;
 import com.HomeCenter2.house.Room;
+import com.HomeCenter2.house.Sensor;
 import com.HomeCenter2.house.Smoke;
 import com.HomeCenter2.house.StatusRelationship;
 import com.HomeCenter2.house.Temperature;
@@ -770,8 +772,7 @@ public class HomeCenterUIEngine extends Handler {
 	public List<Object> initAllDevices() {
 		List<Object> objects = new ArrayList<Object>();
 		Area area = null;
-		Room room = null;
-		Device device = null;
+		Room room = null;		
 
 		for (int i = 0; i < configManager.MAX_AREA; i++) {
 			area = new Area();
@@ -814,7 +815,9 @@ public class HomeCenterUIEngine extends Handler {
 							+ " " + (j + 1));
 					room.setOtherType(false);
 					objects.add(room);
-					for (int k = 0; k < configManager.MAX_DEVICE_IN_ROOM; k++) {
+					
+					Device device = null;
+					for (int k = 0; k < configManager.MAX_CONTROL_IN_ROOM; k++) {
 						device = initDevice(k);
 						device.setName(device.getName() + (j + 1) + (k + 1));
 						device.setId(k);
@@ -1226,14 +1229,23 @@ public class HomeCenterUIEngine extends Handler {
 				Log.d("TMT room", "getRoomStatus: text" + strStatusDevice);
 				Room room = mHouse.getRoomsById((roomId));
 				if (room != null) {
-					List<Device> devices = room.getDevices();
+					List<Control> devices = room.getControls();
 					int size = devices.size();
 					Device device = null;
 					for (int i = 0; i < size; i++) {
 						device = devices.get(i);
 						setStatusForDevice(i, strStatusDevice, device);
 					}
-					room.putState();
+					
+					List<Sensor> sensors = room.getSensors();
+					size = sensors.size();
+					Device sensor = null;
+					for (int i = 0; i < size; i++) {
+						sensor = sensors.get(i);
+						setStatusForDevice(i, strStatusDevice, sensor);
+					}
+					
+					room.putStateControl();
 				}
 				notifyStatusObserver();
 			}
@@ -1993,7 +2005,7 @@ public class HomeCenterUIEngine extends Handler {
 		String[] response = receiveMessage.split("\\r|\\n|;");
 		if (response.length >= 2) {
 			Room room = mHouse.getRoomsById(roomId);
-			DoorLock door = (DoorLock) room.getDeviceById(String.valueOf(configManager.DOOR_LOCK_1));
+			DoorLock door = (DoorLock) room.getControlById(String.valueOf(configManager.DOOR_LOCK_1));
 			List<KeyDoorLock> keys = door.getKeys();
 			int size = keys.size();
 			String status = response[1];

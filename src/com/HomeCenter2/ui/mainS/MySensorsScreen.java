@@ -34,6 +34,7 @@ import com.HomeCenter2.house.House;
 import com.HomeCenter2.house.Light;
 import com.HomeCenter2.house.Motion;
 import com.HomeCenter2.house.Room;
+import com.HomeCenter2.house.Sensor;
 import com.HomeCenter2.house.Smoke;
 import com.HomeCenter2.house.Temperature;
 import com.HomeCenter2.ui.DialogConfigDevice;
@@ -196,7 +197,7 @@ public class MySensorsScreen extends RADialerMainScreenAbstract implements
 		}
 		mTxtRoomName.setText(room.getName());
 		mImgRoomIcon.setImageResource(room.getIcon());
-		List<Device> devices = room.getDevices();
+		List<Sensor> devices = room.getSensors();
 		ArrayList<Device> items = new ArrayList<Device>();
 		Device item = null;
 		int size = devices.size();

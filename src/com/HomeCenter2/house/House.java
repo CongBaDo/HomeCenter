@@ -111,17 +111,17 @@ public class House {
 			if (object instanceof Area) {
 				Area area = (Area) object;
 				areas.add(area);
-				List<Room> lsroom = area.getRooms();
+/*				List<Room> lsroom = area.getRooms();
 				int sizeroom = lsroom.size();
 				for (int j = 0; j < sizeroom; j++) {
 					Room roomArea = lsroom.get(j);
-					List<Device> devices = roomArea.getDevices();
+					List<Device> devices = roomArea.getControls();
 					int sizedevice = devices.size();
 					for (int k = 0; k < sizedevice; k++) {
 						Device device = devices.get(k);
 					}
 				}
-
+*/
 			} else if (object instanceof Room) {
 				Room room = (Room) object;
 				Log.d(TAG, "setHouse: addRoom" + room.getName());

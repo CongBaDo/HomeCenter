@@ -149,7 +149,8 @@ public class configManager {
 
 	public static final int NUM_DEVICE_IN_PAGE = 4;
 
-	public static final int MAX_DEVICE_IN_ROOM = 30;
+	public static final int MAX_CONTROL_IN_ROOM = 16;
+	public static final int MAX_SENSOR_IN_ROOM = 14;
 	public static final int MAX_AREA = 1;
 	public static final int MAX_ROOM_IN_AREA = 8;
 	public static final int MAX_VISIBLE_ITEM_WHEEL_WIDGET = 3;

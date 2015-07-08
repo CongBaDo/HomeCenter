@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -41,7 +43,7 @@ public class ParameterConfigRoom extends RADialerMainScreenAbstract implements
 		LoginListener, DialogFragmentWrapper.OnCreateDialogFragmentListener,
 		OnItemLongClickListener, XMLListener, OnItemClickListener {
 
-	public static final String TAG = "TMT ParameterConfigDevice";
+	public static final String TAG = "ParameterConfigRoom";
 
 	public ParameterConfigRoom(int title, String tag,
 			SlidingBaseActivity context) {
@@ -52,7 +54,7 @@ public class ParameterConfigRoom extends RADialerMainScreenAbstract implements
 	List<Room> mRooms;
 	Dialog mDialog = null;
 
-	ListView mLVRooms;
+	GridView mLVRooms;
 	MyParameterRoomAdapter mRoomAdapter;
 
 	public static ParameterConfigRoom initializeParameterConfigRoom(
@@ -77,9 +79,10 @@ public class ParameterConfigRoom extends RADialerMainScreenAbstract implements
 		View view = inflater.inflate(R.layout.parameter_config_room, container,
 				false);
 
-		mLVRooms = (ListView) view.findViewById(R.id.lvRoom);
+		mLVRooms = (GridView) view.findViewById(R.id.lvRoom);
 		mLVRooms.setOnItemLongClickListener(this);
 		mLVRooms.setOnItemClickListener(this);
+		mLVRooms.setNumColumns(3);
 
 		HomeCenterUIEngine uiEngine = RegisterService.getHomeCenterUIEngine();
 		if (uiEngine == null) {
@@ -427,6 +430,8 @@ public class ParameterConfigRoom extends RADialerMainScreenAbstract implements
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		Room room = (Room) mRoomAdapter.getItem(position);
+		
+		Log.i(TAG, "onItemClick "+room.getName());
 		if (position == (configManager.MAX_ROOM_IN_AREA + 1)) {			
 				showDetailGSM();
 			

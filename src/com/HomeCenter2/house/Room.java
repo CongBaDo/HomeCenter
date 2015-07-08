@@ -255,15 +255,18 @@ public class Room implements Serializable {
 					break;
 				case configManager.DOOR_LOCK:
 					device = new DoorLock();
+					isControl = true;
 					break;
 				case configManager.ROLLER_SHUTTER:
 					device = new RollerShutter();
+					isControl = true;
 					break;
 				case configManager.SMOKE:
 					device = new Smoke();
 					break;
 				case configManager.CAMERA:
 					device = new Camera();
+					isControl = true;
 					break;
 				default:
 					break;

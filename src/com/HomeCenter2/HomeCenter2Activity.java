@@ -74,11 +74,12 @@ import com.HomeCenter2.ui.slidingmenu.framework.ViewManager;
 public class HomeCenter2Activity extends SlidingBaseActivity implements
 		OnPageScrolledCompleteListener, OnPreferenceAttachedListener,
 		OnSharedPreferenceChangeListener, ConnectSocketListener {
+	
+	private static final String TAG = "HomeCenter2Activity";
 	public static ViewManager viewManager;
 	public static final String PREF_NAME = "HomeScreenSharedPref";
 
 	static HomeCenter2Activity app_context;
-	static final String TAG = "HomeCenter2";
 	HomeCenterUIEngine uiEngine;
 
 	static final public boolean ANDROID_SIMULATOR = false;

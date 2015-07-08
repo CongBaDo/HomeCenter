@@ -203,7 +203,10 @@ public class RoomManageFragment extends Fragment implements OnClickListener{
 	}
 	
 	public void processRightView(View v, boolean isCollapse) {
+		
 		float width = v.getWidth();
+		
+		Log.e(TAG, "processRightView "+width+" "+HomeScreenSetting.ScreenW);
 		if (isCollapse) {
 			ObjectAnimator translationRight = ObjectAnimator.ofFloat(v, "X", HomeScreenSetting.ScreenW - width);
 			translationRight.setDuration(500);
@@ -227,5 +230,4 @@ public class RoomManageFragment extends Fragment implements OnClickListener{
 			translationLeft.start();
 		}
 	}
-
 }

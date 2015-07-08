@@ -135,7 +135,7 @@
 
     <!-- MainMenuItem -->
     <string name="my_main_screen">Home</string>
-    <string name="my_account_menu_item">My account</string>
+    <string name="my_setup_menu_item">Setup</string>
     <string name="my_protection_menu_item">My protection</string>
     <string name="my_devices_menu_item">My devices</string>
     <string name="my_sensors_menu_item">My sensors</string>

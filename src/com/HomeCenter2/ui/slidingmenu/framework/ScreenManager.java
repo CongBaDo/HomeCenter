@@ -22,7 +22,7 @@ import com.HomeCenter2.ui.mainS.MyCamerasScreen;
 import com.HomeCenter2.ui.mainS.MyDevicesScreen;
 import com.HomeCenter2.ui.mainS.MyEnergyScreen;
 import com.HomeCenter2.ui.mainS.RoomManagerScreenFragment;
-import com.HomeCenter2.ui.mainS.MyParametersScreen;
+import com.HomeCenter2.ui.mainS.SetupScreen;
 import com.HomeCenter2.ui.mainS.MyRemotesScreen;
 import com.HomeCenter2.ui.mainS.MySensorsScreen;
 
@@ -33,22 +33,22 @@ public class ScreenManager {
 
 	// Change mNameTV (no longer tabs)
 
-	public final static int MY_ACCOUNT_TAB_ID = 0;
+	public final static int MY_SETUP_TAB_ID = 0;
 	public final static int MY_HOME_TAB_ID	= 1;
-	public final static int MY_DEVICES_TAB_ID = MY_ACCOUNT_TAB_ID + 2;
-	public final static int MY_SENSORS_TAB_ID = MY_ACCOUNT_TAB_ID + 3;
-	public final static int MY_CAMERAS_TAB_ID = MY_ACCOUNT_TAB_ID + 4;
-	public final static int MY_REMOTE_TAB_ID = MY_ACCOUNT_TAB_ID + 5;
-	public final static int EXIT_TAB_ID = MY_ACCOUNT_TAB_ID + 6;
-	public final static int MY_AUDIO_TAB_ID = MY_ACCOUNT_TAB_ID + 7;
-	public final static int MY_ENERGY_TAB_ID = MY_ACCOUNT_TAB_ID + 8;
+	public final static int MY_DEVICES_TAB_ID = MY_SETUP_TAB_ID + 2;
+	public final static int MY_SENSORS_TAB_ID = MY_SETUP_TAB_ID + 3;
+	public final static int MY_CAMERAS_TAB_ID = MY_SETUP_TAB_ID + 4;
+	public final static int MY_REMOTE_TAB_ID = MY_SETUP_TAB_ID + 5;
+	public final static int EXIT_TAB_ID = MY_SETUP_TAB_ID + 6;
+	public final static int MY_AUDIO_TAB_ID = MY_SETUP_TAB_ID + 7;
+	public final static int MY_ENERGY_TAB_ID = MY_SETUP_TAB_ID + 8;
 
-	public final static int SETTING_TAB_ID = MY_ACCOUNT_TAB_ID + 9;
-	public final static int CONFIG_TAG_ID = MY_ACCOUNT_TAB_ID + 11;
+	public final static int SETTING_TAB_ID = MY_SETUP_TAB_ID + 9;
+	public final static int CONFIG_TAG_ID = MY_SETUP_TAB_ID + 11;
 
 	// Sub main screen
 	public final static String MY_HOME_TAB = "MyHomeScreen";
-	public final static String MY_ACCOUNT_TAB = "MyAccountScreen";
+	public final static String MY_SETUP_TAB = "MySetupScreen";
 	public final static String MY_DEVICE_TAG = "MyDeviceScreen";
 	public final static String MY_SENSORS_TAB = "MysSensorsScreen";
 	public final static String MY_CAMERAS_TAB = "MyCamerasScreen";
@@ -63,6 +63,7 @@ public class ScreenManager {
 
 	public final static String PARAMETER_CONFIG_TAG = "ParameterConfigScreen";
 	public final static String PARAMETER_ROOM_TAG = "ParameterRoomScreen";
+	public final static String PARAMETER_ACCOUNT_TAG = "ParameterAccountScreen";
 
 	public final static String SCHEDULE_DEVICE_TAG = "ShceduleDeviceScreen";
 	public final static String SCHEDULE_REMOTE_TAG = "ShceduleRemoteScreen";
@@ -78,10 +79,10 @@ public class ScreenManager {
 				R.drawable.ic_prise_selected, MY_HOME_TAB,
 				RoomManagerScreenFragment.class),
 		
-			new ScreenEntry(HOUSE_GROUP_ID, MY_ACCOUNT_TAB_ID,
-					R.string.my_account_menu_item, R.drawable.ic_home,
-					R.drawable.ic_home_selected, MY_ACCOUNT_TAB,
-					MyParametersScreen.class),
+			new ScreenEntry(HOUSE_GROUP_ID, MY_SETUP_TAB_ID,
+					R.string.my_setup_menu_item, R.drawable.ic_home,
+					R.drawable.ic_home_selected, MY_SETUP_TAB,
+					SetupScreen.class),
 					
 			new ScreenEntry(HOUSE_GROUP_ID, MY_DEVICES_TAB_ID,
 					R.string.my_devices_menu_item, R.drawable.ic_prise,
@@ -278,8 +279,8 @@ public class ScreenManager {
 			fragment = new RoomManagerScreenFragment(entry.getTitleId(), entry.getTag(), slidingBaseActivity);
 			break;
 
-		case MY_ACCOUNT_TAB_ID:
-			fragment = new MyParametersScreen(entry.getTitleId(),
+		case MY_SETUP_TAB_ID:
+			fragment = new SetupScreen(entry.getTitleId(),
 					entry.getTag(), slidingBaseActivity);
 			break;
 

@@ -27,6 +27,7 @@ import com.HomeCenter2.HomeCenterUIEngine;
 import com.HomeCenter2.R;
 import com.HomeCenter2.RegisterService;
 import com.HomeCenter2.data.configManager;
+import com.HomeCenter2.fragment.AccountFragment;
 import com.HomeCenter2.ui.DialogFragmentWrapper;
 import com.HomeCenter2.ui.adapter.MyParameterAdapter;
 import com.HomeCenter2.ui.listener.ConfigListener;
@@ -37,11 +38,11 @@ import com.HomeCenter2.ui.slidingmenu.framework.RADialerMainScreenAbstract;
 import com.HomeCenter2.ui.slidingmenu.framework.ScreenManager;
 import com.HomeCenter2.ui.slidingmenu.framework.SlidingBaseActivity;
 
-public class MyParametersScreen extends RADialerMainScreenAbstract implements
+public class SetupScreen extends RADialerMainScreenAbstract implements
 		XMLListener, TabHost.OnTabChangeListener,
 		ViewPager.OnPageChangeListener, ConfigListener , DialogFragmentWrapper.OnCreateDialogFragmentListener{
 
-	private static final String TAG = "TMT MyParametersScreen";
+	private static final String TAG = "SetupScreen";
 
 	LayoutInflater mInflater;
 	private TabHost mTabHost;
@@ -54,10 +55,11 @@ public class MyParametersScreen extends RADialerMainScreenAbstract implements
 	
 	private static final String TAG_CONFIG = "Parameter_Config";
 	private static final String TAG_ROOM = "Parameter_Room";
+	private static final String TAG_ACCOUNT = "Parameter_Account";
 	private int mCurrentTab = 0;
 
-	public MyParametersScreen(int title, String tag, SlidingBaseActivity context) {
-		super(MyParametersScreen.class, title, tag, context);
+	public SetupScreen(int title, String tag, SlidingBaseActivity context) {
+		super(SetupScreen.class, title, tag, context);
 	}
 
 	@Override
@@ -110,24 +112,30 @@ public class MyParametersScreen extends RADialerMainScreenAbstract implements
 
 	ParameterConfigDevice mDeviceFragment = null;
 	ParameterConfigRoom mRoomFragment = null;
+	private AccountFragment mAccountFragment = null;
 	List<Fragment> mFragments = null;
 
 	private void initialiseViewPager() {
 		Log.d(TAG, "initialiseViewPager");
 		if (mFragments == null) {
 			mFragments = new Vector<Fragment>();
+			
+			mRoomFragment = new ParameterConfigRoom(R.string.room,
+					ScreenManager.PARAMETER_ROOM_TAG, mContext);
+			mRoomFragment.setFragmentTag(TAG_ROOM);
+			mFragments.add(mRoomFragment);
 
 			mDeviceFragment = new ParameterConfigDevice(R.string.device,
 					ScreenManager.PARAMETER_CONFIG_TAG, mContext);
 			mDeviceFragment.setFragmentTag(TAG_CONFIG);
 			mFragments.add(mDeviceFragment);
 
-			mRoomFragment = new ParameterConfigRoom(R.string.room,
-					ScreenManager.PARAMETER_ROOM_TAG, mContext);
-			mRoomFragment.setFragmentTag(TAG_ROOM);
-			mFragments.add(mRoomFragment);
+			mAccountFragment = new AccountFragment(R.string.account,
+					ScreenManager.PARAMETER_ACCOUNT_TAG, mContext);
+			mAccountFragment.setFragmentTag(TAG_ACCOUNT);
+			mFragments.add(mAccountFragment);
 
-			Log.d(TAG, "initialiseViewPager: show adapter");
+			Log.d(TAG, "initialiseViewPager: show adapter "+mFragments.size());
 			this.mPagerAdapter = new MyParameterAdapter(mContext,
 					getFragmentManager(), mFragments);
 			this.mPager.setAdapter(this.mPagerAdapter);
@@ -135,7 +143,6 @@ public class MyParametersScreen extends RADialerMainScreenAbstract implements
 			this.mPager.setCurrentItem(mCurrentTab);
 			mTabHost.setCurrentTab(mCurrentTab);
 		}
-
 	}
 
 	/**
@@ -144,13 +151,19 @@ public class MyParametersScreen extends RADialerMainScreenAbstract implements
 	private void initialiseTabHost(Bundle args) {
 		mTabHost.setup();
 		TabInfo tabInfo = null;
+		AddTab(mContext, this.mTabHost, this.mTabHost.newTabSpec("TabP2")
+				.setIndicator("Config Room"), (tabInfo = new TabInfo("TabP2",
+						ParameterConfigRoom.class, args)));
+		this.mapTabInfo.put(tabInfo.tag, tabInfo);
+
 		AddTab(mContext, this.mTabHost, this.mTabHost.newTabSpec("TabP1")
 				.setIndicator("Config Device"), (tabInfo = new TabInfo("TabP1",
 				ParameterConfigDevice.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
 
-		AddTab(mContext, this.mTabHost, this.mTabHost.newTabSpec("TabP2")
-				.setIndicator("Config Room"), (tabInfo = new TabInfo("TabP2",
+		
+		AddTab(mContext, this.mTabHost, this.mTabHost.newTabSpec("TabP3")
+				.setIndicator("My Account"), (tabInfo = new TabInfo("TabP3",
 				ParameterConfigRoom.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
 
@@ -341,6 +354,14 @@ public class MyParametersScreen extends RADialerMainScreenAbstract implements
 					}
 					break;
 				case 1:
+					if(mAccountFragment != null && mAccountFragment.isVisible() == true){
+						((AccountFragment) mAccountFragment).saveConfig();
+					}
+					
+					break;
+					
+				case 2:
+					
 					if (mRoomFragment != null
 							&& mRoomFragment.isVisible() == true) {
 						((ParameterConfigRoom) mRoomFragment).save();
@@ -390,6 +411,11 @@ public class MyParametersScreen extends RADialerMainScreenAbstract implements
 			if (frRoom != null) {
 				this.getFragmentManager().beginTransaction().remove(frRoom)
 						.commit();
+			}
+			
+			Fragment frAccount = this.getFragmentManager().findFragmentByTag(TAG_ACCOUNT);
+			if(frAccount != null){
+				this.getFragmentManager().beginTransaction().remove(frAccount).commit();
 			}
 			mFragments = null;
 		}

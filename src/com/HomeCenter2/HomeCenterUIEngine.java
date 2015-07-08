@@ -816,10 +816,17 @@ public class HomeCenterUIEngine extends Handler {
 							+ " " + (j + 1));
 					room.setOtherType(false);
 					objects.add(room);
-
 					Device device = null;
-					for (int k = 0; k < configManager.MAX_CONTROL_IN_ROOM; k++) {
+					for (int k = 0; k < configManager.MAX_SENSOR_IN_ROOM; k++) {
 						device = initDevice(k);
+						device.setName(device.getName() + (j + 1) + (k + 1));
+						device.setId(k);
+						room.addDevice(device);
+						objects.add(device);
+					}
+					
+					for (int k = 0; k < configManager.MAX_CONTROL_IN_ROOM; k++) {
+						device = initDevice(k+ configManager.MAX_SENSOR_IN_ROOM);
 						device.setName(device.getName() + (j + 1) + (k + 1));
 						device.setId(k);
 						room.addDevice(device);

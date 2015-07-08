@@ -91,7 +91,7 @@ public class HomeCenterUIEngine extends Handler {
 		setSocket(new ClientSocket());
 		mHouse = new House();
 		mRoomCurrentIndex = 0;
-//		startSocket();//nganguyen
+		// startSocket();//nganguyen
 		initDeviceTypes();
 	}
 
@@ -150,28 +150,28 @@ public class HomeCenterUIEngine extends Handler {
 		sendcommand(id, roomID, sensorId, devID, message);
 		boolean isFailed = false;
 		// nganguyen comment to by pass login
-//		try {
-//			mSocket.getSocket().setSoTimeout(configManager.SOCKET_TIME_OUT);
-//			mSocket.setInBuffer(new BufferedReader(new InputStreamReader(
-//					mSocket.getSocket().getInputStream())));
-//			mSocket.getInBuffer().read(receivebuf, 0,
-//					configManager.MAX_BUFFER_LENGTH);
-//		} catch (IOException e) {
-//			Log.i(TAG, "sendAndReceiveMessage: reading buffer was failed - "
-//					+ e.toString());
-//			e.printStackTrace();
-//			isFailed = false;
-//		} catch (NetworkOnMainThreadException e) {
-//			e.printStackTrace();
-//			isFailed = false;
-//		}
-//		finally {
-			if (isFailed == true) {
-				receiveMessage = null;
-			} else {
-				receiveMessage = new String(receivebuf);
-			}
-//		}
+		// try {
+		// mSocket.getSocket().setSoTimeout(configManager.SOCKET_TIME_OUT);
+		// mSocket.setInBuffer(new BufferedReader(new InputStreamReader(
+		// mSocket.getSocket().getInputStream())));
+		// mSocket.getInBuffer().read(receivebuf, 0,
+		// configManager.MAX_BUFFER_LENGTH);
+		// } catch (IOException e) {
+		// Log.i(TAG, "sendAndReceiveMessage: reading buffer was failed - "
+		// + e.toString());
+		// e.printStackTrace();
+		// isFailed = false;
+		// } catch (NetworkOnMainThreadException e) {
+		// e.printStackTrace();
+		// isFailed = false;
+		// }
+		// finally {
+		if (isFailed == true) {
+			receiveMessage = null;
+		} else {
+			receiveMessage = new String(receivebuf);
+		}
+		// }
 		return receiveMessage;
 	}
 
@@ -179,7 +179,7 @@ public class HomeCenterUIEngine extends Handler {
 		Password password = (Password) bundle
 				.getSerializable(configManager.PASSWORD_BUNDLE);
 		// nganguyen comment to by pass login
-//		boolean result = psswd(password);
+		// boolean result = psswd(password);
 		boolean result = true;
 		Log.d(TAG, "login - result : " + result);
 		if (result) {
@@ -201,7 +201,7 @@ public class HomeCenterUIEngine extends Handler {
 				String tempStr = String.valueOf(temp);
 				try {
 					int light = Integer.parseInt(tempStr);
-					light1.setLight(light);					
+					light1.setLight(light);
 				} catch (Exception e) {
 					// TODO: handle exception
 					Log.d(TAG,
@@ -217,7 +217,7 @@ public class HomeCenterUIEngine extends Handler {
 				String tempStr = String.valueOf(temp);
 				try {
 					int light = Integer.parseInt(tempStr);
-					light2.setLight(light);					
+					light2.setLight(light);
 				} catch (Exception e) {
 					Log.d(TAG,
 							"setStatusForDevice - device: LIGHT_2 , status: null");
@@ -230,7 +230,7 @@ public class HomeCenterUIEngine extends Handler {
 				DoorStatus ds1 = (DoorStatus) device;
 				boolean state1 = (status
 						.charAt(configManager.DOOR_STATUS_1_POSITION) != '0');
-				ds1.setState(state1);		
+				ds1.setState(state1);
 			}
 			break;
 		case configManager.DOOR_STATUS_2:
@@ -239,7 +239,7 @@ public class HomeCenterUIEngine extends Handler {
 				DoorStatus ds2 = (DoorStatus) device;
 				boolean state2 = (status
 						.charAt(configManager.DOOR_STATUS_2_POSITION) != '0');
-				ds2.setState(state2);				
+				ds2.setState(state2);
 			}
 			break;
 		case configManager.DOOR_STATUS_3:
@@ -248,7 +248,7 @@ public class HomeCenterUIEngine extends Handler {
 				DoorStatus ds3 = (DoorStatus) device;
 				boolean state3 = (status
 						.charAt(configManager.DOOR_STATUS_3_POSITION) != '0');
-				ds3.setState(state3);				
+				ds3.setState(state3);
 			}
 			break;
 		case configManager.DOOR_STATUS_4:
@@ -257,7 +257,7 @@ public class HomeCenterUIEngine extends Handler {
 				DoorStatus ds4 = (DoorStatus) device;
 				boolean state4 = (status
 						.charAt(configManager.DOOR_STATUS_4_POSITION) != '0');
-				ds4.setState(state4);				
+				ds4.setState(state4);
 			}
 			break;
 		case configManager.MOTION_1:
@@ -266,7 +266,7 @@ public class HomeCenterUIEngine extends Handler {
 				Motion ms1 = (Motion) device;
 				boolean state5 = (status
 						.charAt(configManager.MOTION_1_POSITION) != '0');
-				ms1.setState(state5);				
+				ms1.setState(state5);
 			}
 			break;
 		case configManager.MOTION_2:
@@ -275,7 +275,7 @@ public class HomeCenterUIEngine extends Handler {
 				Motion ms2 = (Motion) device;
 				boolean state6 = (status
 						.charAt(configManager.MOTION_2_POSITION) != '0');
-				ms2.setState(state6);				
+				ms2.setState(state6);
 			}
 			break;
 		case configManager.MOTION_3:
@@ -284,7 +284,7 @@ public class HomeCenterUIEngine extends Handler {
 				Motion ms3 = (Motion) device;
 				boolean state7 = (status
 						.charAt(configManager.MOTION_3_POSITION) != '0');
-				ms3.setState(state7);				
+				ms3.setState(state7);
 			}
 			break;
 		case configManager.MOTION_4:
@@ -293,7 +293,7 @@ public class HomeCenterUIEngine extends Handler {
 				Motion ms4 = (Motion) device;
 				boolean state8 = (status
 						.charAt(configManager.MOTION_4_POSITION) != '0');
-				ms4.setState(state8);				
+				ms4.setState(state8);
 			}
 			break;
 		case configManager.TEMPERATURE_1:
@@ -355,7 +355,7 @@ public class HomeCenterUIEngine extends Handler {
 					&& device instanceof LampRoot) {
 				LampRoot lamp2 = (LampRoot) device;
 				boolean state12 = (status.charAt(configManager.LAMP_2_POSITION) == '1');
-				lamp2.setState(state12);				
+				lamp2.setState(state12);
 			}
 			break;
 		case configManager.LAMP_3:
@@ -363,7 +363,7 @@ public class HomeCenterUIEngine extends Handler {
 					&& device instanceof LampRoot) {
 				LampRoot lamp3 = (LampRoot) device;
 				boolean state = (status.charAt(configManager.LAMP_3_POSITION) == '1');
-				lamp3.setState(state);				
+				lamp3.setState(state);
 			}
 			break;
 		case configManager.LAMP_4:
@@ -371,7 +371,7 @@ public class HomeCenterUIEngine extends Handler {
 					&& device instanceof LampRoot) {
 				LampRoot lamp4 = (LampRoot) device;
 				boolean state = (status.charAt(configManager.LAMP_4_POSITION) == '1');
-				lamp4.setState(state);				
+				lamp4.setState(state);
 			}
 			break;
 		case configManager.LAMP_5:
@@ -379,7 +379,7 @@ public class HomeCenterUIEngine extends Handler {
 					&& device instanceof LampRoot) {
 				LampRoot lamp5 = (LampRoot) device;
 				boolean state = (status.charAt(configManager.LAMP_5_POSITION) == '1');
-				lamp5.setState(state);				
+				lamp5.setState(state);
 			}
 			break;
 		case configManager.LAMP_6:
@@ -387,7 +387,7 @@ public class HomeCenterUIEngine extends Handler {
 					&& device instanceof LampRoot) {
 				LampRoot lamp6 = (LampRoot) device;
 				boolean state = (status.charAt(configManager.LAMP_6_POSITION) == '1');
-				lamp6.setState(state);				
+				lamp6.setState(state);
 			}
 			break;
 		case configManager.LAMP_7:
@@ -395,7 +395,7 @@ public class HomeCenterUIEngine extends Handler {
 					&& device instanceof LampRoot) {
 				LampRoot lamp7 = (LampRoot) device;
 				boolean state = (status.charAt(configManager.LAMP_7_POSITION) == '1');
-				lamp7.setState(state);				
+				lamp7.setState(state);
 			}
 			break;
 		case configManager.LAMP_8:
@@ -403,7 +403,7 @@ public class HomeCenterUIEngine extends Handler {
 					&& device instanceof LampRoot) {
 				LampRoot lamp8 = (LampRoot) device;
 				boolean state = (status.charAt(configManager.LAMP_8_POSITION) == '1');
-				lamp8.setState(state);				
+				lamp8.setState(state);
 			}
 			break;
 		case configManager.LAMP_9:
@@ -411,7 +411,7 @@ public class HomeCenterUIEngine extends Handler {
 					&& device instanceof LampRoot) {
 				LampRoot lamp9 = (LampRoot) device;
 				boolean state = (status.charAt(configManager.LAMP_9_POSITION) == '1');
-				lamp9.setState(state);				
+				lamp9.setState(state);
 			}
 			break;
 		case configManager.FAN_1:
@@ -419,7 +419,7 @@ public class HomeCenterUIEngine extends Handler {
 					&& device instanceof LampRoot) {
 				LampRoot fan = (LampRoot) device;
 				boolean state = (status.charAt(configManager.FAN_1_POSITION) == '1');
-				fan.setState(state);				
+				fan.setState(state);
 			}
 			break;
 		case configManager.ROLLER_SHUTTER_1:
@@ -440,7 +440,7 @@ public class HomeCenterUIEngine extends Handler {
 				/*
 				 * state = (status .charAt(configManager.DOOR_LOCK_1_POSITION)
 				 * == '1'); doorlock.setState(state);
-				 */				
+				 */
 			}
 			break;
 		case configManager.SMOKE_1:
@@ -448,7 +448,7 @@ public class HomeCenterUIEngine extends Handler {
 					&& device instanceof Smoke) {
 				Smoke smoke = (Smoke) device;
 				boolean stateSmoke = (status.charAt(configManager.SMOKE_1) == '1');
-				smoke.setState(stateSmoke);				
+				smoke.setState(stateSmoke);
 			}
 			break;
 		case configManager.SMOKE_2:
@@ -456,7 +456,7 @@ public class HomeCenterUIEngine extends Handler {
 					&& device instanceof Smoke) {
 				Smoke smoke = (Smoke) device;
 				boolean stateSmoke = (status.charAt(configManager.SMOKE_2) == '1');
-				smoke.setState(stateSmoke);				
+				smoke.setState(stateSmoke);
 			}
 			break;
 		default:
@@ -772,12 +772,13 @@ public class HomeCenterUIEngine extends Handler {
 	public List<Object> initAllDevices() {
 		List<Object> objects = new ArrayList<Object>();
 		Area area = null;
-		Room room = null;		
+		Room room = null;
 
 		for (int i = 0; i < configManager.MAX_AREA; i++) {
 			area = new Area();
 			area.setId(i + 1);
-			area.setName(HomeCenter2Activity.getContext().getString(R.string.area)
+			area.setName(HomeCenter2Activity.getContext().getString(
+					R.string.area)
 					+ " " + i);
 			objects.add(area);
 
@@ -796,13 +797,13 @@ public class HomeCenterUIEngine extends Handler {
 					objects.add(room);
 					switch (temp) {
 					case 0:
-						String strAudio = HomeCenter2Activity.getContext().getString(
-								R.string.room_audio);
+						String strAudio = HomeCenter2Activity.getContext()
+								.getString(R.string.room_audio);
 						room.setName(strAudio);
 						break;
 					case 1:
-						String strGSM = HomeCenter2Activity.getContext().getString(
-								R.string.room_gsm);
+						String strGSM = HomeCenter2Activity.getContext()
+								.getString(R.string.room_gsm);
 						room.setName(strGSM);
 
 						break;
@@ -815,7 +816,7 @@ public class HomeCenterUIEngine extends Handler {
 							+ " " + (j + 1));
 					room.setOtherType(false);
 					objects.add(room);
-					
+
 					Device device = null;
 					for (int k = 0; k < configManager.MAX_CONTROL_IN_ROOM; k++) {
 						device = initDevice(k);
@@ -875,21 +876,21 @@ public class HomeCenterUIEngine extends Handler {
 		case configManager.LAMP_4:
 		case configManager.LAMP_5:
 		case configManager.LAMP_6:
-			LampRoot lamp = new LampRoot();			
+			LampRoot lamp = new LampRoot();
 			lamp.setName(context.getString(R.string.lamp));
-			lamp.setTypeId(0);
+			lamp.setTypeId(configManager.TYPE_LAMP);
 			return lamp;
 		case configManager.LAMP_7:
 		case configManager.LAMP_8:
 			LampRoot lamp1 = new LampRoot();
-			lamp1.setTypeId(1);
+			lamp1.setTypeId(configManager.TYPE_FAN);
 			lamp1.setName(context.getString(R.string.fan));
 			return lamp1;
-		case configManager.LAMP_9:			
+		case configManager.LAMP_9:
 		case configManager.FAN_1:
 			LampRoot lamp2 = new LampRoot();
-			lamp2.setTypeId(2);
-			lamp2.setName(context.getString(R.string.fridge));			
+			lamp2.setTypeId(configManager.TYPE_FRIDGE);
+			lamp2.setName(context.getString(R.string.fridge));
 			return lamp2;
 		case configManager.DOOR_LOCK_1:
 			DoorLock doorLock = new DoorLock();
@@ -1216,8 +1217,8 @@ public class HomeCenterUIEngine extends Handler {
 			return "";
 		}
 		// test old
-		//String receiveMessage = ":gs880081;32101101111103025200000000001687";
-		//String receiveMessage = ":gs88;21100111001125225200010001001701";
+		// String receiveMessage = ":gs880081;32101101111103025200000000001687";
+		// String receiveMessage = ":gs88;21100111001125225200010001001701";
 
 		Log.d("TMT room", "getRoomStatus: " + roomId + " - receiveMessage :"
 				+ receiveMessage);
@@ -1236,7 +1237,7 @@ public class HomeCenterUIEngine extends Handler {
 						device = devices.get(i);
 						setStatusForDevice(i, strStatusDevice, device);
 					}
-					
+
 					List<Sensor> sensors = room.getSensors();
 					size = sensors.size();
 					Device sensor = null;
@@ -1244,7 +1245,7 @@ public class HomeCenterUIEngine extends Handler {
 						sensor = sensors.get(i);
 						setStatusForDevice(i, strStatusDevice, sensor);
 					}
-					
+
 					room.putStateControl();
 				}
 				notifyStatusObserver();
@@ -1581,15 +1582,19 @@ public class HomeCenterUIEngine extends Handler {
 		if (receiveMessage == null) {
 			return sr;
 		}
-		// receiveMessage = ":gr888:999910100000000000"; 2: so thu tu den, 2: ko quan tam, 14: device
+		// receiveMessage = ":gr888:999910100000000000"; 2: so thu tu den, 2: ko
+		// quan tam, 14: device
 		Log.d(TAG, "getDeviceTurnWhen 1::receive/" + receiveMessage);
 		String[] response = receiveMessage.split(";|:");
 		if (response.length >= 3) {
 			String valueResponseAtPosition = response[2];
 			char valueAtPosition;
-			valueResponseAtPosition = valueResponseAtPosition.substring(4, valueResponseAtPosition.length()-1);
-			Log.d(TAG, "getDeviceTurnWhen 1::receive/" + valueResponseAtPosition + " , size: " + valueResponseAtPosition.length());
-			if (valueResponseAtPosition.length() >= (configManager.SR_DOOR4_POSITION+1)) {
+			valueResponseAtPosition = valueResponseAtPosition.substring(4,
+					valueResponseAtPosition.length() - 1);
+			Log.d(TAG, "getDeviceTurnWhen 1::receive/"
+					+ valueResponseAtPosition + " , size: "
+					+ valueResponseAtPosition.length());
+			if (valueResponseAtPosition.length() >= (configManager.SR_DOOR4_POSITION + 1)) {
 				// temp1
 				valueAtPosition = valueResponseAtPosition
 						.charAt(configManager.SR_TEMP1_POSITION);
@@ -1737,9 +1742,9 @@ public class HomeCenterUIEngine extends Handler {
 		default:
 			break;
 		}
-		 String se = bundle.getString(configManager.TURN_SMART_ENERGY);
+		String se = bundle.getString(configManager.TURN_SMART_ENERGY);
 
-		 setTimerOff(roomId, devId, se);
+		setTimerOff(roomId, devId, se);
 
 		bundleGetDevice.putInt(configManager.ROOM_ID, roomId);
 		bundleGetDevice.putString(configManager.DEVICE_ID, devId);
@@ -1823,15 +1828,14 @@ public class HomeCenterUIEngine extends Handler {
 	 */
 	public boolean getAudio() {
 		boolean result = false;
-		
+
 		for (int k = 0; k < 2; k++) {
 			Log.d(TAG, "getAudio: " + k);
 			String receiveMessage = sendAndReceiveMessage(
 					configManager.GET_AUDIO, "0", "0", "0");
 			// test old
-			//receiveMessage = ":gs66;25483651,192";
-			if(k==0)
-			{
+			// receiveMessage = ":gs66;25483651,192";
+			if (k == 0) {
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
@@ -1844,11 +1848,12 @@ public class HomeCenterUIEngine extends Handler {
 				continue;
 			}
 
-			Log.d(TAG, "getMedia - receiveMessage :" + receiveMessage + ", k: " + k);
+			Log.d(TAG, "getMedia - receiveMessage :" + receiveMessage + ", k: "
+					+ k);
 
 			String[] response = receiveMessage.split(";|,");
 			String str = "";
-			Log.d(TAG, "getMedia - receiveMessage : size: " + response.length) ;
+			Log.d(TAG, "getMedia - receiveMessage : size: " + response.length);
 			if (response.length >= 3) {
 				str = response[1];
 				Log.d(TAG, "getMedia - receiveMessage Audio : str: " + str);
@@ -1996,7 +2001,7 @@ public class HomeCenterUIEngine extends Handler {
 		String devId = configManager.convertDeviceIdToString(id);
 		String receiveMessage = sendAndReceiveMessage(
 				configManager.GET_LOCK_DOOR, String.valueOf(roomId), devId, "1");
-		//receiveMessage = ":gl220021;1111100000";
+		// receiveMessage = ":gl220021;1111100000";
 		if (receiveMessage == null) {
 			return false;
 		}
@@ -2005,15 +2010,16 @@ public class HomeCenterUIEngine extends Handler {
 		String[] response = receiveMessage.split("\\r|\\n|;");
 		if (response.length >= 2) {
 			Room room = mHouse.getRoomsById(roomId);
-			DoorLock door = (DoorLock) room.getControlById(String.valueOf(configManager.DOOR_LOCK_1));
+			DoorLock door = (DoorLock) room.getControlById(String
+					.valueOf(configManager.DOOR_LOCK_1));
 			List<KeyDoorLock> keys = door.getKeys();
 			int size = keys.size();
 			String status = response[1];
 			int sizeStatus = status.length();
 			int value = 0;
 			KeyDoorLock keyIem = null;
-			for (int i = 0; i < size && i<sizeStatus; i++) {				
-				keyIem = keys.get(i);				
+			for (int i = 0; i < size && i < sizeStatus; i++) {
+				keyIem = keys.get(i);
 				value = Integer.parseInt(String.valueOf(status.charAt(i)));
 				keyIem.setState(value == 1 ? true : false);
 			}
@@ -2067,7 +2073,7 @@ public class HomeCenterUIEngine extends Handler {
 		}
 		Log.d(TAG, "getClock- receiveMessage the first: " + receiveMessage);
 		receiveMessage = receiveMessage.trim();
-		//Log.d(TAG, "getClock- receiveMessage: " + receiveMessage);
+		// Log.d(TAG, "getClock- receiveMessage: " + receiveMessage);
 
 		receiveMessage = receiveMessage.replaceAll("\\s+", " ");
 		String[] response = receiveMessage.split("\\r|\\n|:| ");
@@ -2239,45 +2245,43 @@ public class HomeCenterUIEngine extends Handler {
 	public HashMap<Integer, DeviceTypeOnOff> getDeviceTypes() {
 		return mDeviceType;
 	}
-	
-	public DeviceTypeOnOff[] getArrayDeviceTypes() {
-		int size = mDeviceType.size();
-		DeviceTypeOnOff[] array = new DeviceTypeOnOff[size];
-		int i = 0;
-		DeviceTypeOnOff currentPagePosition = null;
+
+	public List<DeviceTypeOnOff> getArrayDeviceTypes() {
+		List<DeviceTypeOnOff> array = new ArrayList<DeviceTypeOnOff>();
+		DeviceTypeOnOff type = null;
 		for (Integer key : mDeviceType.keySet()) {
-			currentPagePosition = mDeviceType.get(key);
-			array[i++]=currentPagePosition;
+			type = mDeviceType.get(key);
+			array.add(type);
 		}
 		return array;
 	}
 
-	public DeviceTypeOnOff getDeviceTypeOnOff(int id){
+	public DeviceTypeOnOff getDeviceTypeOnOff(int id) {
 		return mDeviceType.get(id);
-		
+
 	}
+
 	private void initDeviceTypes() {
-		
+
 		mDeviceType = new HashMap<Integer, DeviceTypeOnOff>();
 		RegisterService service = RegisterService.getService();
 		if (service == null)
 			return;
-		
-		DeviceTypeOnOff item = new DeviceTypeOnOff(0, service.getResources().getString(R.string.lamp), R.drawable.ic_lamp_wht, R.drawable.ic_lamp_blk);
-		mDeviceType.put(0, item);
-		
-		item = new DeviceTypeOnOff(1, service.getResources().getString(R.string.fan), R.drawable.ic_fan_wht_43, R.drawable.ic_fan_blk_43);
-		mDeviceType.put(1, item);
-		
-		item = new DeviceTypeOnOff(2, service.getResources().getString(R.string.fridge), R.drawable.ic_fridge_wht_64, R.drawable.ic_fridge_blk_64);
-		mDeviceType.put(2, item);
-		
-		item = new DeviceTypeOnOff(3, service.getResources().getString(R.string.plug_device), R.drawable.ic_menu_prise_wht, R.drawable.ic_menu_prise_blk);
-		mDeviceType.put(3, item);
-		
-		
-		item = new DeviceTypeOnOff(4, service.getResources().getString(R.string.cock), R.drawable.ic_cock_wht_30, R.drawable.ic_cock_blk);
-		mDeviceType.put(4, item);		
+
+		DeviceTypeOnOff item = configManager.OnOffTypes.get(0);
+		mDeviceType.put(item.getId(), item);
+
+		item = configManager.OnOffTypes.get(1);
+		mDeviceType.put(item.getId(), item);
+
+		item = configManager.OnOffTypes.get(2);
+		mDeviceType.put(item.getId(), item);
+
+		item = configManager.OnOffTypes.get(3);
+		mDeviceType.put(item.getId(), item);
+
+		item = configManager.OnOffTypes.get(4);
+		mDeviceType.put(item.getId(), item);
 	}
 
 	// all infomations are gotten
@@ -2397,7 +2401,7 @@ public class HomeCenterUIEngine extends Handler {
 		int roomId = bundle.getInt(configManager.ROOM_ID);
 		String status = bundle.getString(configManager.PASSWORD_KEY);
 		String name = bundle.getString(configManager.NAME);
-		if(TextUtils.isEmpty(name) == false){			
+		if (TextUtils.isEmpty(name) == false) {
 		}
 		for (int i = 0; i < 2; i++) {
 			String receiveMessage = sendAndReceiveMessage(
@@ -2475,7 +2479,7 @@ public class HomeCenterUIEngine extends Handler {
 	public void removeAudioObserver(AudioListener observer) {
 		mAudioListeners.remove(observer);
 	}
-	
+
 	public void notifyAudioObserver(int[] result) {
 		int size = mAudioListeners.size();
 		AudioListener observer = null;

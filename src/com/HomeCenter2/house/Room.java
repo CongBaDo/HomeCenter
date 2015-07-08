@@ -244,7 +244,6 @@ public class Room implements Serializable {
 				case configManager.LIGHT:
 					device = new Light();
 					break;
-
 				case configManager.TEMPERATURE:
 					device = new Temperature();
 					break;

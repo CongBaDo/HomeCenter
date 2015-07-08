@@ -60,8 +60,9 @@ public class RegisterService extends Service{
 	public void initialize() {		
 		HandlerThread thread = new HandlerThread("MyHandlerThread");
 		thread.start();
-		mUIEngine = new HomeCenterUIEngine(thread.getLooper());
 		configManager.initConfigManager();
+		mUIEngine = new HomeCenterUIEngine(thread.getLooper());
+		
 	}
 
 	public static HomeCenterUIEngine getHomeCenterUIEngine(){

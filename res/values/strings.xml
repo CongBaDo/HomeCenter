@@ -202,6 +202,9 @@
     <string name="remote">Remote</string>
     <string name="local">Local</string>
     <string name="sensors">Sensors</string>
-    
-    
+
+    <string name="remote_tv">TV</string>
+    <string name="remote_camera">Camera</string>
+    <string name="remote_aircondition">Air Condition</string>
+
 </resources>

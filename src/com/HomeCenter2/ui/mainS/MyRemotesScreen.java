@@ -174,17 +174,17 @@ public class MyRemotesScreen extends RADialerMainScreenAbstract implements
 		mTabHost.setup();
 		TabInfo tabInfo = null;
 		AddTab(mContext, this.mTabHost, this.mTabHost.newTabSpec("Tab1")
-				.setIndicator("Tivi"), (tabInfo = new TabInfo("Tab1",
+				.setIndicator(this.getString(R.string.remote_tv)), (tabInfo = new TabInfo("Tab1",
 				RemoteTVScreen.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
 
 		AddTab(mContext, this.mTabHost, this.mTabHost.newTabSpec("Tab2")
-				.setIndicator("Camera"), (tabInfo = new TabInfo("Tab2",
+				.setIndicator(this.getString(R.string.remote_camera)), (tabInfo = new TabInfo("Tab2",
 				RemoteCameraScreen.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
 
 		AddTab(mContext, this.mTabHost, this.mTabHost.newTabSpec("Tab3")
-				.setIndicator("Air Conditioner"), (tabInfo = new TabInfo(
+				.setIndicator(this.getString(R.string.remote_aircondition)), (tabInfo = new TabInfo(
 				"Tab3", RemoteAirConditionerScreen.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
 		// Default to first tab

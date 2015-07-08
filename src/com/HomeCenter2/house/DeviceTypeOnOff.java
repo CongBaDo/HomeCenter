@@ -2,7 +2,7 @@ package com.HomeCenter2.house;
 
 public class DeviceTypeOnOff {
 	private int id;
-		private String name;
+	private String name;
 	private int iconOn;
 	private int iconOff;
 
@@ -12,7 +12,7 @@ public class DeviceTypeOnOff {
 		setIconOn(iconOn);
 		setIconOff(iconOff);
 	}
-	
+
 	public int getId() {
 		return id;
 	}
@@ -44,6 +44,5 @@ public class DeviceTypeOnOff {
 	public void setIconOff(int iconOff) {
 		this.iconOff = iconOff;
 	}
-
 
 }

@@ -1,5 +1,7 @@
 package com.HomeCenter2.data;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
@@ -15,14 +17,17 @@ import android.widget.TextView;
 
 import com.HomeCenter2.HomeCenter2Activity;
 import com.HomeCenter2.R;
+import com.HomeCenter2.RegisterService;
 import com.HomeCenter2.house.DeviceType;
+import com.HomeCenter2.house.DeviceTypeOnOff;
 import com.HomeCenter2.house.Schedule;
 import com.HomeCenter2.ui.DialogFragmentWrapper;
 
 public class configManager {
 
-	public static String FOLDERNAME;// = Environment.getExternalStorageDirectory()
-//			.getAbsolutePath() + "/Devices";
+	public static String FOLDERNAME;// =
+									// Environment.getExternalStorageDirectory()
+	// .getAbsolutePath() + "/Devices";
 	public static String DEVICE_FILENAME = "devices.xml";
 	public static String CONFIG_FILENAME = "configs.xml";
 
@@ -34,10 +39,10 @@ public class configManager {
 	public static String CONFIG = "config";
 	public static String SERVER_REMOTE = "server_remote";
 	public static String PORT_REMOTE = "port_remote";
-	
+
 	public static String SERVER_LOCAL = "server_local";
 	public static String PORT_LOCAL = "port_local";
-	
+
 	public static String IP_TYPE = "ip_type";
 
 	/**
@@ -89,24 +94,33 @@ public class configManager {
 	 * static final String ROLLER_DOWN_ID = "do";
 	 */
 
-	public static final int NORMAL = 0;	
+	public static final int NORMAL = 0;
 	public static final int LIGHT = NORMAL + 2;
 	public static final int TEMPERATURE = NORMAL + 3;
 	public static final int MOTION = NORMAL + 4;
-	public static final int DOOR_STATUS = NORMAL + 5;	
+	public static final int DOOR_STATUS = NORMAL + 5;
 	public static final int ROLLER_SHUTTER = NORMAL + 7;
 	public static final int DOOR_LOCK = NORMAL + 8;
 	public static final int SMOKE = NORMAL + 11;
-	public static final int CAMERA = NORMAL + 12;	
+	public static final int CAMERA = NORMAL + 12;
 	public static final int ON_OFF = NORMAL + 14;
-	
-	
-	public static final int FAN = NORMAL + 1;
-	public static final int LAMP = NORMAL + 6;
-	public static final int FRIDGE = NORMAL + 9;
-	public static final int PLUG_DEVICE = NORMAL + 10;
-	public static final int COCK = NORMAL + 13;
 
+	// device type id
+	public static final int TYPE_LAMP = 0;
+	public static final int TYPE_FAN = TYPE_LAMP + 1;
+	public static final int TYPE_FRIDGE = TYPE_LAMP + 2;
+	public static final int TYPE_PLUG_DEVICE = TYPE_LAMP + 3;
+	public static final int TYPE_COCK = TYPE_LAMP + 4;
+	
+
+	public static final int TYPE_REMOTE_TV = TYPE_LAMP + 5;
+	public static final int TYPE_REMOTE_CAMERA = TYPE_LAMP + 6;
+	public static final int TYPE_REMOTE_AIR = TYPE_LAMP + 7;
+	public static final int TYPE_CAMERA = TYPE_LAMP + 8;
+	public static final int TYPE_DOORCLOCK = TYPE_LAMP + 9;
+	public static final int TYPE_ROLLER_SHUTTER = TYPE_LAMP + 10;
+
+	
 	// Postion of status relationship 20,1,31,12,0000000,1 //phut,h,d,m,rep,on
 	public static final int SR_MINUTE = 0;
 	public static final int SR_HOUR = SR_MINUTE + 1;
@@ -145,7 +159,7 @@ public class configManager {
 	public static final int ROOM_TYPE = 1;
 	public static final int AREA_TYPE = 2;
 
-	public static List<DeviceType> deviceTypes = null;
+	public static List<DeviceTypeOnOff> OnOffTypes = null;
 
 	public static final int NUM_DEVICE_IN_PAGE = 4;
 
@@ -189,7 +203,7 @@ public class configManager {
 	public static final int DIALOG_SERVER_LOGIN = DIALOG_PROCESS + 16;
 
 	public static final int PROVISION_REQUEST = 0;
-	public static final int RESULT_SPEECH = 1;	
+	public static final int RESULT_SPEECH = 1;
 	public static final int RESULT_ROOM_INDEX = 113;
 
 	public static final int NO_INDEX_ROOM = -1;
@@ -293,23 +307,23 @@ public class configManager {
 	// the device order in the "get status" message receive.
 
 	public static final int LIGHT_1_POSITION = 0; //
-	public static final int LIGHT_2_POSITION = LIGHT_1_POSITION + 1; 
+	public static final int LIGHT_2_POSITION = LIGHT_1_POSITION + 1;
 	public static final int DOOR_STATUS_1_POSITION = LIGHT_1_POSITION + 2;
 	public static final int DOOR_STATUS_2_POSITION = LIGHT_1_POSITION + 3;
 	public static final int DOOR_STATUS_3_POSITION = LIGHT_1_POSITION + 4;
 	public static final int DOOR_STATUS_4_POSITION = LIGHT_1_POSITION + 5;
-	
+
 	public static final int MOTION_1_POSITION = LIGHT_1_POSITION + 6;
 	public static final int MOTION_2_POSITION = LIGHT_1_POSITION + 7;
 	public static final int MOTION_3_POSITION = LIGHT_1_POSITION + 8;
 	public static final int MOTION_4_POSITION = LIGHT_1_POSITION + 9;
-	
+
 	public static final int SMOKE_1_POSITION = LIGHT_1_POSITION + 10;
 	public static final int SMOKE_2_POSITION = LIGHT_1_POSITION + 11;
-	
+
 	public static final int TEMPERATURE_1_POSITION = LIGHT_1_POSITION + 12;
 	public static final int TEMPERATURE_2_POSITION = LIGHT_1_POSITION + 15;
-	
+
 	public static final int LAMP_1_POSITION = LIGHT_1_POSITION + 18;
 	public static final int LAMP_2_POSITION = LIGHT_1_POSITION + 19;
 	public static final int LAMP_3_POSITION = LIGHT_1_POSITION + 20;
@@ -320,8 +334,8 @@ public class configManager {
 	public static final int LAMP_8_POSITION = LIGHT_1_POSITION + 25;
 	public static final int LAMP_9_POSITION = LIGHT_1_POSITION + 26;
 	public static final int FAN_1_POSITION = LIGHT_1_POSITION + 27;
-	
-	public static final int ROLLER_STATUS_1_POSITION = LIGHT_1_POSITION + 28;	
+
+	public static final int ROLLER_STATUS_1_POSITION = LIGHT_1_POSITION + 28;
 	public static final int DOOR_LOCK_1_POSITION = LIGHT_1_POSITION + 29;
 	public static final int ENERGY_POSITION = LIGHT_1_POSITION + 30;
 	//
@@ -377,15 +391,14 @@ public class configManager {
 	public static final String ON_OFF_ACTION = "OnOffAction";
 
 	// bundle schedule
-	public static final String SHEDULE = "Shedule";	
-	
+	public static final String SHEDULE = "Shedule";
+
 	public static final int TYPE_SHEDULE_01 = 0;
 	public static final int TYPE_SHEDULE_02 = 1;
 	public static final int TYPE_SHEDULE_03 = 2;
-	public static final int TYPE_SHEDULE_04 = 3;	
+	public static final int TYPE_SHEDULE_04 = 3;
 	public static final int TYPE_TURN_WHEN_DEVICE = 4;
-	
-	
+
 	public static final String TURN_SMART_ENERGY = "SmartEnergy";
 
 	// Config
@@ -394,7 +407,7 @@ public class configManager {
 	public static final String SAVE_CLOCK = "SaveCLock";
 
 	public static final String PASSWORD_BUNDLE = "Password";
-	
+
 	public static final String NAME_BUNDLE = "NameDevice";
 
 	// Schedule
@@ -432,43 +445,77 @@ public class configManager {
 	public static final String MODE_LEARN_IR = "5";
 
 	public static final int NUMBER_SENSOR_DEFAULT = 11;
-	public static final String ZERO = "0";	
+	public static final String ZERO = "0";
 
 	/**
 	 * list devices have in house
 	 */
 	private static void createDeviceTypes() {
-		deviceTypes = new ArrayList<DeviceType>();
+		OnOffTypes = new ArrayList<DeviceTypeOnOff>();
 		Context context = HomeCenter2Activity.getContext();
 		if (context == null) {
 			return;
 		}
-		DeviceType item = null;
-		item = new DeviceType(LIGHT, context.getString(R.string.light));
-		deviceTypes.add(item);
-		item = new DeviceType(FAN, context.getString(R.string.fan));
-		deviceTypes.add(item);
 
-		item = new DeviceType(TEMPERATURE,
-				context.getString(R.string.temperature));
-		deviceTypes.add(item);
+		RegisterService service = RegisterService.getService();
+		if (service == null)
+			return;
 
-		item = new DeviceType(MOTION, context.getString(R.string.motion));
-		deviceTypes.add(item);
+		DeviceTypeOnOff item = new DeviceTypeOnOff(TYPE_LAMP, service
+				.getResources().getString(R.string.lamp),
+				R.drawable.ic_lamp_wht, R.drawable.ic_lamp_blk);
+		OnOffTypes.add(item);
 
-		item = new DeviceType(DOOR_STATUS,
-				context.getString(R.string.doorstatus));
-		deviceTypes.add(item);
+		item = new DeviceTypeOnOff(TYPE_FAN, service.getResources().getString(
+				R.string.fan), R.drawable.ic_fan_wht_43,
+				R.drawable.ic_fan_blk_43);
+		OnOffTypes.add(item);
 
-		item = new DeviceType(LAMP, context.getString(R.string.lamp));
-		deviceTypes.add(item);
+		item = new DeviceTypeOnOff(TYPE_FRIDGE, service.getResources()
+				.getString(R.string.fridge), R.drawable.ic_fridge_wht_64,
+				R.drawable.ic_fridge_blk_64);
+		OnOffTypes.add(item);
 
-		item = new DeviceType(DOOR_LOCK, context.getString(R.string.doorlock));
-		deviceTypes.add(item);
+		item = new DeviceTypeOnOff(TYPE_PLUG_DEVICE, service.getResources()
+				.getString(R.string.plug_device), R.drawable.ic_menu_prise_wht,
+				R.drawable.ic_menu_prise_blk);
+		OnOffTypes.add(item);
 
-		item = new DeviceType(ROLLER_SHUTTER,
-				context.getString(R.string.rollerShutter));
-		deviceTypes.add(item);
+		item = new DeviceTypeOnOff(TYPE_COCK, service.getResources().getString(
+				R.string.cock), R.drawable.ic_cock_wht_30,
+				R.drawable.ic_cock_blk);
+		OnOffTypes.add(item);
+
+		item = new DeviceTypeOnOff(TYPE_REMOTE_TV, service.getResources()
+				.getString(R.string.remote_tv), R.drawable.ic_remote,
+				R.drawable.ic_lamp_blk);
+		OnOffTypes.add(item);
+		
+		item = new DeviceTypeOnOff(TYPE_REMOTE_CAMERA, service.getResources()
+				.getString(R.string.remote_camera), R.drawable.ic_camera_wht,
+				R.drawable.ic_camera_wht);
+		OnOffTypes.add(item);
+		
+		item = new DeviceTypeOnOff(TYPE_REMOTE_AIR, service.getResources()
+				.getString(R.string.remote_aircondition), R.drawable.ic_24,
+				R.drawable.ic_24);
+		OnOffTypes.add(item);
+		
+		item = new DeviceTypeOnOff(TYPE_CAMERA, service.getResources()
+				.getString(R.string.camera), R.drawable.ic_surveillance,
+				R.drawable.ic_surveillance);
+		OnOffTypes.add(item);
+		
+		item = new DeviceTypeOnOff(TYPE_DOORCLOCK, service.getResources()
+				.getString(R.string.doorlock), R.drawable.lock_locked_grayscale,
+				R.drawable.lock_locked_grayscale);
+		OnOffTypes.add(item);
+		
+		item = new DeviceTypeOnOff(TYPE_ROLLER_SHUTTER, service.getResources()
+				.getString(R.string.rollerShutter), R.drawable.ic_objet_volet,
+				R.drawable.ic_objet_volet);
+		OnOffTypes.add(item);
+		
 	}
 
 	public static void initConfigManager() {
@@ -495,7 +542,6 @@ public class configManager {
 
 		createDeviceTypes();
 	}
-	
 
 	public static void setDate(TextView view, int day, int month, int year) {
 		if (view == null) {
@@ -639,15 +685,15 @@ public class configManager {
 		}
 		return pos;
 	}
-	
+
 	public static String convertIdToString(int id) {
 		String pos = "";
-		
-			if (id > 0 && id < 10) {
-				pos = "0" + String.valueOf(id);
-			} else {
-				pos = String.valueOf(id);
-			}		
+
+		if (id > 0 && id < 10) {
+			pos = "0" + String.valueOf(id);
+		} else {
+			pos = String.valueOf(id);
+		}
 		return pos;
 	}
 
@@ -660,20 +706,19 @@ public class configManager {
 	public static final int SOCKET_TIME_OUT = 1000;
 	public static final int MAX_TIME_REQUEST_AGAIN = 2000;
 	public static final int MAX_TIME_SEND_AGAIN = 2;
-	
+
 	public static final int SIZE_TEMPERATURE = 3;
 	public static final int DOWN_TEMPERATURE = 3;
 	public static final int DEFAULT_NONE_TEMPERATURE = 252;
 
-	//Audio
+	// Audio
 	public static final int POSITION_AUDIO = 0;
 	public static final int POSITION_GSM = 1;
 
-	//Schedule
-	public static final String NOT_SET_DAY_SCHEDULE = "*";	
-	
+	// Schedule
+	public static final String NOT_SET_DAY_SCHEDULE = "*";
+
 	public static final String ACTIVE_KEY = "activeKey";
 	public static final String POSITON_KEY = "positionKey";
-	
-	
+
 }

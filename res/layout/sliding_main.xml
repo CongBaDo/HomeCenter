@@ -9,16 +9,16 @@
         android:layout_width="@dimen/menu_size"
         android:layout_height="match_parent"
         android:background="#111"
-        android:orientation="vertical">
+        android:orientation="vertical" >
     </FrameLayout>
+
     <!-- @dimen/detail_size" -->
 
     <FrameLayout
         android:id="@+id/content_pane"
-        android:layout_width="@dimen/detail_size"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-         >
+        android:layout_weight="1" >
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -39,14 +39,12 @@
                 android:layout_height="match_parent"
                 android:layout_below="@id/actionbar_content_pane"
                 android:layout_toRightOf="@id/shadow_content"
-                android:orientation="vertical"
-                >
+                android:orientation="vertical" >
 
                 <FrameLayout
                     android:id="@+id/content_view"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                     />
+                    android:layout_height="match_parent" />
             </LinearLayout>
         </RelativeLayout>
     </FrameLayout>

@@ -35,7 +35,7 @@ public class SlidingBaseActivity extends ActionBarActivity implements
 
 	private static String TAG = "SlidingBaseActivity";
 	SlidingBase mSlidingMenu;
-	private ActionBarDrawerToggle mDrawerToggle;
+	
 	protected MainScreen mMainMenuScreen;
 	protected InputMethodManager mIMethodManager;
 	Vector<ISlidingListener> mSlidingObserver = new Vector<ISlidingListener>();
@@ -49,7 +49,7 @@ public class SlidingBaseActivity extends ActionBarActivity implements
 	View mPopUpKeypad;
 
 	private OnPageScrolledCompleteListener mOnPageScrolledCompleteListener;
-	private boolean mTablet = true;
+	
 	private ViewGroup mActionBar = null;
 
 	public SlidingBaseActivity(int titleRes) {
@@ -59,16 +59,7 @@ public class SlidingBaseActivity extends ActionBarActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setTablet(isTabletDevice(this));
-		// setTablet(true);
 
-		caculateScreenMetrics();
-		/*
-		 * if(mTablet == true){ paneLayout = (SlidingPaneLayout)
-		 * getLayoutInflater() .inflate(R.layout.sliding_main_tablet, null);
-		 * }else{ paneLayout = (SlidingPaneLayout) getLayoutInflater()
-		 * .inflate(R.layout.sliding_main, null); }
-		 */
 		paneLayout = (SlidingPaneLayout) getLayoutInflater().inflate(
 				R.layout.sliding_main, null);
 		setContentView(paneLayout);
@@ -95,21 +86,6 @@ public class SlidingBaseActivity extends ActionBarActivity implements
 
 		mPopup = new PopupWindow(this);
 
-		/*
-		 * if (isTablet()) { ScreenEntry entry = new
-		 * ScreenEntry(ScreenManager.CONTACTS_GROUP_ID,
-		 * ScreenManager.FAVORITES_TAB_ID, R.string.tab_bar_title_favorites,
-		 * R.drawable.sidebar_favorites_icon, FavoritesScreen.class); Fragment
-		 * fragment = (RADialerScreenAbstract) ScreenManager
-		 * .getInstance().createScreenByPrimaryEntry(entry, this);
-		 * 
-		 * Fragment fragment = new TempFragment(); mPopUpKeypad =
-		 * this.getLayoutInflater().inflate(R.layout.popup_keypad, null, false);
-		 * FrameLayout layout = (FrameLayout) mPopUpKeypad
-		 * .findViewById(R.id.popupKeypad);
-		 * getSupportFragmentManager().beginTransaction().replace(
-		 * layout.getId(), fragment); }
-		 */
 	}
 
 	public void initializeViewManager(SlidingBaseActivity context) {
@@ -647,14 +623,6 @@ public class SlidingBaseActivity extends ActionBarActivity implements
 		 */
 	}
 
-	public boolean isTablet() {
-		return mTablet;
-	}
-
-	public void setTablet(boolean mTablet) {
-		this.mTablet = mTablet;
-	}
-
 	private PopupWindow mPopup;
 
 	private boolean isPopUpShowing() {
@@ -668,13 +636,6 @@ public class SlidingBaseActivity extends ActionBarActivity implements
 
 	public int mWidth;
 	public int mHeigth;
-
-	public void caculateScreenMetrics() {
-		DisplayMetrics displaymetrics = new DisplayMetrics();
-		this.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-		mWidth = displaymetrics.widthPixels;
-		mHeigth = displaymetrics.heightPixels;
-	}
 
 	private void updateHeigthActionBar() {
 		if (mActionBar == null) {

@@ -174,18 +174,19 @@ public class MyRemotesScreen extends RADialerMainScreenAbstract implements
 		mTabHost.setup();
 		TabInfo tabInfo = null;
 		AddTab(mContext, this.mTabHost, this.mTabHost.newTabSpec("Tab1")
-				.setIndicator(this.getString(R.string.remote_tv)), (tabInfo = new TabInfo("Tab1",
-				RemoteTVScreen.class, args)));
+				.setIndicator(this.getString(R.string.remote_tv)),
+				(tabInfo = new TabInfo("Tab1", RemoteTVScreen.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
 
 		AddTab(mContext, this.mTabHost, this.mTabHost.newTabSpec("Tab2")
-				.setIndicator(this.getString(R.string.remote_camera)), (tabInfo = new TabInfo("Tab2",
-				RemoteCameraScreen.class, args)));
+				.setIndicator(this.getString(R.string.remote_camera)),
+				(tabInfo = new TabInfo("Tab2", RemoteCameraScreen.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
 
 		AddTab(mContext, this.mTabHost, this.mTabHost.newTabSpec("Tab3")
-				.setIndicator(this.getString(R.string.remote_aircondition)), (tabInfo = new TabInfo(
-				"Tab3", RemoteAirConditionerScreen.class, args)));
+				.setIndicator(this.getString(R.string.remote_aircondition)),
+				(tabInfo = new TabInfo("Tab3",
+						RemoteAirConditionerScreen.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
 		// Default to first tab
 		// this.onTabChanged("Tab1");
@@ -266,10 +267,6 @@ public class MyRemotesScreen extends RADialerMainScreenAbstract implements
 				refreshRemoteType(mMenu, configManager.REMOTE_UPDATE);
 				mUiEngine.setRemoteType(configManager.REMOTE_UPDATE);
 				return true;
-			case R.id.schedule_menu:
-				refreshRemoteType(mMenu, configManager.REMOTE_SHEDULE);
-				mUiEngine.setRemoteType(configManager.REMOTE_SHEDULE);
-				return true;
 			}
 		}
 		return super.onOptionsItemSelected(item);
@@ -293,23 +290,6 @@ public class MyRemotesScreen extends RADialerMainScreenAbstract implements
 			title = mRoomCurrent.getName();
 			mTxtRoomName.setText(title + " - " + item.getTitle());
 
-			item = menu.findItem(R.id.schedule_menu);
-			item.setChecked(false);
-
-			break;
-		case configManager.REMOTE_SHEDULE:
-			item = menu.findItem(R.id.control_menu);
-			item.setChecked(false);
-
-			item = menu.findItem(R.id.update_menu);
-			item.setChecked(false);
-
-			item = menu.findItem(R.id.schedule_menu);
-			item.setChecked(true);
-
-			title = mRoomCurrent.getName();
-			mTxtRoomName.setText(title + " - " + item.getTitle());
-
 			break;
 		default:
 			item = menu.findItem(R.id.control_menu);
@@ -319,9 +299,6 @@ public class MyRemotesScreen extends RADialerMainScreenAbstract implements
 			mTxtRoomName.setText(title + " - " + item.getTitle());
 
 			item = menu.findItem(R.id.update_menu);
-			item.setChecked(false);
-
-			item = menu.findItem(R.id.schedule_menu);
 			item.setChecked(false);
 
 			break;
@@ -345,9 +322,6 @@ public class MyRemotesScreen extends RADialerMainScreenAbstract implements
 		}
 		String status = "";
 		switch (mRemoteStatus) {
-		case configManager.REMOTE_SHEDULE:
-			status = mContext.getString(R.string.schedule);
-			break;
 		case configManager.REMOTE_UPDATE:
 			status = mContext.getString(R.string.update);
 			break;
@@ -450,7 +424,6 @@ public class MyRemotesScreen extends RADialerMainScreenAbstract implements
 		super.onDestroy();
 		mUiEngine.removeStatusObserver(this);
 		mUiEngine.removeXMLObserver(this);
-		
 
 	}
 
@@ -554,10 +527,10 @@ public class MyRemotesScreen extends RADialerMainScreenAbstract implements
 	 * OnPageChangeListener#onPageSelected(int</span>)
 	 */
 	@Override
-	public void onPageSelected(int position) {		
+	public void onPageSelected(int position) {
 		this.mTabHost.setCurrentTab(position);
-		////
-		
+		// //
+
 	}
 
 	/*
@@ -587,7 +560,7 @@ public class MyRemotesScreen extends RADialerMainScreenAbstract implements
 			mRoomDropDownAdapter.setSelected(mUiEngine.getRoomCurrentIndex());
 			refreshListByPosition(mRoomDropDownAdapter.getSelected());
 		}
-		showViewPager();		
+		showViewPager();
 	}
 
 	public Room getCurrentRoom() {

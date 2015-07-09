@@ -25,27 +25,43 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="4dp" >
+        android:padding="8dp" >
 
-        <com.HomeCenter2.customview.SquareImageView
-            android:id="@+id/image_thumb_left"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <com.HomeCenter2.customview.CategoryView
+            android:id="@+id/contain_left"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_margin="4dp"
             android:layout_weight="1"
-            android:background="@drawable/boder_item_room_config"
-            android:padding="8dp" >
-        </com.HomeCenter2.customview.SquareImageView>
+            android:background="@drawable/boder_image_thumb" >
 
-        <com.HomeCenter2.customview.SquareImageView
-            android:id="@+id/image_thumb_right"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            <ImageView
+                android:id="@+id/image_thumb_left"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_margin="8dp"
+                android:scaleType="centerCrop" >
+            </ImageView>
+        </com.HomeCenter2.customview.CategoryView>
+
+        <com.HomeCenter2.customview.CategoryView
+            android:id="@+id/contain_right"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_margin="4dp"
             android:layout_weight="1"
-            android:background="@drawable/boder_item_room_config"
-            android:padding="8dp" >
-        </com.HomeCenter2.customview.SquareImageView>
+            android:background="@drawable/boder_image_thumb" >
+
+            <ImageView
+                android:id="@+id/image_thumb_right"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_margin="8dp"
+                android:scaleType="centerCrop" >
+            </ImageView>
+        </com.HomeCenter2.customview.CategoryView>
     </LinearLayout>
 
     <TextView

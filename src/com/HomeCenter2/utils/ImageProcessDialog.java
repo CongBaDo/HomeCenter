@@ -124,7 +124,6 @@ public class ImageProcessDialog implements OnClickListener {
 			break;
 
 		case R.id.tv_delete_image:
-			Toast.makeText(context, "You have just copy the link ", Toast.LENGTH_SHORT).show();
 			callback.shareCallback(ACTION.DELETE_IMAGE);
 			dialog.dismiss();
 			break;

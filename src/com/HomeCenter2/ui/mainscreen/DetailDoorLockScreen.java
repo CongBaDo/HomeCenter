@@ -1,12 +1,22 @@
 package com.HomeCenter2.ui.mainscreen;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Typeface;
+import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
@@ -29,8 +39,10 @@ import android.widget.TextView;
 
 import com.HomeCenter2.HCRequest;
 import com.HomeCenter2.HomeCenterUIEngine;
+import com.HomeCenter2.HomeScreenSetting;
 import com.HomeCenter2.R;
 import com.HomeCenter2.RegisterService;
+import com.HomeCenter2.customview.CategoryView;
 import com.HomeCenter2.customview.HeaderFooterGridView;
 import com.HomeCenter2.customview.SquareImageView;
 import com.HomeCenter2.data.configManager;
@@ -45,16 +57,30 @@ import com.HomeCenter2.ui.listener.GetStatusKeyLockListener;
 import com.HomeCenter2.ui.slidingmenu.framework.RADialerMainScreenAbstract;
 import com.HomeCenter2.ui.slidingmenu.framework.ScreenManager;
 import com.HomeCenter2.ui.slidingmenu.framework.SlidingBaseActivity;
+import com.HomeCenter2.utils.FileUtils;
 import com.HomeCenter2.utils.ImageProcessDialog;
-import com.HomeCenter2.utils.ImageProcessDialog.ImageDialogListener;
 import com.HomeCenter2.utils.ImageProcessDialog.ACTION;
+import com.HomeCenter2.utils.ImageProcessDialog.ImageDialogListener;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 		DialogFragmentWrapper.OnCreateDialogFragmentListener,
-		OnItemClickListener, GetStatusKeyLockListener, OnItemLongClickListener, OnClickListener {
+		OnItemClickListener, GetStatusKeyLockListener, OnItemLongClickListener,
+		OnClickListener {
 
 	private final int CHANGE_TYPE_DIALOG = 0;
+	public static final int MEDIA_TYPE_IMAGE = 1;
+	private static final int PICK_FROM_CAMERA = 1;
+	private static final int CROP_FROM_CAMERA = 2;
+	private static final int PICK_FROM_FILE = 3;
 	private LayoutInflater mInflater = null;
+	private int imageW;
+
+	private enum IMAGE_POS {
+		LEFT, RIGHT
+	}
+
+	private IMAGE_POS imagePos = IMAGE_POS.LEFT;
 
 	public DetailDoorLockScreen(int title, String tag,
 			SlidingBaseActivity context) {
@@ -66,6 +92,8 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 	public static DetailDoorLockScreen m_instance = null;
 	public DoorLock mDevice = null;
 	public Room mRoom = null;
+	private Uri mImageCaptureUri;
+	private CategoryView containLeft, containRight;
 
 	ScrollView scrollView = null;
 
@@ -75,16 +103,18 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 
 	Dialog mDialog = null;
 	private View header;
-	private SquareImageView imgThumbLeft, imgThumbRight;
+	private ImageView imgThumbLeft, imgThumbRight;
+	private File leftFile, rightFile;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mInflater = LayoutInflater.from(mContext);
-		Log.d(TAG, "onCreateConentView");
+		Log.d(TAG, "onCreateConentView ");
 		mDevice = (DoorLock) mBundle
 				.getSerializable(configManager.DEVICE_BUNDLE);
 		int roomId = mDevice.getRoomId();
+		Log.v(TAG, "onCreateConentView "+mDevice.getName());
 		HomeCenterUIEngine uiEngine = RegisterService.getHomeCenterUIEngine();
 		if (uiEngine != null) {
 			House mHouse = uiEngine.getHouse();
@@ -93,6 +123,9 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 			}
 		}
 		setHasOptionsMenu(true);
+		
+		imageW = HomeScreenSetting.ScreenW / 2 - HomeScreenSetting.ScreenW/20;
+		
 	}
 
 	@Override
@@ -106,12 +139,21 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 		View view = inflater.inflate(R.layout.detail_door_lock_screen,
 				container, false);
 		initUI(view, inflater);
-		getDetailDoorLock();
-
+		initData();
 		return view;
 	}
 	
-	private void initUI(View view, LayoutInflater inflater){
+	private void initData(){
+		leftFile = new File(configManager.FOLDERNAME + "/"+mDevice.getName().replace(" ", "")+"/left.png");
+		rightFile = new File(configManager.FOLDERNAME + "/"+mDevice.getName().replace(" ", "")+"/right.png");
+		
+		loadBitFromPath(rightFile, IMAGE_POS.RIGHT);
+		loadBitFromPath(leftFile, IMAGE_POS.LEFT);
+		
+		getDetailDoorLock();
+	}
+
+	private void initUI(View view, LayoutInflater inflater) {
 		mKeyLV = (HeaderFooterGridView) view.findViewById(R.id.lvDoorLock);
 		header = inflater.inflate(R.layout.header_room_detail, null);
 		mKeyLV.addHeaderView(header);
@@ -121,10 +163,18 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 		mKeyLV.setOnItemClickListener(this);
 		mKeyLV.setNumColumns(5);
 		mKeyLV.setOnItemLongClickListener(this);
+
+		imgThumbLeft = (ImageView) header
+				.findViewById(R.id.image_thumb_left);
+		imgThumbRight = (ImageView) header
+				.findViewById(R.id.image_thumb_right);
 		
-		imgThumbLeft = (SquareImageView)header.findViewById(R.id.image_thumb_left);
-		imgThumbRight = (SquareImageView)header.findViewById(R.id.image_thumb_right);
+		containLeft = (CategoryView)header.findViewById(R.id.contain_left);
+		containRight = (CategoryView)header.findViewById(R.id.contain_right);
 		
+		containLeft.setOnClickListener(this);
+		containRight.setOnClickListener(this);
+
 		imgThumbLeft.setOnClickListener(this);
 		imgThumbRight.setOnClickListener(this);
 	}
@@ -392,42 +442,195 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.image_thumb_left:
-			showDialog();
+		case R.id.contain_left:
+			showDialog(IMAGE_POS.LEFT);
 			break;
-			
+
 		case R.id.image_thumb_right:
-			showDialog();
+		case R.id.contain_right:
+			showDialog(IMAGE_POS.RIGHT);
 			break;
 
 		default:
 			break;
 		}
 	}
-	
-	private void showDialog(){
-		ImageProcessDialog dialog = new ImageProcessDialog(getActivity(), new ImageDialogListener() {
-			
-			@SuppressLint("NewApi") @Override
-			public void shareCallback(ACTION shareType) {
-				// TODO Auto-generated method stub
-				if(shareType == ACTION.DELETE_IMAGE){
-					
-				}else if(shareType == ACTION.EDIT_DEVICE){
-					
-				}else if(shareType == ACTION.TAKE_PHOTO){
-					
-				}else if(shareType == ACTION.USE_LIBRARY){
-					
-				}
-			}
-			
-			@Override
-			public void dismissListener() {
-				// TODO Auto-generated method stub
-				
-			}
-		});
+
+	private void showDialog(IMAGE_POS type) {
+		imagePos = type;
+		ImageProcessDialog dialog = new ImageProcessDialog(getActivity(),
+				new ImageDialogListener() {
+
+					@SuppressLint("NewApi")
+					@Override
+					public void shareCallback(ACTION shareType) {
+						// TODO Auto-generated method stub
+						if (shareType == ACTION.DELETE_IMAGE) {
+							if(imagePos == IMAGE_POS.LEFT){
+								FileUtils.deleteFile(leftFile);
+							}else{
+								FileUtils.deleteFile(rightFile);
+							}
+							
+							resetImageView(imagePos);
+						} else if (shareType == ACTION.EDIT_DEVICE) {
+
+						} else if (shareType == ACTION.TAKE_PHOTO) {
+							onCallCamera();
+						} else if (shareType == ACTION.USE_LIBRARY) {
+							onCallGallery();
+						}
+					}
+
+					@Override
+					public void dismissListener() {
+						// TODO Auto-generated method stub
+
+					}
+				});
 		dialog.showRadialDialog();
 	}
+	
+	public void resetImageView(IMAGE_POS type){
+		if(type == IMAGE_POS.LEFT){
+			imgThumbLeft.setImageBitmap(null);
+		}else{
+			imgThumbRight.setImageBitmap(null);
+		}
+	}
 
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode != getActivity().RESULT_OK)
+			return;
+		File myDir = new File(configManager.FOLDERNAME + "/"+mDevice.getName().replace(" ", ""));
+		String fname = null;//"bbz_avatar.jpg";
+		if(this.imagePos == IMAGE_POS.LEFT){
+			fname = "left.png";
+			leftFile = new File(myDir, fname);
+		}else{
+			fname = "right.png";
+			rightFile = new File(myDir, fname);
+		}
+		
+		myDir.mkdirs();
+		File file = new File(myDir, fname);
+		if (file.exists()) {
+			Log.e(TAG, "Exist");
+			file.delete();
+		} else {
+			Log.v(TAG, "No Exist");
+		}
+
+		switch (requestCode) {
+
+		case PICK_FROM_CAMERA:
+			mImageCaptureUri = data.getData();
+			Bitmap bmAvatar = (Bitmap) data.getExtras().get("data");
+
+			try {
+				FileOutputStream out = new FileOutputStream(file);
+				bmAvatar.compress(Bitmap.CompressFormat.JPEG, 90, out);
+				out.flush();
+				out.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			loadBitFromPath(file, imagePos);
+			break;
+		case PICK_FROM_FILE:
+			mImageCaptureUri = data.getData();
+
+			BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
+			bmpFactoryOptions.inJustDecodeBounds = true;
+			try {
+				bmAvatar = BitmapFactory.decodeStream(
+						getActivity().getContentResolver().openInputStream(
+								mImageCaptureUri), null, bmpFactoryOptions);
+				bmpFactoryOptions.inJustDecodeBounds = false;
+				Bitmap bit = BitmapFactory.decodeStream(
+						getActivity().getContentResolver().openInputStream(
+								mImageCaptureUri), null, bmpFactoryOptions);
+
+				ExifInterface exif = new ExifInterface(FileUtils.getPath(
+						getActivity(), mImageCaptureUri));
+				int orientation = exif.getAttributeInt(
+						ExifInterface.TAG_ORIENTATION, 1);
+				Log.d("EXIF", "Exif: " + orientation);
+				Matrix matrix = new Matrix();
+				if (orientation == 6) {
+					matrix.postRotate(90);
+				} else if (orientation == 3) {
+					matrix.postRotate(180);
+				} else if (orientation == 8) {
+					matrix.postRotate(270);
+				}
+
+				bmAvatar = Bitmap.createBitmap(bit, 0, 0, bit.getWidth(),
+						bit.getHeight(), matrix, true);
+
+				FileOutputStream out = new FileOutputStream(file);
+				bmAvatar.compress(Bitmap.CompressFormat.JPEG, 90, out);
+				out.flush();
+				out.close();
+				
+				loadBitFromPath(file, imagePos);
+
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			break;
+		}
+	}
+	
+	private void loadBitFromPath(File file, IMAGE_POS type){
+		FileInputStream fisR;
+		try {
+			fisR = new FileInputStream(file.getAbsoluteFile());
+			
+			Bitmap imageBitmapR = BitmapFactory.decodeStream(fisR);
+	        
+	        BitmapFactory.Options optionsR = new BitmapFactory.Options();
+			optionsR.inJustDecodeBounds = true;
+			BitmapFactory.decodeFile(file.getAbsolutePath(), optionsR);//decodeResource(getResources(), R.id.myimage, options);
+			int imageHeightR = optionsR.outHeight;
+			int imageWidthR = optionsR.outWidth;
+			
+			int imageHR = imageW*imageHeightR/imageWidthR;
+
+	        imageBitmapR = Bitmap.createScaledBitmap(imageBitmapR, imageW , imageHR, false);
+
+	        if (type == IMAGE_POS.LEFT) {
+				imgThumbLeft.setImageBitmap(imageBitmapR);
+			} else {
+				imgThumbRight.setImageBitmap(imageBitmapR);
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void onCallGallery() {
+		Intent intent = new Intent();
+		intent.setType("image/*");
+		intent.setAction(Intent.ACTION_GET_CONTENT);
+
+		startActivityForResult(Intent.createChooser(intent, "Select Picture"),
+				PICK_FROM_FILE);
+	}
+
+	private void onCallCamera() {
+		Log.e(TAG, "onCallCamera");
+		Intent cameraIntent = new Intent(
+				android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+		startActivityForResult(cameraIntent, PICK_FROM_CAMERA);
+	}
 }

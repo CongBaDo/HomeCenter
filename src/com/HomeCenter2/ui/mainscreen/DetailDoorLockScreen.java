@@ -1,7 +1,10 @@
 package com.HomeCenter2.ui.mainscreen;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -14,21 +17,22 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.HomeCenter2.HCRequest;
-import com.HomeCenter2.HomeCenter2Activity;
 import com.HomeCenter2.HomeCenterUIEngine;
 import com.HomeCenter2.R;
 import com.HomeCenter2.RegisterService;
+import com.HomeCenter2.customview.HeaderFooterGridView;
+import com.HomeCenter2.customview.SquareImageView;
 import com.HomeCenter2.data.configManager;
 import com.HomeCenter2.house.Device;
 import com.HomeCenter2.house.DoorLock;
@@ -41,14 +45,19 @@ import com.HomeCenter2.ui.listener.GetStatusKeyLockListener;
 import com.HomeCenter2.ui.slidingmenu.framework.RADialerMainScreenAbstract;
 import com.HomeCenter2.ui.slidingmenu.framework.ScreenManager;
 import com.HomeCenter2.ui.slidingmenu.framework.SlidingBaseActivity;
+import com.HomeCenter2.utils.ImageProcessDialog;
+import com.HomeCenter2.utils.ImageProcessDialog.ImageDialogListener;
+import com.HomeCenter2.utils.ImageProcessDialog.ACTION;
 
-public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements		
-		DialogFragmentWrapper.OnCreateDialogFragmentListener, OnItemClickListener, GetStatusKeyLockListener, OnItemLongClickListener{
+public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
+		DialogFragmentWrapper.OnCreateDialogFragmentListener,
+		OnItemClickListener, GetStatusKeyLockListener, OnItemLongClickListener, OnClickListener {
 
-	private final int CHANGE_TYPE_DIALOG = 0;	
+	private final int CHANGE_TYPE_DIALOG = 0;
 	private LayoutInflater mInflater = null;
 
-	public DetailDoorLockScreen(int title, String tag, SlidingBaseActivity context) {
+	public DetailDoorLockScreen(int title, String tag,
+			SlidingBaseActivity context) {
 		super(DetailDoorLockScreen.class, title, tag, context);
 	}
 
@@ -58,27 +67,29 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 	public DoorLock mDevice = null;
 	public Room mRoom = null;
 
-	ScrollView scrollView = null;	
-	
-	ListView mKeyLV;
-		
+	ScrollView scrollView = null;
+
+	HeaderFooterGridView mKeyLV;
+
 	KeyDoorLockAdapter mKeyAdapter;
-	
-	Dialog mDialog = null;	
+
+	Dialog mDialog = null;
+	private View header;
+	private SquareImageView imgThumbLeft, imgThumbRight;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mInflater = LayoutInflater.from(mContext);
 		Log.d(TAG, "onCreateConentView");
-		mDevice = (DoorLock) mBundle.getSerializable(configManager.DEVICE_BUNDLE);
+		mDevice = (DoorLock) mBundle
+				.getSerializable(configManager.DEVICE_BUNDLE);
 		int roomId = mDevice.getRoomId();
 		HomeCenterUIEngine uiEngine = RegisterService.getHomeCenterUIEngine();
-		if(uiEngine!= null)
-		{
-			House mHouse= uiEngine.getHouse();
-			if(mHouse!= null){
-				mRoom = mHouse.getRoomsById(roomId);		
+		if (uiEngine != null) {
+			House mHouse = uiEngine.getHouse();
+			if (mHouse != null) {
+				mRoom = mHouse.getRoomsById(roomId);
 			}
 		}
 		setHasOptionsMenu(true);
@@ -86,22 +97,36 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 
 	@Override
 	protected View onCreateContentView(LayoutInflater inflater,
-			ViewGroup container, Bundle savedInstanceState) {		
+			ViewGroup container, Bundle savedInstanceState) {
 		HomeCenterUIEngine uiEngine = RegisterService.getHomeCenterUIEngine();
-			if (uiEngine != null) {				
-				uiEngine.addKeyLockObserver(this);
-			}		
-		
-		
-		View view = inflater.inflate(R.layout.detail_door_lock_screen, container,
-				false);
-		mKeyLV = (ListView) view.findViewById(R.id.lvDoorLock);
+		if (uiEngine != null) {
+			uiEngine.addKeyLockObserver(this);
+		}
+
+		View view = inflater.inflate(R.layout.detail_door_lock_screen,
+				container, false);
+		initUI(view, inflater);
+		getDetailDoorLock();
+
+		return view;
+	}
+	
+	private void initUI(View view, LayoutInflater inflater){
+		mKeyLV = (HeaderFooterGridView) view.findViewById(R.id.lvDoorLock);
+		header = inflater.inflate(R.layout.header_room_detail, null);
+		mKeyLV.addHeaderView(header);
+
 		mKeyAdapter = new KeyDoorLockAdapter(mContext, mDevice);
 		mKeyLV.setAdapter(mKeyAdapter);
 		mKeyLV.setOnItemClickListener(this);
+		mKeyLV.setNumColumns(5);
 		mKeyLV.setOnItemLongClickListener(this);
-		getDetailDoorLock();
-		return view;
+		
+		imgThumbLeft = (SquareImageView)header.findViewById(R.id.image_thumb_left);
+		imgThumbRight = (SquareImageView)header.findViewById(R.id.image_thumb_right);
+		
+		imgThumbLeft.setOnClickListener(this);
+		imgThumbRight.setOnClickListener(this);
 	}
 
 	@Override
@@ -124,21 +149,21 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 		if (m_instance == null) {
 			m_instance = new DetailDoorLockScreen(titleId,
 					ScreenManager.DETAIL_DEVICE_TAG, mContext);
-		}		
+		}
 		return m_instance;
 	}
 
 	private void getDetailDoorLock() {
 		Bundle bundle = new Bundle();
 		bundle.putInt(configManager.ROOM_ID, mDevice.getRoomId());
-		bundle.putInt(configManager.DEVICE_ID,mDevice.getId());		
+		bundle.putInt(configManager.DEVICE_ID, mDevice.getId());
 
 		Log.e(TAG, "getDetailDoorLock::room id: " + mDevice.getRoomId()
 				+ " , devId: " + mDevice.getId());
-		
+
 		Message message = Message.obtain();
 		message.setData(bundle);
-		message.what= HCRequest.REQUEST_GET_LOCK_STATUS;
+		message.what = HCRequest.REQUEST_GET_LOCK_STATUS;
 		RegisterService.getHomeCenterUIEngine().sendMessage(message);
 	}
 
@@ -146,11 +171,10 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 	public void onDestroy() {
 		super.onDestroy();
 		HomeCenterUIEngine uiEngine = RegisterService.getHomeCenterUIEngine();
-		if (uiEngine != null) {				
+		if (uiEngine != null) {
 			uiEngine.removeKeyLockObserver(this);
-		}			
-	
-		
+		}
+
 	}
 
 	@Override
@@ -184,9 +208,9 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 				backToPreviousScreen();
 				isSelected = true;
 				break;
-			case R.id.remote_menu:				
+			case R.id.remote_menu:
 				setModeDoorLock(mDevice);
-				break;			
+				break;
 			}
 		}
 		return isSelected;
@@ -201,7 +225,7 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 	}
 
 	@Override
-	public void onPageDeselected() {		
+	public void onPageDeselected() {
 		mActionBarV7.setIcon(R.drawable.ic_protection_totale);
 	}
 
@@ -215,50 +239,49 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 			isChecked = false;
 			tv.setTypeface(Typeface.DEFAULT);
 			tv.setTextColor(getResources().getColor(R.color.black));
-			
-			
+
 		} else {
 			isChecked = true;
 			tv.setTypeface(Typeface.DEFAULT_BOLD);
 			tv.setTextColor(getResources().getColor(R.color.blue_light));
-			
+
 		}
 		tv.setTag(isChecked);
-		
+
 	}
 
 	@Override
 	public void onViewScrolledComplete(boolean isShow) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		/*KeyDoorLock key = (KeyDoorLock) mKeyAdapter.getItem(position);
-		if(key!= null){
-			key.setStatus(!key.isStatus());
-			setDetailDevice(key,!key.isStatus());
-		}
-		
-		mKeyAdapter.notifyDataSetChanged();*/
+		/*
+		 * KeyDoorLock key = (KeyDoorLock) mKeyAdapter.getItem(position);
+		 * if(key!= null){ key.setStatus(!key.isStatus());
+		 * setDetailDevice(key,!key.isStatus()); }
+		 * 
+		 * mKeyAdapter.notifyDataSetChanged();
+		 */
 	}
 
 	@Override
 	public void recieveKeyLockStatus() {
-		mContext.runOnUiThread(new Runnable() {			
+		mContext.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				mKeyAdapter.notifyDataSetChanged();				
+				mKeyAdapter.notifyDataSetChanged();
 			}
 		});
-				
+
 	}
-	
+
 	@Override
 	public Dialog onCreateDialog(int id) {
-		switch (id) {		
+		switch (id) {
 		case configManager.DIALOG_CHANGE_ROOM_NAME:
 			return showContentDeviceDialog();
 		default:
@@ -266,31 +289,33 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 		}
 		return null;
 	}
-	
+
 	EditText mPasswordEdit;
 	ImageView mKeyImage;
-	
-	int mPosition=0;
+
+	int mPosition = 0;
+
 	@Override
-	public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position,
-			long arg3) {		
-		mPosition = position;				
-		DialogFragmentWrapper.showDialog(getFragmentManager(), this, configManager.DIALOG_CHANGE_ROOM_NAME);
+	public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+			int position, long arg3) {
+		mPosition = position;
+		DialogFragmentWrapper.showDialog(getFragmentManager(), this,
+				configManager.DIALOG_CHANGE_ROOM_NAME);
 		return true;
 	}
-	
+
 	public Dialog showContentDeviceDialog() {
 		if (mDialog != null) {
 			mDialog.dismiss();
 		}
 		View view = mInflater.inflate(R.layout.add_lock_name_dialog, null);
 		mPasswordEdit = (EditText) view.findViewById(R.id.editPasswordKey);
-		mPasswordEdit.setText("");		
-		
+		mPasswordEdit.setText("");
+
 		mKeyImage = (ImageView) view.findViewById(R.id.imgRoom);
-		KeyDoorLock mKeyCurrent = (KeyDoorLock)mKeyAdapter.getItem(mPosition);
+		KeyDoorLock mKeyCurrent = (KeyDoorLock) mKeyAdapter.getItem(mPosition);
 		mKeyImage.setImageResource(mKeyCurrent.getIcon());
-		
+
 		mDialog = new AlertDialog.Builder(this.getActivity())
 				.setTitle(mKeyCurrent.getNameKey())
 				.setView(view)
@@ -299,18 +324,18 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-								String pw = mPasswordEdit.getText().toString();								
+								String pw = mPasswordEdit.getText().toString();
 								if (!TextUtils.isEmpty(pw)) {
-									Bundle bundle  = new Bundle();
-									bundle.putString(configManager.PASSWORD_KEY, pw);
+									Bundle bundle = new Bundle();
+									bundle.putString(
+											configManager.PASSWORD_KEY, pw);
 									bundle.putString(configManager.NAME, "tmt");
-									setPasswordKey(bundle);							
+									setPasswordKey(bundle);
 									mKeyAdapter.notifyDataSetChanged();
-									//save();
+									// save();
 									mDialog.dismiss();
 								}
-								
-								
+
 							}
 						})
 				.setNegativeButton(R.string.cancel,
@@ -323,45 +348,86 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 						}).create();
 		return mDialog;
 	}
-	
+
 	public void saveConfig(Bundle bundle) {
-		/*destroyTask();
-		HCRequest hc = new HCRequest();
-		hc.setRequestType(HCRequest.REQUEST_SET_DEVICE_ADDRESS);
-		mNameRequestTask = new SocketRequestTask(this);
-		if (mNameRequestTask != null) {
-			mNameRequestTask.setRequest(hc);
-			mNameRequestTask.setObject(bundle);
-			mNameRequestTask.execute(hc);
-		}*/
+		/*
+		 * destroyTask(); HCRequest hc = new HCRequest();
+		 * hc.setRequestType(HCRequest.REQUEST_SET_DEVICE_ADDRESS);
+		 * mNameRequestTask = new SocketRequestTask(this); if (mNameRequestTask
+		 * != null) { mNameRequestTask.setRequest(hc);
+		 * mNameRequestTask.setObject(bundle); mNameRequestTask.execute(hc); }
+		 */
 	}
-	
-	private void setModeDoorLock(Device device) {		
+
+	private void setModeDoorLock(Device device) {
 		Bundle bundle = new Bundle();
 		bundle.putInt(configManager.ROOM_ID, device.getRoomId());
-		bundle.putString(configManager.MODE_STATUS, configManager.MODE_LEARN_IR);		
+		bundle.putString(configManager.MODE_STATUS, configManager.MODE_LEARN_IR);
 		bundle.putInt(configManager.DEVICE_ID, 1);
-		
+
 		Log.e(TAG, "getDetailDevice::room id: " + device.getRoomId()
 				+ " , devId: " + device.getDeviceId());
-		
+
 		Message message = Message.obtain();
 		message.setData(bundle);
-		message.what= HCRequest.REQUEST_SET_LOCK_STATUS;
+		message.what = HCRequest.REQUEST_SET_LOCK_STATUS;
 		RegisterService.getHomeCenterUIEngine().sendMessage(message);
 	}
 
-	private void setPasswordKey(Bundle bundle) {		
+	private void setPasswordKey(Bundle bundle) {
 		bundle.putInt(configManager.ROOM_ID, mDevice.getRoomId());
-		int pos = mPosition+1;
+		int pos = mPosition + 1;
 		bundle.putInt(configManager.DEVICE_ID, pos);
 		Log.e(TAG, "getDetailDevice::room id: " + mDevice.getRoomId()
-				+ " , devId: " +pos + ", pw:");
-		
+				+ " , devId: " + pos + ", pw:");
+
 		Message message = Message.obtain();
 		message.setData(bundle);
-		message.what= HCRequest.REQUEST_SET_PASSWORD_KEY;
-		RegisterService.getHomeCenterUIEngine().sendMessage(message);		
+		message.what = HCRequest.REQUEST_SET_PASSWORD_KEY;
+		RegisterService.getHomeCenterUIEngine().sendMessage(message);
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		switch (v.getId()) {
+		case R.id.image_thumb_left:
+			showDialog();
+			break;
+			
+		case R.id.image_thumb_right:
+			showDialog();
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+	private void showDialog(){
+		ImageProcessDialog dialog = new ImageProcessDialog(getActivity(), new ImageDialogListener() {
+			
+			@SuppressLint("NewApi") @Override
+			public void shareCallback(ACTION shareType) {
+				// TODO Auto-generated method stub
+				if(shareType == ACTION.DELETE_IMAGE){
+					
+				}else if(shareType == ACTION.EDIT_DEVICE){
+					
+				}else if(shareType == ACTION.TAKE_PHOTO){
+					
+				}else if(shareType == ACTION.USE_LIBRARY){
+					
+				}
+			}
+			
+			@Override
+			public void dismissListener() {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		dialog.showRadialDialog();
 	}
 
 }

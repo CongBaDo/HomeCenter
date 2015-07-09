@@ -1,51 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.HomeCenter2.customview.CategoryView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rltDeviceItem"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/shadow_content" >
+    android:layout_height="wrap_content"
+    android:background="@drawable/boder_item_room_config"
+    android:padding="1dp" >
 
     <ImageView
         android:id="@+id/imgIcon"
         android:layout_width="@dimen/main_item_icon_height"
         android:layout_height="@dimen/main_item_icon_height"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
+        android:layout_centerInParent="true"
         android:layout_marginBottom="5dp"
-        android:layout_marginLeft="@dimen/main_item_icon_margin_right"
-        android:layout_marginRight="@dimen/main_item_icon_margin_right"
         android:layout_marginTop="5dp"
-        android:background="@drawable/circle_btn_grey"
-        android:padding="@dimen/main_item_icon_padding"
-        android:src="@drawable/ic_launcher" />
-
-    <TextView
-        android:id="@+id/btnActive"        
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="@dimen/main_item_icon_margin_right"
-        android:layout_marginRight="@dimen/main_item_icon_margin_right"
-        android:layout_marginTop="5dp"
-        android:text="@string/active"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-         />
+        android:src="@drawable/key_doorlock_on" />
 
     <TextView
         android:id="@+id/txtTitle"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/btnActive"
-        android:layout_toRightOf="@+id/imgIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imgIcon"
+        android:layout_centerInParent="true"
         android:ellipsize="marquee"
         android:gravity="center_vertical"
         android:singleLine="true"
         android:text="device"
-        android:textAppearance="?android:attr/textAppearanceMedium" >
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/black">
     </TextView>
 
-</RelativeLayout>
+</com.HomeCenter2.customview.CategoryView>

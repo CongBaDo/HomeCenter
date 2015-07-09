@@ -37,5 +37,6 @@
 	
 	<color name="blue_light">#7FDBBE</color> <!-- blue light -->
 	<color name="yellow_light">#F7BF18</color> <!-- blue light -->
+	<color name="color_text_dialog">#1376de</color>
 			
 </resources>

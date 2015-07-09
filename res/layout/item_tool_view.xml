@@ -2,14 +2,26 @@
 <com.HomeCenter2.customview.ContainToolView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:gravity="center"
+    android:orientation="vertical"
     android:padding="8dp" >
 
     <com.HomeCenter2.customview.ToolImageView
         android:id="@+id/img_tool"
-        android:layout_gravity="center"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center" />
+
+    <TextView
+        android:id="@+id/tv_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="30"
+        android:textSize="25sp"
+        android:textColor="@color/black"
+        android:textStyle="bold" />
 
 </com.HomeCenter2.customview.ContainToolView>

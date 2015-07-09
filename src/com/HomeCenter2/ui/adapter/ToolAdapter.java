@@ -4,14 +4,21 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.test.suitebuilder.annotation.Smoke;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import com.HomeCenter2.R;
 import com.HomeCenter2.customview.ToolImageView;
+import com.HomeCenter2.house.Device;
+import com.HomeCenter2.house.DoorStatus;
+import com.HomeCenter2.house.Light;
+import com.HomeCenter2.house.Motion;
 import com.HomeCenter2.house.Sensor;
+import com.HomeCenter2.house.Temperature;
 
 public class ToolAdapter extends BaseAdapter{
 
@@ -55,18 +62,29 @@ public class ToolAdapter extends BaseAdapter{
         	convertView = inflater.inflate(R.layout.item_tool_view, parent, false);
             vh = new ViewHolder();
             vh.imgTool = (ToolImageView) convertView.findViewById(R.id.img_tool);
+            vh.tvTool = (TextView)convertView.findViewById(R.id.tv_value);
             convertView.setTag(vh);
         }
         else {
             vh = (ViewHolder) convertView.getTag();
         }
 		
-        vh.imgTool.setBackgroundResource(devices.get(position).getIcon());
+        if(devices.get(position) instanceof Temperature){
+        	vh.tvTool.setText(((Temperature)devices.get(position)).getTemperature()+"");
+        	vh.tvTool.setVisibility(View.VISIBLE);
+        	vh.imgTool.setVisibility(View.GONE);
+        }else{
+        	
+        	vh.imgTool.setBackgroundResource(devices.get(position).getIcon());
+        	vh.imgTool.setVisibility(View.VISIBLE);
+        	vh.tvTool.setVisibility(View.GONE);
+        }
 		
 		return convertView;
 	}
 	
 	static class ViewHolder {
+		TextView tvTool;
         ToolImageView imgTool;
     }
 }

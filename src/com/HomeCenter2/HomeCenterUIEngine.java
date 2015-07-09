@@ -1242,7 +1242,7 @@ public class HomeCenterUIEngine extends Handler {
 					Device device = null;
 					for (int i = 0; i < size; i++) {
 						device = devices.get(i);
-						setStatusForDevice(i, strStatusDevice, device);
+						setStatusForDevice(i + configManager.MAX_SENSOR_IN_ROOM, strStatusDevice, device);
 					}
 
 					List<Sensor> sensors = room.getSensors();

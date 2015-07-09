@@ -5,8 +5,8 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.HomeCenter2.HomeCenter2Activity;
@@ -20,7 +20,7 @@ import com.HomeCenter2.ui.slidingmenu.framework.ScreenManager;
 import com.HomeCenter2.ui.slidingmenu.framework.SlidingBaseActivity;
 
 public class RemoteAirConditionerScreen extends Fragment implements
-		View.OnClickListener {
+		View.OnClickListener, OnLongClickListener {
 
 	private static final String TAG = "RemoteAirConditionerScreen";
 	MyRemotesScreen mParentsScreen = null;
@@ -82,10 +82,60 @@ public class RemoteAirConditionerScreen extends Fragment implements
 
 		mOn.setOnClickListener(this);
 		mOff.setOnClickListener(this);
+
+		m18.setOnLongClickListener(this);
+		m20.setOnLongClickListener(this);
+		m22.setOnLongClickListener(this);
+		m24.setOnLongClickListener(this);
+
+		mAirUp.setOnLongClickListener(this);
+
+		mFan.setOnLongClickListener(this);
+		mSwing.setOnLongClickListener(this);
+
+		mAirDown.setOnLongClickListener(this);
+
+		mOn.setOnLongClickListener(this);
+		mOff.setOnLongClickListener(this);
+
+		mOff.setOnLongClickListener(this);
 	}
 
 	@Override
 	public void onClick(View v) {
+		String id = getIdButton(v);
+		if (mUiEngine != null && id.compareTo("00") != 0) {
+			int type = mUiEngine.getRemoteType();
+			Room room = mParentsScreen.getCurrentRoom();
+			if (room != null) {
+				if (type == configManager.REMOTE_CONTROL) {
+					Log.d(TAG, "remote control");
+					mParentsScreen.setControlRemote(String.valueOf(1),
+							String.valueOf(1), id);
+				} else if (type == configManager.REMOTE_UPDATE) {
+					Log.d(TAG, "remote control");
+					mParentsScreen.setUpdateRemote(String.valueOf(1),
+							String.valueOf(1), id);
+				} 			}
+		}
+	}
+
+	private void showShedule(Room room, String buttonId) {
+		Bundle bundle = new Bundle();
+
+		bundle.putSerializable(configManager.ROOM_BUNDLE, room);
+		bundle.putString(configManager.BUTTON_BUNDLE, buttonId);
+		bundle.putBoolean(configManager.IS_DEVICE_BUNDLE, false);
+
+		DetailDeviceScreen fragment = DetailDeviceScreen
+				.initializeDetailDeviceScreen(bundle, -1,
+						(SlidingBaseActivity) getActivity());
+		HomeCenter2Activity activity = (HomeCenter2Activity) getActivity();
+		activity.switchContentView(fragment, ScreenManager.DETAIL_DEVICE_TAG,
+				true, true, false);
+	}
+
+	private String getIdButton(View v) {
 		String id = "00";
 		switch (v.getId()) {
 		case R.id.imbAir18:
@@ -121,41 +171,19 @@ public class RemoteAirConditionerScreen extends Fragment implements
 		default:
 			break;
 		}
+		return id;
+	}
+
+	@Override
+	public boolean onLongClick(View v) {
+		String id = getIdButton(v);
 		if (mUiEngine != null && id.compareTo("00") != 0) {
-			int type = mUiEngine.getRemoteType();
 			Room room = mParentsScreen.getCurrentRoom();
 			if (room != null) {
-				if (type == configManager.REMOTE_CONTROL) {
-					Log.d(TAG, "remote control");
-					mParentsScreen.setControlRemote(String.valueOf(1),
-							String.valueOf(1), id);
-				} else if (type == configManager.REMOTE_UPDATE) {
-					Log.d(TAG, "remote control");
-					mParentsScreen.setUpdateRemote(String.valueOf(1),
-							String.valueOf(1), id);
-				} else if (type == configManager.REMOTE_SHEDULE) {
-					Log.d(TAG, "schedule control");
-
-					showShedule(room, id);
-
-				}
+				Log.d(TAG, "schedule control");
+				showShedule(room, id);
 			}
 		}
+		return false;
 	}
-
-	private void showShedule(Room room, String buttonId) {
-		Bundle bundle = new Bundle();
-
-		bundle.putSerializable(configManager.ROOM_BUNDLE, room);
-		bundle.putString(configManager.BUTTON_BUNDLE, buttonId);
-		bundle.putBoolean(configManager.IS_DEVICE_BUNDLE, false);
-
-		DetailDeviceScreen fragment = DetailDeviceScreen
-				.initializeDetailDeviceScreen(bundle, -1,
-						(SlidingBaseActivity) getActivity());
-		HomeCenter2Activity activity = (HomeCenter2Activity) getActivity();
-		activity.switchContentView(fragment, ScreenManager.DETAIL_DEVICE_TAG,
-				true, true, false);
-	}
-
 }

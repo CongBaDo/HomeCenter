@@ -379,8 +379,7 @@ public class configManager {
 	 */
 
 	public static final int REMOTE_CONTROL = 1;
-	public static final int REMOTE_UPDATE = 2;
-	public static final int REMOTE_SHEDULE = 3;
+	public static final int REMOTE_UPDATE = 2;	
 
 	// Bundle
 

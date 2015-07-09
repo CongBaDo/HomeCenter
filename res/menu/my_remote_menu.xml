@@ -12,10 +12,4 @@
         HomeCenter2:showAsAction="collapseActionView"
         android:checkable="true"
         android:title="@string/update"/>
-    <item
-        android:id="@+id/schedule_menu"
-        HomeCenter2:showAsAction="collapseActionView"
-        android:checkable="true"
-        android:title="@string/schedule"/>
-
 </menu>

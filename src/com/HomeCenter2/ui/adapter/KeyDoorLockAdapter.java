@@ -28,7 +28,7 @@ import com.HomeCenter2.ui.ScheduleImageView;
 
 public class KeyDoorLockAdapter extends BaseAdapter implements OnClickListener {
 
-	private static final String TAG = "MyDevicesAdapter";
+	private static final String TAG = "KeyDoorLockAdapter";
 	List<KeyDoorLock> mItems = null;
 	Context mContext = null;
 	LayoutInflater mInflater;
@@ -42,6 +42,8 @@ public class KeyDoorLockAdapter extends BaseAdapter implements OnClickListener {
 		mDevice = device;
 		mItems = mDevice.getKeys();
 		mAdapter = this;
+		
+		Log.e(TAG, "KeyDoorLockAdapter "+mItems.size());
 	}
 
 	@Override
@@ -74,11 +76,11 @@ public class KeyDoorLockAdapter extends BaseAdapter implements OnClickListener {
 		if (item == null) {
 			return view;
 		}
-		Bundle bundle = (Bundle)viewHolder.btnActive.getTag();
+		Bundle bundle = (Bundle)viewHolder.imgIcon.getTag();
 		bundle.putBoolean(configManager.ACTIVE_KEY, item.isState());
 		bundle.putInt(configManager.POSITON_KEY, position);		
 		
-		refreshActiveButton(viewHolder.btnActive, item.isState());
+		refreshActiveButton(viewHolder.imgIcon, item.isState());
 		viewHolder.imgIcon.setImageResource(item.getIcon());
 		viewHolder.txtTitle.setText(item.getNameKey());
 		return view;
@@ -90,13 +92,10 @@ public class KeyDoorLockAdapter extends BaseAdapter implements OnClickListener {
 		viewHolder.imgIcon = (ImageView) view.findViewById(R.id.imgIcon);
 		viewHolder.txtTitle = (TextView) view.findViewById(R.id.txtTitle);
 		viewHolder.txtTitle.setSelected(true);
-		viewHolder.btnActive = (TextView) view.findViewById(R.id.btnActive);
-		viewHolder.btnActive.setOnClickListener(this);
 		Bundle bundle = new Bundle();
 		bundle.putBoolean(configManager.ACTIVE_KEY, false);
 		bundle.putInt(configManager.POSITON_KEY, position);
-		viewHolder.btnActive.setTag(bundle);
-		
+		viewHolder.imgIcon.setTag(bundle);
 				
 		view.setTag(viewHolder);
 		return view;
@@ -106,7 +105,6 @@ public class KeyDoorLockAdapter extends BaseAdapter implements OnClickListener {
 		ImageView imgIcon;
 		TextView txtTitle;
 		//Switch deviceOn;
-		TextView btnActive;
 		
 	}
 
@@ -123,18 +121,6 @@ public class KeyDoorLockAdapter extends BaseAdapter implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.imgOn:
 			((ScheduleImageView) v).toggle();
-			break;
-		case R.id.btnActive:
-			Bundle bundle = (Bundle) v.getTag();			
-			boolean isAcitve  = bundle.getBoolean(configManager.ACTIVE_KEY);			
-			refreshActiveButton((TextView) v, !isAcitve);
-			int position = bundle.getInt(configManager.POSITON_KEY);
-			KeyDoorLock device = mItems.get(position);
-			if (device != null) {
-				device.setState(!isAcitve);
-				setModeDoorLock(device, !isAcitve, position + 1);
-			}
-			mAdapter.notifyDataSetChanged();
 			break;
 		default:
 			break;
@@ -160,21 +146,16 @@ public class KeyDoorLockAdapter extends BaseAdapter implements OnClickListener {
 		RegisterService.getHomeCenterUIEngine().sendMessage(message);
 	}
 	
-	public void refreshActiveButton(TextView button, boolean isActive){		
+	public void refreshActiveButton(ImageView button, boolean isActive){		
 		Bundle bundle = (Bundle) button.getTag();
 		bundle.putBoolean(configManager.ACTIVE_KEY, isActive);		
 		
 		button.setTag(bundle);		
 		if(isActive == true){
-			button.setBackground(mContext.getResources().getDrawable(R.drawable.btn_active));			
-			button.setText(mContext.getString(R.string.deactive));
+			button.setBackgroundResource(R.drawable.key_doorlock_on);			
 		}else{
-			button.setBackground(mContext.getResources().getDrawable(R.drawable.btn_deactive));						
-			button.setText(mContext.getString(R.string.active));
+			button.setBackgroundResource(R.drawable.key_doorlock_off);						
 		}
-		
-		
 	}
-
 }
 

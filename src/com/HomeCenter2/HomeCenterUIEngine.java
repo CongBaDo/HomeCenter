@@ -1225,7 +1225,7 @@ public class HomeCenterUIEngine extends Handler {
 		}
 		// test old
 		// String receiveMessage = ":gs880081;32101101111103025200000000001687";
-		// String receiveMessage = ":gs88;21100111001125225200010001001701";
+		receiveMessage = ":gs88;21100111001125225200010001001701";
 
 		Log.d("TMT room", "getRoomStatus: " + roomId + " - receiveMessage :"
 				+ receiveMessage);

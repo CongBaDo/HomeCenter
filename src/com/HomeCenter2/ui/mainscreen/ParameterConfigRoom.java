@@ -448,7 +448,6 @@ public class ParameterConfigRoom extends RADialerMainScreenAbstract implements
 		Bundle bundle = new Bundle();
 
 		bundle.putSerializable(configManager.DEVICE_BUNDLE, device);
-
 		DetailDoorLockScreen fragment = DetailDoorLockScreen
 				.initializeDetailDeviceScreen(bundle, -1,
 						(SlidingBaseActivity) mContext);

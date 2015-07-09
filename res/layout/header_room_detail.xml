@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="12dp"
+        android:text="To Do here" />
+
+    <TextView
+        style="@android:style/TextAppearance.DeviceDefault.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue_temp"
+        android:padding="8dp"
+        android:text="Images &amp; Devices"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="4dp" >
+
+        <com.HomeCenter2.customview.SquareImageView
+            android:id="@+id/image_thumb_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            android:background="@drawable/boder_item_room_config"
+            android:padding="8dp" >
+        </com.HomeCenter2.customview.SquareImageView>
+
+        <com.HomeCenter2.customview.SquareImageView
+            android:id="@+id/image_thumb_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            android:background="@drawable/boder_item_room_config"
+            android:padding="8dp" >
+        </com.HomeCenter2.customview.SquareImageView>
+    </LinearLayout>
+
+    <TextView
+        style="@android:style/TextAppearance.DeviceDefault.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue_temp"
+        android:padding="8dp"
+        android:text="Keys"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
+
+</LinearLayout>

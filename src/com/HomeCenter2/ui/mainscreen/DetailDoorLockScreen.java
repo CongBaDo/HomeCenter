@@ -44,7 +44,6 @@ import com.HomeCenter2.R;
 import com.HomeCenter2.RegisterService;
 import com.HomeCenter2.customview.CategoryView;
 import com.HomeCenter2.customview.HeaderFooterGridView;
-import com.HomeCenter2.customview.SquareImageView;
 import com.HomeCenter2.data.configManager;
 import com.HomeCenter2.house.Device;
 import com.HomeCenter2.house.DoorLock;
@@ -53,15 +52,16 @@ import com.HomeCenter2.house.KeyDoorLock;
 import com.HomeCenter2.house.Room;
 import com.HomeCenter2.ui.DialogFragmentWrapper;
 import com.HomeCenter2.ui.adapter.KeyDoorLockAdapter;
+import com.HomeCenter2.ui.adapter.KeyDoorLockAdapter.ClickCallback;
 import com.HomeCenter2.ui.listener.GetStatusKeyLockListener;
 import com.HomeCenter2.ui.slidingmenu.framework.RADialerMainScreenAbstract;
 import com.HomeCenter2.ui.slidingmenu.framework.ScreenManager;
 import com.HomeCenter2.ui.slidingmenu.framework.SlidingBaseActivity;
 import com.HomeCenter2.utils.FileUtils;
+import com.HomeCenter2.utils.HCUtils;
 import com.HomeCenter2.utils.ImageProcessDialog;
 import com.HomeCenter2.utils.ImageProcessDialog.ACTION;
 import com.HomeCenter2.utils.ImageProcessDialog.ImageDialogListener;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 		DialogFragmentWrapper.OnCreateDialogFragmentListener,
@@ -125,7 +125,6 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 		setHasOptionsMenu(true);
 		
 		imageW = HomeScreenSetting.ScreenW / 2 - HomeScreenSetting.ScreenW/20;
-		
 	}
 
 	@Override
@@ -144,8 +143,8 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 	}
 	
 	private void initData(){
-		leftFile = new File(configManager.FOLDERNAME + "/"+mDevice.getName().replace(" ", "")+"/left.png");
-		rightFile = new File(configManager.FOLDERNAME + "/"+mDevice.getName().replace(" ", "")+"/right.png");
+		leftFile = new File(HCUtils.getFilePath("left.png", mDevice.getName()));
+		rightFile = new File(HCUtils.getFilePath("right.png", mDevice.getName()));
 		
 		loadBitFromPath(rightFile, IMAGE_POS.RIGHT);
 		loadBitFromPath(leftFile, IMAGE_POS.LEFT);
@@ -160,6 +159,14 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 
 		mKeyAdapter = new KeyDoorLockAdapter(mContext, mDevice);
 		mKeyLV.setAdapter(mKeyAdapter);
+		mKeyAdapter.setClickCallback(new ClickCallback() {
+			
+			@Override
+			public void clickPosCallback(int pos) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		mKeyLV.setOnItemClickListener(this);
 		mKeyLV.setNumColumns(5);
 		mKeyLV.setOnItemLongClickListener(this);
@@ -309,13 +316,15 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		/*
-		 * KeyDoorLock key = (KeyDoorLock) mKeyAdapter.getItem(position);
-		 * if(key!= null){ key.setStatus(!key.isStatus());
-		 * setDetailDevice(key,!key.isStatus()); }
-		 * 
-		 * mKeyAdapter.notifyDataSetChanged();
-		 */
+		
+		Log.v(TAG, "onItemClick "+position);
+//		 KeyDoorLock key = (KeyDoorLock) mKeyAdapter.getItem(position);
+//		 if(key!= null){ 
+//			 key.setStatus(!key.isStatus());
+//			 setDetailDevice(key,!key.isStatus()); 
+//		 }
+		mKeyAdapter.setClickPos(position);
+		mKeyAdapter.notifyDataSetChanged();
 	}
 
 	@Override

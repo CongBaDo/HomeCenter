@@ -46,6 +46,7 @@ public class RoomManageFragment extends Fragment implements OnClickListener {
 	private View footerToolRight;
 	private ScheduleImageView imgToolOn, imgToolOff;
 	private ImageView imgMic;
+	private boolean isShowed = false;
 
 	public static RoomManageFragment newInstance(int position) {
 		RoomManageFragment f = new RoomManageFragment();
@@ -70,6 +71,7 @@ public class RoomManageFragment extends Fragment implements OnClickListener {
 
 		position = getArguments().getInt("no_page");
 		room = mHouse.getRooms().get(position);
+		isShowed = getArguments().getBoolean(configManager.ARGUMENT_IS_SHOWED);
 
 		Log.w(TAG, "ROOM " + room.getName() + " cs " + room.getControls());
 		// if ((savedInstanceState != null) &&
@@ -123,6 +125,10 @@ public class RoomManageFragment extends Fragment implements OnClickListener {
 		tvTitle.setOnClickListener(this);
 		imgProcessLeft.setOnClickListener(this);
 		imgProcessRight.setOnClickListener(this);
+		
+		if(!isShowed){
+			containToolLeft.setVisibility(View.GONE);
+		}
 	}
 
 	private void initData() {

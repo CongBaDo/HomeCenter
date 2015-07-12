@@ -42,7 +42,6 @@ public class configManager {
 
 	public static String SERVER_LOCAL = "server_local";
 	public static String PORT_LOCAL = "port_local";
-
 	public static String IP_TYPE = "ip_type";
 
 	/**
@@ -445,6 +444,8 @@ public class configManager {
 
 	public static final int NUMBER_SENSOR_DEFAULT = 11;
 	public static final String ZERO = "0";
+	
+	public static final String ARGUMENT_IS_SHOWED = "is_show";
 
 	/**
 	 * list devices have in house

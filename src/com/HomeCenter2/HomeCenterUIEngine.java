@@ -2008,7 +2008,7 @@ public class HomeCenterUIEngine extends Handler {
 		String devId = configManager.convertDeviceIdToString(id);
 		String receiveMessage = sendAndReceiveMessage(
 				configManager.GET_LOCK_DOOR, String.valueOf(roomId), devId, "1");
-		// receiveMessage = ":gl220021;1111100000";
+		receiveMessage = ":gl220021;1111100000";
 		if (receiveMessage == null) {
 			return false;
 		}
@@ -2018,7 +2018,7 @@ public class HomeCenterUIEngine extends Handler {
 		if (response.length >= 2) {
 			Room room = mHouse.getRoomsById(roomId);
 			DoorLock door = (DoorLock) room.getControlById(String
-					.valueOf(configManager.DOOR_LOCK_1));
+					.valueOf(configManager.DOOR_LOCK_1 - configManager.MAX_SENSOR_IN_ROOM));
 			List<KeyDoorLock> keys = door.getKeys();
 			int size = keys.size();
 			String status = response[1];
@@ -2078,6 +2078,7 @@ public class HomeCenterUIEngine extends Handler {
 		if (receiveMessage == null) {
 			return false;
 		}
+		
 		Log.d(TAG, "getClock- receiveMessage the first: " + receiveMessage);
 		receiveMessage = receiveMessage.trim();
 		// Log.d(TAG, "getClock- receiveMessage: " + receiveMessage);

@@ -123,7 +123,7 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 			}
 		}
 		setHasOptionsMenu(true);
-		
+		Log.v(TAG, "onCreateConentView "+mRoom.getName());
 		imageW = HomeScreenSetting.ScreenW / 2 - HomeScreenSetting.ScreenW/20;
 	}
 
@@ -143,8 +143,10 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 	}
 	
 	private void initData(){
-		leftFile = new File(HCUtils.getFilePath("left.png", mDevice.getName()));
-		rightFile = new File(HCUtils.getFilePath("right.png", mDevice.getName()));
+//		Log.v(TAG, "initData "+)
+		
+		leftFile = new File(HCUtils.getFilePath(configManager.IMAGE_LEFT, mRoom.getName()));
+		rightFile = new File(HCUtils.getFilePath(configManager.IMAGE_RIGHT, mRoom.getName()));
 		
 		loadBitFromPath(rightFile, IMAGE_POS.RIGHT);
 		loadBitFromPath(leftFile, IMAGE_POS.LEFT);
@@ -513,13 +515,13 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode != getActivity().RESULT_OK)
 			return;
-		File myDir = new File(configManager.FOLDERNAME + "/"+mDevice.getName().replace(" ", ""));
+		File myDir = new File(configManager.FOLDERNAME + "/"+mRoom.getName().replace(" ", ""));
 		String fname = null;//"bbz_avatar.jpg";
 		if(this.imagePos == IMAGE_POS.LEFT){
-			fname = "left.png";
+			fname = configManager.IMAGE_LEFT;
 			leftFile = new File(myDir, fname);
 		}else{
-			fname = "right.png";
+			fname = configManager.IMAGE_RIGHT;
 			rightFile = new File(myDir, fname);
 		}
 		
@@ -540,7 +542,7 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 
 			try {
 				FileOutputStream out = new FileOutputStream(file);
-				bmAvatar.compress(Bitmap.CompressFormat.JPEG, 90, out);
+				bmAvatar.compress(Bitmap.CompressFormat.JPEG, 80, out);
 				out.flush();
 				out.close();
 			} catch (Exception e) {
@@ -581,7 +583,7 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 						bit.getHeight(), matrix, true);
 
 				FileOutputStream out = new FileOutputStream(file);
-				bmAvatar.compress(Bitmap.CompressFormat.JPEG, 90, out);
+				bmAvatar.compress(Bitmap.CompressFormat.JPEG, 80, out);
 				out.flush();
 				out.close();
 				

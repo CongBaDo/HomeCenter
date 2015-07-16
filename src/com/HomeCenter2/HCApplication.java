@@ -77,8 +77,6 @@ public class HCApplication extends Application {
 				.cacheOnDisk(true).imageScaleType(ImageScaleType.NONE)
 				.handler(new Handler()).build();
 
-		// ImageLoader.getInstance().setSessionId(ReaderSettings.SessionID,
-		// ReaderSettings.PublisherID+"");
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
 				context).defaultDisplayImageOptions(options).threadPoolSize(7)
 				.threadPriority(Thread.NORM_PRIORITY - 1).build();

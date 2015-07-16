@@ -32,6 +32,9 @@ public class configManager {
 	public static String CONFIG_FILENAME = "configs.xml";
 
 	public static String RA_CLIENT_ENABLED = "clientEnabled";
+	
+	public static final String IMAGE_LEFT = "left.jpeg";
+	public static final String IMAGE_RIGHT = "right.jpeg";
 
 	/**
 	 * Config

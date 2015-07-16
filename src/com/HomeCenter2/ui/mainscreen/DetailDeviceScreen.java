@@ -80,7 +80,7 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 		super(DetailDeviceScreen.class, title, tag, context);
 	}
 
-	public static final String TAG = "TMT DetailDeviceScreen";
+	public static final String TAG = "DetailDeviceScreen";
 	public static Bundle mBundle;
 	public static DetailDeviceScreen m_instance = null;
 	public int roomId;

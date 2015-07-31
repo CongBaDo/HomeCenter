@@ -2,6 +2,8 @@ package com.HomeCenter2.activity;
 
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.FragmentActivity;
@@ -9,8 +11,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.HomeCenter2.HomeCenterUIEngine;
@@ -20,6 +24,7 @@ import com.HomeCenter2.RegisterService;
 import com.HomeCenter2.data.configManager;
 import com.HomeCenter2.house.House;
 import com.HomeCenter2.house.Room;
+import com.HomeCenter2.imageprocessing.PhotoSortrView;
 import com.HomeCenter2.ui.ScheduleImageView;
 import com.HomeCenter2.ui.adapter.OnOffTypeAdapter;
 import com.HomeCenter2.ui.adapter.ToolAdapter;
@@ -34,8 +39,8 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 	private TextView tvTitle;
 	private int position;
 	private StaggeredGridView gridToolLeft, gridToolRight;
-	private ImageView imgProcessLeft, imgProcessRight;
-	private boolean isLeftCollapse, isRightCollapse;
+	private ImageView imgProcessRight;
+	private boolean isRightCollapse;
 	private OnOffTypeAdapter adapterLeft;
 	private ToolAdapter adapterRight;
 	private LinearLayout containToolLeft, containToolRight;
@@ -46,6 +51,8 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 	private ScheduleImageView imgToolOn, imgToolOff;
 	private ImageView imgMic;
 	private ImageView imgMain;
+	private PhotoSortrView photoSorter;
+	private RelativeLayout containPhotoSortView;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -58,7 +65,18 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 			StrictMode.setThreadPolicy(policy);
 		}
 		
-		setContentView(R.layout.fragment_room_manager);
+		setContentView(R.layout.activity_process_room_image);
+		
+		containPhotoSortView = (RelativeLayout)findViewById(R.id.contain_tools);
+		
+		 photoSorter = new PhotoSortrView(getApplicationContext());
+		 photoSorter.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		 photoSorter.setBackgroundColor(Color.TRANSPARENT);
+		 
+		 photoSorter.addImage(getResources().getDrawable( R.drawable.test_1_image), getResources());
+		 photoSorter.addImage(getResources().getDrawable( R.drawable.test_2_image), getResources());
+		 
+		 containPhotoSortView.addView(photoSorter);
 		
 		mUiEngine = RegisterService.getHomeCenterUIEngine();
 		// mUiEngine.addStatusObserver(this);
@@ -79,7 +97,6 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 		gridToolLeft = (StaggeredGridView) findViewById(R.id.grid_tool_left);
 		gridToolRight = (StaggeredGridView) findViewById(R.id.grid_tool_right);
 
-		imgProcessLeft = (ImageView) findViewById(R.id.img_expand_close_left);
 		imgProcessRight = (ImageView) findViewById(R.id.img_expand_close_right);
 
 		containToolLeft = (LinearLayout) findViewById(R.id.contain_tool_left);
@@ -101,7 +118,6 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 		gridToolRight.addFooterView(footerToolRight);
 
 		tvTitle.setOnClickListener(this);
-		imgProcessLeft.setOnClickListener(this);
 		imgProcessRight.setOnClickListener(this);
 	}
 
@@ -115,15 +131,6 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 
 		gridToolLeft.setAdapter(adapterLeft);
 		gridToolRight.setAdapter(adapterRight);
-
-		gridToolLeft.post(new Runnable() {
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				processLeftView(containToolLeft, isLeftCollapse);
-			}
-		});
 
 		gridToolRight.post(new Runnable() {
 
@@ -167,10 +174,6 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 
 			break;
 
-		case R.id.img_expand_close_left:
-			manageLeftArrow();
-			break;
-
 		case R.id.img_expand_close_right:
 			manageRightArrow();
 			break;
@@ -178,17 +181,6 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 		default:
 			break;
 		}
-	}
-	
-	private void manageLeftArrow() {
-		if (isLeftCollapse) {
-			isLeftCollapse = false;
-			imgProcessLeft.setBackgroundResource(R.drawable.icon_arrow_next);
-		} else {
-			isLeftCollapse = true;
-			imgProcessLeft.setBackgroundResource(R.drawable.icon_arrow_back);
-		}
-		processLeftView(containToolLeft, isLeftCollapse);
 	}
 
 	private void manageRightArrow() {
@@ -215,20 +207,6 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 		} else {
 			ObjectAnimator translationLeft = ObjectAnimator.ofFloat(v, "X",
 					HomeScreenSetting.ScreenW - width / 2);
-			translationLeft.setDuration(500);
-			translationLeft.start();
-		}
-	}
-
-	public void processLeftView(View v, boolean isCollapse) {
-		float width = v.getWidth();
-		if (isCollapse) {
-			ObjectAnimator translationRight = ObjectAnimator.ofFloat(v, "X", 0);
-			translationRight.setDuration(500);
-			translationRight.start();
-		} else {
-			ObjectAnimator translationLeft = ObjectAnimator.ofFloat(v, "X",
-					-width / 2);
 			translationLeft.setDuration(500);
 			translationLeft.start();
 		}

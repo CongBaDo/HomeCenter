@@ -45,7 +45,7 @@ public class RoomManageFragment extends Fragment implements OnClickListener {
 	private TextView tvTitle;
 	private int position;
 	private StaggeredGridView gridToolLeft, gridToolRight;
-	private ImageView imgProcessLeft, imgProcessRight;
+	private ImageView imgProcessRight;
 	private boolean isLeftCollapse, isRightCollapse;
 	private OnOffTypeAdapter adapterLeft;
 	private ToolAdapter adapterRight;
@@ -113,8 +113,6 @@ public class RoomManageFragment extends Fragment implements OnClickListener {
 		gridToolRight = (StaggeredGridView) view
 				.findViewById(R.id.grid_tool_right);
 
-		imgProcessLeft = (ImageView) view
-				.findViewById(R.id.img_expand_close_left);
 		imgProcessRight = (ImageView) view
 				.findViewById(R.id.img_expand_close_right);
 
@@ -140,7 +138,6 @@ public class RoomManageFragment extends Fragment implements OnClickListener {
 		gridToolRight.addFooterView(footerToolRight);
 
 		tvTitle.setOnClickListener(this);
-		imgProcessLeft.setOnClickListener(this);
 		imgProcessRight.setOnClickListener(this);
 		
 		if(!isShowed){
@@ -231,10 +228,6 @@ public class RoomManageFragment extends Fragment implements OnClickListener {
 
 			break;
 
-		case R.id.img_expand_close_left:
-			manageLeftArrow();
-			break;
-
 		case R.id.img_expand_close_right:
 			manageRightArrow();
 			break;
@@ -242,17 +235,6 @@ public class RoomManageFragment extends Fragment implements OnClickListener {
 		default:
 			break;
 		}
-	}
-
-	private void manageLeftArrow() {
-		if (isLeftCollapse) {
-			isLeftCollapse = false;
-			imgProcessLeft.setBackgroundResource(R.drawable.icon_arrow_next);
-		} else {
-			isLeftCollapse = true;
-			imgProcessLeft.setBackgroundResource(R.drawable.icon_arrow_back);
-		}
-		processLeftView(containToolLeft, isLeftCollapse);
 	}
 
 	private void manageRightArrow() {

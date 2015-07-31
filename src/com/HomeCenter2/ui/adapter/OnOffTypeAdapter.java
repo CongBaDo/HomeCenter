@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import com.HomeCenter2.R;
 import com.HomeCenter2.customview.ToolImageView;
@@ -56,6 +57,7 @@ public class OnOffTypeAdapter extends BaseAdapter{
         	convertView = inflater.inflate(R.layout.item_tool_view, parent, false);
             vh = new ViewHolder();
             vh.imgTool = (ToolImageView) convertView.findViewById(R.id.img_tool);
+            vh.tv = (TextView)convertView.findViewById(R.id.tv_value);
             convertView.setTag(vh);
         }
         else {
@@ -63,11 +65,13 @@ public class OnOffTypeAdapter extends BaseAdapter{
         }
 		
         vh.imgTool.setBackgroundResource(types.get(position).getIconOn());
+        vh.tv.setVisibility(View.GONE);
 		
 		return convertView;
 	}
 	
 	static class ViewHolder {
         ToolImageView imgTool;
+        TextView tv;
     }
 }

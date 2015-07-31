@@ -112,4 +112,5 @@
 	
 	<dimen name="tool_column_width">50dp</dimen>
 	<dimen name="tool_width">120dp</dimen>
+	<dimen name="tool_width_a_half">60dp</dimen>
 </resources>

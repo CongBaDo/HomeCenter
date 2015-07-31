@@ -43,6 +43,12 @@
             android:name="com.HomeCenter2.activity.RoomListActivity"
             android:screenOrientation="landscape" >
         </activity>
+        
+        <activity
+            android:name="com.HomeCenter2.activity.DeviceProcessActivity"
+            android:theme="@style/Theme1"
+            android:screenOrientation="landscape" >
+        </activity>
 
         <service
             android:name="com.HomeCenter2.RegisterService"

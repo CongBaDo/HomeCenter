@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
@@ -35,6 +36,12 @@ public class KeyDoorLockAdapter extends BaseAdapter implements OnClickListener {
 	DoorLock mDevice;
 	KeyDoorLockAdapter mAdapter = null;
 	
+	public interface ClickCallback{
+		public void clickPosCallback(int pos);
+	}
+	
+	private ClickCallback callback;
+	
 	public KeyDoorLockAdapter(Context context, DoorLock device) {
 		super();
 		mContext = context;
@@ -44,6 +51,18 @@ public class KeyDoorLockAdapter extends BaseAdapter implements OnClickListener {
 		mAdapter = this;
 		
 		Log.e(TAG, "KeyDoorLockAdapter "+mItems.size());
+	}
+	
+	public void setClickCallback(ClickCallback callback){
+		this.callback = callback;
+	}
+	
+	public void setClickPos(int pos){
+		for(int i = 0; i < mItems.size(); i++){
+			if(pos == i){
+				mItems.get(i).setState(true);
+			}
+		}
 	}
 
 	@Override
@@ -67,7 +86,7 @@ public class KeyDoorLockAdapter extends BaseAdapter implements OnClickListener {
 	}
 
 	@Override
-	public View getView(int position, View view, ViewGroup arg2) {
+	public View getView(final int position, View view, ViewGroup arg2) {
 		if (view == null) {
 			view = newView(position);
 		}
@@ -80,9 +99,28 @@ public class KeyDoorLockAdapter extends BaseAdapter implements OnClickListener {
 		bundle.putBoolean(configManager.ACTIVE_KEY, item.isState());
 		bundle.putInt(configManager.POSITON_KEY, position);		
 		
-		refreshActiveButton(viewHolder.imgIcon, item.isState());
+		refreshActiveButton(view, viewHolder.imgIcon, item.isState());
 		viewHolder.imgIcon.setImageResource(item.getIcon());
 		viewHolder.txtTitle.setText(item.getNameKey());
+		
+		view.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				callback.clickPosCallback(position);
+				
+				for(int i = 0; i < mItems.size(); i++){
+					if(mItems.get(i).isState() && position == i){
+						mItems.get(i).setState(false);
+					}else if(!mItems.get(i).isState() && position == i){
+						mItems.get(i).setState(true);
+					}
+				}
+				
+				notifyDataSetChanged();
+			}
+		});
 		return view;
 	}
 
@@ -146,14 +184,16 @@ public class KeyDoorLockAdapter extends BaseAdapter implements OnClickListener {
 		RegisterService.getHomeCenterUIEngine().sendMessage(message);
 	}
 	
-	public void refreshActiveButton(ImageView button, boolean isActive){		
+	public void refreshActiveButton(View view, ImageView button, boolean isActive){		
 		Bundle bundle = (Bundle) button.getTag();
 		bundle.putBoolean(configManager.ACTIVE_KEY, isActive);		
 		
 		button.setTag(bundle);		
 		if(isActive == true){
-			button.setBackgroundResource(R.drawable.key_doorlock_on);			
+			view.setBackgroundResource(R.drawable.boder_key_selected);
+			button.setBackgroundResource(R.drawable.key_doorlock_on);	
 		}else{
+			view.setBackgroundResource(R.drawable.boder_key_normal);
 			button.setBackgroundResource(R.drawable.key_doorlock_off);						
 		}
 	}

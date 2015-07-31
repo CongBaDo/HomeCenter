@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnLongClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 
@@ -19,7 +20,8 @@ import com.HomeCenter2.ui.mainS.MyRemotesScreen;
 import com.HomeCenter2.ui.slidingmenu.framework.ScreenManager;
 import com.HomeCenter2.ui.slidingmenu.framework.SlidingBaseActivity;
 
-public class RemoteTVScreen extends Fragment implements View.OnClickListener {
+public class RemoteTVScreen extends Fragment implements View.OnClickListener,
+		OnLongClickListener {
 
 	private static final String TAG = "RemoteTVScreen";
 	MyRemotesScreen mParentsScreen = null;
@@ -136,17 +138,104 @@ public class RemoteTVScreen extends Fragment implements View.OnClickListener {
 		mNuC.setOnClickListener(this);
 		mNu0.setOnClickListener(this);
 		mNuT.setOnClickListener(this);
-		
+
 		mVolumeUp.setOnClickListener(this);
 		mVolumeDown.setOnClickListener(this);
 		mSlilent.setOnClickListener(this);
 		mBook.setOnClickListener(this);
 		mCHUP.setOnClickListener(this);
 		mCHDown.setOnClickListener(this);
+		
+		mReturn.setOnLongClickListener(this);
+		mMenu.setOnLongClickListener(this);
+		mTool.setOnLongClickListener(this);
+		mInfo.setOnLongClickListener(this);
+		mExit.setOnLongClickListener(this);
+
+		mMute.setOnLongClickListener(this);
+		mChannelTop.setOnLongClickListener(this);
+		mSource.setOnLongClickListener(this);
+
+		mVolumnLeft.setOnLongClickListener(this);
+		mTv.setOnLongClickListener(this);
+		mVolumnRight.setOnLongClickListener(this);
+
+		mPower.setOnLongClickListener(this);
+		mChannelBottom.setOnLongClickListener(this);
+
+		mNu1.setOnLongClickListener(this);
+		mNu2.setOnLongClickListener(this);
+		mNu3.setOnLongClickListener(this);
+
+		mNu4.setOnLongClickListener(this);
+		mNu5.setOnLongClickListener(this);
+		mNu6.setOnLongClickListener(this);
+
+		mNu7.setOnLongClickListener(this);
+		mNu8.setOnLongClickListener(this);
+		mNu9.setOnLongClickListener(this);
+
+		mNuC.setOnLongClickListener(this);
+		mNu0.setOnLongClickListener(this);
+		mNuT.setOnLongClickListener(this);
+
+		mVolumeUp.setOnLongClickListener(this);
+		mVolumeDown.setOnLongClickListener(this);
+		mSlilent.setOnLongClickListener(this);
+		mBook.setOnLongClickListener(this);
+		mCHUP.setOnLongClickListener(this);
+		mCHDown.setOnLongClickListener(this);
+
 	}
 
 	@Override
 	public void onClick(View v) {
+		String id = getIdButton(v);
+		if (mUiEngine != null && id.compareTo("00") != 0) {
+			int type = mUiEngine.getRemoteType();
+			Room room = mParentsScreen.getCurrentRoom();
+			if (room != null) {
+				if (type == configManager.REMOTE_CONTROL) {
+					Log.d(TAG, "remote control");
+					mParentsScreen
+							.setControlRemote(String.valueOf(room.getId()),
+									String.valueOf(1), id);
+				} else if (type == configManager.REMOTE_UPDATE) {
+					Log.d(TAG, "remote control");
+					mParentsScreen
+							.setUpdateRemote(String.valueOf(room.getId()),
+									String.valueOf(1), id);
+				}
+			}
+		}
+
+	}
+
+	private void showShedule(Room room, String buttonId) {
+		Bundle bundle = new Bundle();
+
+		bundle.putSerializable(configManager.ROOM_BUNDLE, room);
+		bundle.putString(configManager.BUTTON_BUNDLE, buttonId);
+		bundle.putBoolean(configManager.IS_DEVICE_BUNDLE, false);
+
+		DetailDeviceScreen fragment = DetailDeviceScreen
+				.initializeDetailDeviceScreen(bundle, -1,
+						(SlidingBaseActivity) getActivity());
+		HomeCenter2Activity activity = (HomeCenter2Activity) getActivity();
+		activity.switchContentView(fragment, ScreenManager.DETAIL_DEVICE_TAG,
+				true, true, false);
+
+		/*
+		 * ScheduleRemoteScreen fragment = ScheduleRemoteScreen
+		 * .initializeDetailDeviceScreen(bundle,
+		 * -1,ScreenManager.SCHEDULE_REMOTE_TAG, (SlidingBaseActivity)
+		 * getActivity()); HomeCenter2 activity = (HomeCenter2) getActivity();
+		 * activity.switchContentView(fragment, ScreenManager.DETAIL_DEVICE_TAG,
+		 * true, true, false);
+		 */
+	}
+
+	private String getIdButton(View v) {
 		String id = "00";
 		switch (v.getId()) {
 		case R.id.imbReturn:
@@ -250,59 +339,29 @@ public class RemoteTVScreen extends Fragment implements View.OnClickListener {
 		case R.id.imbCHUp:
 			id = "46";
 			break;
-			
+
 		case R.id.imbCHDown:
 			id = "47";
 			break;
-			
+
 		default:
 			break;
 		}
-		
-		if (mUiEngine != null && id.compareTo("00") != 0) {
-			int type = mUiEngine.getRemoteType();
-			Room room = mParentsScreen.getCurrentRoom();
-			if (room != null) {
-				if (type == configManager.REMOTE_CONTROL) {
-					Log.d(TAG, "remote control");
-					mParentsScreen
-							.setControlRemote(String.valueOf(room.getId()),
-									String.valueOf(1), id);
-				} else if (type == configManager.REMOTE_UPDATE) {
-					Log.d(TAG, "remote control");
-					mParentsScreen
-							.setUpdateRemote(String.valueOf(room.getId()),
-									String.valueOf(1), id);
-				} else if (type == configManager.REMOTE_SHEDULE) {
-					Log.d(TAG, "schedule control");
-					showShedule(room, id);
-				}
-			}
-		}
 
+		return id;
+		
 	}
 
-	private void showShedule(Room room, String buttonId) {
-		Bundle bundle = new Bundle();
-
-		bundle.putSerializable(configManager.ROOM_BUNDLE, room);
-		bundle.putString(configManager.BUTTON_BUNDLE, buttonId);
-		bundle.putBoolean(configManager.IS_DEVICE_BUNDLE, false);
-
-		DetailDeviceScreen fragment = DetailDeviceScreen
-				.initializeDetailDeviceScreen(bundle, -1,
-						(SlidingBaseActivity) getActivity());
-		HomeCenter2Activity activity = (HomeCenter2Activity) getActivity();
-		activity.switchContentView(fragment, ScreenManager.DETAIL_DEVICE_TAG,
-				true, true, false);
-
-		/*
-		 * ScheduleRemoteScreen fragment = ScheduleRemoteScreen
-		 * .initializeDetailDeviceScreen(bundle,
-		 * -1,ScreenManager.SCHEDULE_REMOTE_TAG, (SlidingBaseActivity)
-		 * getActivity()); HomeCenter2 activity = (HomeCenter2) getActivity();
-		 * activity.switchContentView(fragment, ScreenManager.DETAIL_DEVICE_TAG,
-		 * true, true, false);
-		 */
+	@Override
+	public boolean onLongClick(View v) {
+		String id = getIdButton(v);
+		if (mUiEngine != null && id.compareTo("00") != 0) {
+			Room room = mParentsScreen.getCurrentRoom();
+			if (room != null) {
+				Log.d(TAG, "schedule control");
+				showShedule(room, id);
+			}
+		}
+		return false;
 	}
 }

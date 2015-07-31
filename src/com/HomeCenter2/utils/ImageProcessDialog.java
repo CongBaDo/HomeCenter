@@ -23,11 +23,15 @@ import com.HomeCenter2.R;
 public class ImageProcessDialog implements OnClickListener {
 
 	public enum ACTION {TAKE_PHOTO, USE_LIBRARY, EDIT_DEVICE, DELETE_IMAGE, CANCEL};
+	
+	public static final int TYPE_BLANK = 100;
+	public static final int TYPE_EXIST = 101;
 	private static final String TAG = "ImageProcessDialog";
 	private Activity context;
 	private Dialog dialog;
 	private int SCW, SCH;
 	private String title, message, subject;
+	private int type;
 
 	public interface ImageDialogListener {
 		public void dismissListener();
@@ -51,7 +55,7 @@ public class ImageProcessDialog implements OnClickListener {
 		this.message = message;
 	}
 
-	public void showRadialDialog() {
+	public void showRadialDialog(int type) {
 
 		dialog = new Dialog(context);
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -75,6 +79,10 @@ public class ImageProcessDialog implements OnClickListener {
 		TextView editDevice = (TextView) v.findViewById(R.id.tv_edit_device);
 		TextView deleteImage = (TextView) v.findViewById(R.id.tv_delete_image);
 		TextView cancel = (TextView) v.findViewById(R.id.tv_cancel);
+		
+		if(type == TYPE_BLANK){
+			v.findViewById(R.id.contain_full_case).setVisibility(View.GONE);
+		}
 
 		takePhoto.setOnClickListener(this);
 		library.setOnClickListener(this);

@@ -32,6 +32,11 @@ public class configManager {
 	public static String CONFIG_FILENAME = "configs.xml";
 
 	public static String RA_CLIENT_ENABLED = "clientEnabled";
+	
+	public static final String IMAGE_LEFT = "left.jpeg";
+	public static final String IMAGE_RIGHT = "right.jpeg";
+	public static final String INTENT_PATH_FILE = "path_file";
+	public static final String INTENT_POS_FILE = "pos_file";
 
 	/**
 	 * Config
@@ -42,7 +47,6 @@ public class configManager {
 
 	public static String SERVER_LOCAL = "server_local";
 	public static String PORT_LOCAL = "port_local";
-
 	public static String IP_TYPE = "ip_type";
 
 	/**
@@ -379,8 +383,7 @@ public class configManager {
 	 */
 
 	public static final int REMOTE_CONTROL = 1;
-	public static final int REMOTE_UPDATE = 2;
-	public static final int REMOTE_SHEDULE = 3;
+	public static final int REMOTE_UPDATE = 2;	
 
 	// Bundle
 
@@ -446,6 +449,8 @@ public class configManager {
 
 	public static final int NUMBER_SENSOR_DEFAULT = 11;
 	public static final String ZERO = "0";
+	
+	public static final String ARGUMENT_IS_SHOWED = "is_show";
 
 	/**
 	 * list devices have in house

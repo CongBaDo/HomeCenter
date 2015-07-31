@@ -1,42 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <resources>
-    
-	<color name="white">#ffffff</color>
-	<color name="black">#5b5b5b</color>
-	<color name="black_off">#595e60</color>
-	
-	<color name="transparent">#00000000</color>
-	<color name="grey">#939494</color>
-	<color name="grey_light">#b6b6b6</color>
-	
-	<color name="bg_tool_room">#CCCFCFCF</color>
-	
-	<!-- setting main -->
-	<color name="bg_color_view_behind">#2F2F2F</color>	
-	
-	<!-- header -->
-	<color name="bg_header">#202020</color>
-	
-	<!-- main menu -->
-	<color name="main_menu_background">#008080</color> <!-- gray -->
-	<color name="main_menu_item_bg_selected">#222222</color> <!-- gray black -->
-	
-	<!-- blue -->
-	
-	<!-- orange -->
-	<color name="orange_light">#ff8800</color> <!-- blue -->
-	
-	<color name="red_temp">#ff2222</color> <!-- blue -->
-	<color name="green_temp">#00f900</color> <!-- blue -->
-	<color name="blue_temp">#2bbfbf</color> <!-- blue -->
-	
-	<!-- background -->
-	<color name="main_background">#E5E4E2</color>	
-	<color name="header_background">#072330</color> <!-- blue -->
-	
-	<color name="blue_light">#7FDBBE</color> <!-- blue light -->
-	<color name="yellow_light">#F7BF18</color> <!-- blue light -->
-	<color name="color_text_dialog">#1376de</color>
-			
+
+    <color name="white">#ffffff</color>
+    <color name="black">#5b5b5b</color>
+    <color name="black_off">#595e60</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="transparent">#00000000</color>
+    <color name="grey">#939494</color>
+    <color name="grey_light">#b6b6b6</color>
+    <color name="bg_tool_room">#CCCFCFCF</color>
+
+    <!-- setting main -->
+    <color name="bg_color_view_behind">#2F2F2F</color>
+
+    <!-- header -->
+    <color name="bg_header">#202020</color>
+
+    <!-- main menu -->
+    <color name="main_menu_background">#008080</color>
+ <!-- gray -->
+    <color name="main_menu_item_bg_selected">#222222</color>
+ <!-- gray black -->
+
+
+    <!-- blue -->
+
+
+    <!-- orange -->
+    <color name="orange_light">#ff8800</color>
+ <!-- blue -->
+
+    <color name="red_temp">#ff2222</color>
+ <!-- blue -->
+    <color name="green_temp">#00f900</color>
+ <!-- blue -->
+    <color name="blue_temp">#2bbfbf</color>
+ <!-- blue -->
+
+
+    <!-- background -->
+    <color name="main_background">#E5E4E2</color>
+    <color name="header_background">#072330</color>
+ <!-- blue -->
+
+    <color name="blue_light">#7FDBBE</color>
+ <!-- blue light -->
+    <color name="yellow_light">#F7BF18</color>
+ <!-- blue light -->
+    <color name="color_text_dialog">#1376de</color>
+
 </resources>

@@ -1,7 +1,14 @@
 package com.HomeCenter2.fragment;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -9,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,7 +32,11 @@ import com.HomeCenter2.house.Room;
 import com.HomeCenter2.ui.ScheduleImageView;
 import com.HomeCenter2.ui.adapter.OnOffTypeAdapter;
 import com.HomeCenter2.ui.adapter.ToolAdapter;
+import com.HomeCenter2.utils.HCUtils;
 import com.etsy.android.grid.StaggeredGridView;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 public class RoomManageFragment extends Fragment implements OnClickListener {
 
@@ -46,6 +56,11 @@ public class RoomManageFragment extends Fragment implements OnClickListener {
 	private View footerToolRight;
 	private ScheduleImageView imgToolOn, imgToolOff;
 	private ImageView imgMic;
+	private boolean isShowed = false;
+	private ImageView imgMain, imgThumb;
+	private enum IMAGE_THUMB{Left, Right, None};
+	private IMAGE_THUMB thumbType = IMAGE_THUMB.None;
+	private File fileRight, fileLeft;
 
 	public static RoomManageFragment newInstance(int position) {
 		RoomManageFragment f = new RoomManageFragment();
@@ -70,6 +85,7 @@ public class RoomManageFragment extends Fragment implements OnClickListener {
 
 		position = getArguments().getInt("no_page");
 		room = mHouse.getRooms().get(position);
+		isShowed = getArguments().getBoolean(configManager.ARGUMENT_IS_SHOWED);
 
 		Log.w(TAG, "ROOM " + room.getName() + " cs " + room.getControls());
 		// if ((savedInstanceState != null) &&
@@ -85,7 +101,7 @@ public class RoomManageFragment extends Fragment implements OnClickListener {
 				false);
 
 		initUI(v);
-		initData();
+		initData(v);
 
 		return v;
 	}
@@ -114,6 +130,9 @@ public class RoomManageFragment extends Fragment implements OnClickListener {
 				.findViewById(R.id.img_tool_off);
 		imgToolOn = (ScheduleImageView) footerToolRight
 				.findViewById(R.id.img_tool_on);
+		imgMain = (ImageView)view.findViewById(R.id.image_showed);
+		imgThumb = (ImageView)view.findViewById(R.id.img_changable);
+		imgThumb.setOnClickListener(this);
 
 		imgMic.setOnClickListener(this);
 		imgToolOff.setOnClickListener(this);
@@ -123,9 +142,13 @@ public class RoomManageFragment extends Fragment implements OnClickListener {
 		tvTitle.setOnClickListener(this);
 		imgProcessLeft.setOnClickListener(this);
 		imgProcessRight.setOnClickListener(this);
+		
+		if(!isShowed){
+			containToolLeft.setVisibility(View.GONE);
+		}
 	}
 
-	private void initData() {
+	private void initData(View v) {
 		tvTitle.setText(room.getName());
 
 		adapterLeft = new OnOffTypeAdapter(getActivity(),
@@ -153,8 +176,24 @@ public class RoomManageFragment extends Fragment implements OnClickListener {
 				processRightView(containToolRight, isRightCollapse);
 			}
 		});
+		
+//		HCUtils.getFilePath("left.png", room.getName());
+		Log.i(TAG, "onCreateView "+HCUtils.getFilePath(configManager.IMAGE_LEFT, room.getName()));
+		ImageLoader.getInstance().displayImage("file:///"+HCUtils.getFilePath(configManager.IMAGE_LEFT, room.getName()), imgMain);
+		
+		String filePathRight = HCUtils.getFilePath(configManager.IMAGE_RIGHT, room.getName());
+		String filePathLeft = HCUtils.getFilePath(configManager.IMAGE_LEFT, room.getName());
+		fileRight = new File(filePathRight);
+		fileLeft = new File(filePathLeft);
+		
+		if(fileRight.exists()){
+			v.findViewById(R.id.contain_thumb).setVisibility(View.VISIBLE);
+			loadBitFromPath(fileRight, thumbType);
+		}else{
+			v.findViewById(R.id.contain_thumb).setVisibility(View.INVISIBLE);
+		}
 	}
-
+	
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
@@ -168,6 +207,16 @@ public class RoomManageFragment extends Fragment implements OnClickListener {
 		case R.id.title_room:
 			Intent intent = new Intent(getActivity(), RoomListActivity.class);
 			startActivityForResult(intent, configManager.RESULT_ROOM_INDEX);// (intent);
+			break;
+			
+		case R.id.img_changable:
+			if(thumbType == IMAGE_THUMB.Left){
+				thumbType = IMAGE_THUMB.Right;
+				loadBitFromPath(fileRight, thumbType);
+			}else{
+				thumbType = IMAGE_THUMB.Left;
+				loadBitFromPath(fileLeft, thumbType);
+			}
 			break;
 
 		case R.id.img_tool_mic:
@@ -246,6 +295,36 @@ public class RoomManageFragment extends Fragment implements OnClickListener {
 					-width / 2);
 			translationLeft.setDuration(500);
 			translationLeft.start();
+		}
+	}
+	
+	private void loadBitFromPath(File file, IMAGE_THUMB type){
+		FileInputStream fisR;
+		try {
+			fisR = new FileInputStream(file.getAbsoluteFile());
+			
+			Bitmap imageBitmapR = BitmapFactory.decodeStream(fisR);
+	        
+	        BitmapFactory.Options optionsR = new BitmapFactory.Options();
+			optionsR.inJustDecodeBounds = true;
+			BitmapFactory.decodeFile(file.getAbsolutePath(), optionsR);//decodeResource(getResources(), R.id.myimage, options);
+			int imageHeightR = optionsR.outHeight;
+			int imageWidthR = optionsR.outWidth;
+			
+			int imageHR = (HomeScreenSetting.ScreenH/15)*imageHeightR/imageWidthR;
+
+	        imageBitmapR = Bitmap.createScaledBitmap(imageBitmapR, HomeScreenSetting.ScreenH , imageHR, false);
+
+	        if (type == IMAGE_THUMB.Left) {
+				imgThumb.setImageBitmap(imageBitmapR);
+				ImageLoader.getInstance().displayImage("file:///"+HCUtils.getFilePath(configManager.IMAGE_RIGHT, room.getName()), imgMain);
+			} else {
+				imgThumb.setImageBitmap(imageBitmapR);
+				ImageLoader.getInstance().displayImage("file:///"+HCUtils.getFilePath(configManager.IMAGE_LEFT, room.getName()), imgMain);
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }

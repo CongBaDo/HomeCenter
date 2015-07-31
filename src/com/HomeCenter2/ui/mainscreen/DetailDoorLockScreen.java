@@ -42,9 +42,9 @@ import com.HomeCenter2.HomeCenterUIEngine;
 import com.HomeCenter2.HomeScreenSetting;
 import com.HomeCenter2.R;
 import com.HomeCenter2.RegisterService;
+import com.HomeCenter2.activity.DeviceProcessActivity;
 import com.HomeCenter2.customview.CategoryView;
 import com.HomeCenter2.customview.HeaderFooterGridView;
-import com.HomeCenter2.customview.SquareImageView;
 import com.HomeCenter2.data.configManager;
 import com.HomeCenter2.house.Device;
 import com.HomeCenter2.house.DoorLock;
@@ -53,15 +53,16 @@ import com.HomeCenter2.house.KeyDoorLock;
 import com.HomeCenter2.house.Room;
 import com.HomeCenter2.ui.DialogFragmentWrapper;
 import com.HomeCenter2.ui.adapter.KeyDoorLockAdapter;
+import com.HomeCenter2.ui.adapter.KeyDoorLockAdapter.ClickCallback;
 import com.HomeCenter2.ui.listener.GetStatusKeyLockListener;
 import com.HomeCenter2.ui.slidingmenu.framework.RADialerMainScreenAbstract;
 import com.HomeCenter2.ui.slidingmenu.framework.ScreenManager;
 import com.HomeCenter2.ui.slidingmenu.framework.SlidingBaseActivity;
 import com.HomeCenter2.utils.FileUtils;
+import com.HomeCenter2.utils.HCUtils;
 import com.HomeCenter2.utils.ImageProcessDialog;
 import com.HomeCenter2.utils.ImageProcessDialog.ACTION;
 import com.HomeCenter2.utils.ImageProcessDialog.ImageDialogListener;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 		DialogFragmentWrapper.OnCreateDialogFragmentListener,
@@ -123,9 +124,8 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 			}
 		}
 		setHasOptionsMenu(true);
-		
+		Log.v(TAG, "onCreateConentView "+mRoom.getName());
 		imageW = HomeScreenSetting.ScreenW / 2 - HomeScreenSetting.ScreenW/20;
-		
 	}
 
 	@Override
@@ -144,8 +144,10 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 	}
 	
 	private void initData(){
-		leftFile = new File(configManager.FOLDERNAME + "/"+mDevice.getName().replace(" ", "")+"/left.png");
-		rightFile = new File(configManager.FOLDERNAME + "/"+mDevice.getName().replace(" ", "")+"/right.png");
+//		Log.v(TAG, "initData "+)
+		
+		leftFile = new File(HCUtils.getFilePath(configManager.IMAGE_LEFT, mRoom.getName()));
+		rightFile = new File(HCUtils.getFilePath(configManager.IMAGE_RIGHT, mRoom.getName()));
 		
 		loadBitFromPath(rightFile, IMAGE_POS.RIGHT);
 		loadBitFromPath(leftFile, IMAGE_POS.LEFT);
@@ -157,9 +159,17 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 		mKeyLV = (HeaderFooterGridView) view.findViewById(R.id.lvDoorLock);
 		header = inflater.inflate(R.layout.header_room_detail, null);
 		mKeyLV.addHeaderView(header);
-
+		
 		mKeyAdapter = new KeyDoorLockAdapter(mContext, mDevice);
 		mKeyLV.setAdapter(mKeyAdapter);
+		mKeyAdapter.setClickCallback(new ClickCallback() {
+			
+			@Override
+			public void clickPosCallback(int pos) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		mKeyLV.setOnItemClickListener(this);
 		mKeyLV.setNumColumns(5);
 		mKeyLV.setOnItemLongClickListener(this);
@@ -309,13 +319,15 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		/*
-		 * KeyDoorLock key = (KeyDoorLock) mKeyAdapter.getItem(position);
-		 * if(key!= null){ key.setStatus(!key.isStatus());
-		 * setDetailDevice(key,!key.isStatus()); }
-		 * 
-		 * mKeyAdapter.notifyDataSetChanged();
-		 */
+		
+		Log.v(TAG, "onItemClick "+position);
+//		 KeyDoorLock key = (KeyDoorLock) mKeyAdapter.getItem(position);
+//		 if(key!= null){ 
+//			 key.setStatus(!key.isStatus());
+//			 setDetailDevice(key,!key.isStatus()); 
+//		 }
+		mKeyAdapter.setClickPos(position);
+		mKeyAdapter.notifyDataSetChanged();
 	}
 
 	@Override
@@ -458,6 +470,13 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 
 	private void showDialog(IMAGE_POS type) {
 		imagePos = type;
+		int typeDialog = ImageProcessDialog.TYPE_BLANK;
+		if(leftFile.exists() && type == IMAGE_POS.LEFT){
+			typeDialog = ImageProcessDialog.TYPE_EXIST;
+		}else if(rightFile.exists() && type == IMAGE_POS.RIGHT){
+			typeDialog = ImageProcessDialog.TYPE_EXIST;
+		}
+		
 		ImageProcessDialog dialog = new ImageProcessDialog(getActivity(),
 				new ImageDialogListener() {
 
@@ -474,7 +493,15 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 							
 							resetImageView(imagePos);
 						} else if (shareType == ACTION.EDIT_DEVICE) {
-
+							Intent intent = new Intent(getActivity(), DeviceProcessActivity.class);
+							if(imagePos == IMAGE_POS.LEFT){
+								intent.putExtra(configManager.INTENT_PATH_FILE, leftFile.getAbsolutePath());
+								intent.putExtra(configManager.INTENT_POS_FILE, configManager.IMAGE_LEFT);
+							}else{
+								intent.putExtra(configManager.INTENT_PATH_FILE, rightFile.getAbsolutePath());
+								intent.putExtra(configManager.INTENT_POS_FILE, configManager.IMAGE_RIGHT);
+							}
+							startActivity(intent);
 						} else if (shareType == ACTION.TAKE_PHOTO) {
 							onCallCamera();
 						} else if (shareType == ACTION.USE_LIBRARY) {
@@ -488,7 +515,7 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 
 					}
 				});
-		dialog.showRadialDialog();
+		dialog.showRadialDialog(typeDialog);
 	}
 	
 	public void resetImageView(IMAGE_POS type){
@@ -504,13 +531,13 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode != getActivity().RESULT_OK)
 			return;
-		File myDir = new File(configManager.FOLDERNAME + "/"+mDevice.getName().replace(" ", ""));
+		File myDir = new File(configManager.FOLDERNAME + "/"+mRoom.getName().replace(" ", ""));
 		String fname = null;//"bbz_avatar.jpg";
 		if(this.imagePos == IMAGE_POS.LEFT){
-			fname = "left.png";
+			fname = configManager.IMAGE_LEFT;
 			leftFile = new File(myDir, fname);
 		}else{
-			fname = "right.png";
+			fname = configManager.IMAGE_RIGHT;
 			rightFile = new File(myDir, fname);
 		}
 		
@@ -531,7 +558,7 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 
 			try {
 				FileOutputStream out = new FileOutputStream(file);
-				bmAvatar.compress(Bitmap.CompressFormat.JPEG, 90, out);
+				bmAvatar.compress(Bitmap.CompressFormat.JPEG, 80, out);
 				out.flush();
 				out.close();
 			} catch (Exception e) {
@@ -572,7 +599,7 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 						bit.getHeight(), matrix, true);
 
 				FileOutputStream out = new FileOutputStream(file);
-				bmAvatar.compress(Bitmap.CompressFormat.JPEG, 90, out);
+				bmAvatar.compress(Bitmap.CompressFormat.JPEG, 80, out);
 				out.flush();
 				out.close();
 				

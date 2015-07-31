@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnLongClickListener;
 import android.widget.ImageButton;
 
 import com.HomeCenter2.HomeCenter2Activity;
@@ -19,7 +20,7 @@ import com.HomeCenter2.ui.slidingmenu.framework.ScreenManager;
 import com.HomeCenter2.ui.slidingmenu.framework.SlidingBaseActivity;
 
 public class RemoteCameraScreen extends Fragment implements
-		View.OnClickListener {
+		View.OnClickListener, OnLongClickListener {
 
 	private static final String TAG = "RemoteCameraScreen";
 	HomeCenter2Activity mContext;
@@ -74,10 +75,55 @@ public class RemoteCameraScreen extends Fragment implements
 		mStop.setOnClickListener(this);
 
 		mPower.setOnClickListener(this);
+		
+		mPrevious.setOnLongClickListener(this);
+		mPause.setOnLongClickListener(this);
+		mNext.setOnLongClickListener(this);
+
+		mRecord.setOnLongClickListener(this);
+		mPlay.setOnLongClickListener(this);
+		mStop.setOnLongClickListener(this);
+
+		mPower.setOnLongClickListener(this);
 	}
 
 	@Override
 	public void onClick(View v) {
+		String id = getIdButton(v);
+		if (mUiEngine != null && id.compareTo("00") != 0) {
+			int type = mUiEngine.getRemoteType();
+			Room room = mParentsScreen.getCurrentRoom();
+			if (room != null) {
+				if (type == configManager.REMOTE_CONTROL) {
+					Log.d(TAG, "remote control");
+					mParentsScreen.setControlRemote(String.valueOf(1),
+							String.valueOf(1), id);
+				} else if (type == configManager.REMOTE_UPDATE) {
+					Log.d(TAG, "remote control");
+					mParentsScreen.setUpdateRemote(String.valueOf(1),
+							String.valueOf(1), id);
+				}
+			}
+		}
+
+	}
+
+	private void showShedule(Room room, String buttonId) {
+		Bundle bundle = new Bundle();
+
+		bundle.putSerializable(configManager.ROOM_BUNDLE, room);
+		bundle.putString(configManager.BUTTON_BUNDLE, buttonId);
+		bundle.putBoolean(configManager.IS_DEVICE_BUNDLE, false);
+
+		DetailDeviceScreen fragment = DetailDeviceScreen
+				.initializeDetailDeviceScreen(bundle, -1,
+						(SlidingBaseActivity) getActivity());
+		HomeCenter2Activity activity = (HomeCenter2Activity) getActivity();
+		activity.switchContentView(fragment, ScreenManager.DETAIL_DEVICE_TAG,
+				true, true, false);
+	}
+
+	private String getIdButton(View v) {
 		String id = "00";
 		switch (v.getId()) {
 		case R.id.imbCameraPrevious:
@@ -102,42 +148,21 @@ public class RemoteCameraScreen extends Fragment implements
 		default:
 			break;
 		}
-		if (mUiEngine != null && id.compareTo("00") != 0) {
-			int type = mUiEngine.getRemoteType();
-			Room room = mParentsScreen.getCurrentRoom();
-			if (room != null) {
-				if (type == configManager.REMOTE_CONTROL) {
-					Log.d(TAG, "remote control");
-					mParentsScreen.setControlRemote(String.valueOf(1),
-							String.valueOf(1), id);
-				} else if (type == configManager.REMOTE_UPDATE) {
-					Log.d(TAG, "remote control");
-					mParentsScreen.setUpdateRemote(String.valueOf(1),
-							String.valueOf(1), id);
-				} else if (type == configManager.REMOTE_SHEDULE) {
-					Log.d(TAG, "schedule control");
 
-					showShedule(room, id);
-
-				}
-			}
-		}
-
+		return id;
 	}
 
-	private void showShedule(Room room, String buttonId) {
-		Bundle bundle = new Bundle();
-
-		bundle.putSerializable(configManager.ROOM_BUNDLE, room);
-		bundle.putString(configManager.BUTTON_BUNDLE, buttonId);
-		bundle.putBoolean(configManager.IS_DEVICE_BUNDLE, false);
-
-		DetailDeviceScreen fragment = DetailDeviceScreen
-				.initializeDetailDeviceScreen(bundle, -1,
-						(SlidingBaseActivity) getActivity());
-		HomeCenter2Activity activity = (HomeCenter2Activity) getActivity();
-		activity.switchContentView(fragment, ScreenManager.DETAIL_DEVICE_TAG,
-				true, true, false);
+	@Override
+	public boolean onLongClick(View v) {
+		String id = getIdButton(v);
+		if (mUiEngine != null && id.compareTo("00") != 0) {
+			Room room = mParentsScreen.getCurrentRoom();
+			if (room != null) {
+				Log.d(TAG, "schedule control");
+				showShedule(room, id);
+			}
+		}
+		return false;
 	}
 
 }

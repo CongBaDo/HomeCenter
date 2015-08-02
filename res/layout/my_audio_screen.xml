@@ -3,19 +3,30 @@
     android:id="@+id/scrollView1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-   	android:orientation="vertical"
-   	android:background="@drawable/shadow_content">
+    android:background="@drawable/shadow_content"
+    android:orientation="vertical" >
 
     <include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         layout="@layout/my_audio_header" />
 
-    <ListView
-        android:id="@+id/lvAudio"
+    <GridView
+        android:id="@+id/gvAudio"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1" >
-    </ListView>
+        android:layout_weight="1"
+        android:numColumns="2"
+        >
+    </GridView>
+
+    <LinearLayout
+        android:id="@+id/linear01"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:orientation="vertical" 
+        android:layout_weight="1" 
+        android:background="@color/bg_header">
+    </LinearLayout>
 
 </LinearLayout>

@@ -303,7 +303,6 @@ public class configManager {
 	public static final int DOOR_LOCK_1 = TEMPERATURE_1 + 24;
 	public static final int ROLLER_SHUTTER_1 = TEMPERATURE_1 + 25;
 	
-
 	public static final int CAMERA_1 = TEMPERATURE_1 + 26;
 	public static final int CAMERA_2 = TEMPERATURE_1 + 27;
 	public static final int CAMERA_3 = TEMPERATURE_1 + 28;

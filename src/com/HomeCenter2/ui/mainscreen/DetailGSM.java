@@ -126,54 +126,7 @@ public class DetailGSM extends RADialerMainScreenAbstract implements
 		mlnDevice.setVisibility(View.VISIBLE);
 		cbSmartEnergy = (TextView) view.findViewById(R.id.cbSmartEnergy_device);
 
-		cbTemp1 = (TextView) view.findViewById(R.id.cbTemp1_device);
-		cbTemp2 = (TextView) view.findViewById(R.id.cbTemp2_device);
-		cbLight1 = (TextView) view.findViewById(R.id.cbLight1_device);
-		cbLight2 = (TextView) view.findViewById(R.id.cbLight2_device);
-		cbSmoke1 = (TextView) view.findViewById(R.id.cbSmoke1_device);
-		cbSmoke2 = (TextView) view.findViewById(R.id.cbSmoke2_device);
-		cbMotion1 = (TextView) view.findViewById(R.id.cbMotion1_device);
-		cbMotion2 = (TextView) view.findViewById(R.id.cbMotion2_device);
-		cbMotion3 = (TextView) view.findViewById(R.id.cbMotion3_device);
-		cbMotion4 = (TextView) view.findViewById(R.id.cbMotion4_device);
-		cbDoor1 = (TextView) view.findViewById(R.id.cbDoor1_device);
-		cbDoor2 = (TextView) view.findViewById(R.id.cbDoor2_device);
-		cbDoor3 = (TextView) view.findViewById(R.id.cbDoor3_device);
-		cbDoor4 = (TextView) view.findViewById(R.id.cbDoor4_device);
-
-		cbTemp1.setOnClickListener(this);
-		cbTemp2.setOnClickListener(this);
-		cbLight1.setOnClickListener(this);
-		cbLight2.setOnClickListener(this);
-		cbSmoke1.setOnClickListener(this);
-		cbSmoke2.setOnClickListener(this);
-		cbMotion1.setOnClickListener(this);
-		cbMotion2.setOnClickListener(this);
-		cbMotion3.setOnClickListener(this);
-		cbMotion4.setOnClickListener(this);
-		cbDoor1.setOnClickListener(this);
-		cbDoor2.setOnClickListener(this);
-		cbDoor3.setOnClickListener(this);
-		cbDoor4.setOnClickListener(this);
-
 		cbSmartEnergy.setOnClickListener(this);
-
-		setDeviceChecked(cbSmartEnergy, false);
-		setDeviceChecked(cbTemp1, false);
-		setDeviceChecked(cbLight1, false);
-		setDeviceChecked(cbSmoke1, false);
-		setDeviceChecked(cbMotion1, false);
-		setDeviceChecked(cbMotion2, false);
-		setDeviceChecked(cbDoor1, false);
-		setDeviceChecked(cbDoor2, false);
-		setDeviceChecked(cbTemp2, false);
-		setDeviceChecked(cbLight2, false);
-		setDeviceChecked(cbSmoke2, false);
-		setDeviceChecked(cbMotion3, false);
-		setDeviceChecked(cbMotion4, false);
-		setDeviceChecked(cbDoor3, false);
-		setDeviceChecked(cbDoor4, false);
-		setDeviceChecked(cbSmartEnergy, false);
 
 		btnTurnWhen = (ImageButton) view.findViewById(R.id.btnSyncDevices);
 		btnTurnWhen.setOnClickListener(this);
@@ -353,20 +306,6 @@ public class DetailGSM extends RADialerMainScreenAbstract implements
 			break;
 
 		// Schedule devices
-		case R.id.cbTemp1_device:
-		case R.id.cbTemp2_device:
-		case R.id.cbLight1_device:
-		case R.id.cbLight2_device:
-		case R.id.cbSmoke1_device:
-		case R.id.cbSmoke2_device:
-		case R.id.cbMotion1_device:
-		case R.id.cbMotion2_device:
-		case R.id.cbMotion3_device:
-		case R.id.cbMotion4_device:
-		case R.id.cbDoor1_device:
-		case R.id.cbDoor2_device:
-		case R.id.cbDoor3_device:
-		case R.id.cbDoor4_device:
 		case R.id.cbSmartEnergy_device:
 			TextView viewDevice = (TextView) v;
 			boolean isChecked = Boolean.valueOf(viewDevice.getTag().toString());

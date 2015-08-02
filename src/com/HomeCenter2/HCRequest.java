@@ -51,5 +51,4 @@ public class HCRequest {
 	public int getRequestType() {
 		return requestType;
 	}
-
 }

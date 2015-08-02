@@ -2,10 +2,10 @@ package com.HomeCenter2.ui.mainscreen;
 
 import java.util.List;
 
+import android.app.ActionBar.LayoutParams;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.text.format.Time;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,8 +31,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -45,8 +46,6 @@ import com.HomeCenter2.data.MyTime;
 import com.HomeCenter2.data.configManager;
 import com.HomeCenter2.house.Control;
 import com.HomeCenter2.house.Device;
-import com.HomeCenter2.house.DeviceTypeOnOff;
-import com.HomeCenter2.house.LampRoot;
 import com.HomeCenter2.house.Room;
 import com.HomeCenter2.house.Sensor;
 import com.HomeCenter2.house.StatusRelationship;
@@ -58,6 +57,8 @@ import com.HomeCenter2.ui.FootLayout;
 import com.HomeCenter2.ui.ScheduleImageView;
 import com.HomeCenter2.ui.ScheduleImageView.onCheckChangedListener;
 import com.HomeCenter2.ui.TimePickerFragment;
+import com.HomeCenter2.ui.adapter.SensorAdapter;
+import com.HomeCenter2.ui.adapter.SensorAdapter.ClickSensorCallback;
 import com.HomeCenter2.ui.listener.GetStatusRelationshipListener;
 import com.HomeCenter2.ui.listener.XMLListener;
 import com.HomeCenter2.ui.slidingmenu.framework.RADialerMainScreenAbstract;
@@ -70,7 +71,7 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 		DialogFragmentWrapper.OnCreateDialogFragmentListener,
 		FootLayout.onCheckChangedListener, XMLListener {
 
-	private static StatusRelationship mSR = null;
+	private StatusRelationship mSR = null;
 
 	private boolean mIsDevice = false;
 	private HomeCenterUIEngine uiEngine;
@@ -146,10 +147,11 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 	private FootLayout lnFootWhen;
 	private LinearLayout lnBodyWhen;
 	ImageButton btnSynWhen;
-	CheckBox cbSmartEnergy, cbTemp1, cbTemp2, cbLight1, cbLight2, cbSmoke1,
-			cbSmoke2, cbMotion1, cbMotion2, cbMotion3, cbMotion4, cbDoor1,
-			cbDoor2, cbDoor3, cbDoor4;
+	CheckBox cbSmartEnergy;
 	ImageButton btnTurnWhen;
+	GridView gvSensor;
+	SensorAdapter deviceAdapter;
+	List<Sensor> listSensors;
 
 	LinearLayout mlnDevice, mlnInfomation;
 	ExpandableHightListView mScheduleLV;
@@ -556,54 +558,7 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 			mlnDevice.setVisibility(View.VISIBLE);
 			cbSmartEnergy = (CheckBox) view
 					.findViewById(R.id.cbSmartEnergy_device);
-
-			cbTemp1 = (CheckBox) view.findViewById(R.id.cbTemp1_device);
-			cbTemp2 = (CheckBox) view.findViewById(R.id.cbTemp2_device);
-			cbLight1 = (CheckBox) view.findViewById(R.id.cbLight1_device);
-			cbLight2 = (CheckBox) view.findViewById(R.id.cbLight2_device);
-			cbSmoke1 = (CheckBox) view.findViewById(R.id.cbSmoke1_device);
-			cbSmoke2 = (CheckBox) view.findViewById(R.id.cbSmoke2_device);
-			cbMotion1 = (CheckBox) view.findViewById(R.id.cbMotion1_device);
-			cbMotion2 = (CheckBox) view.findViewById(R.id.cbMotion2_device);
-			cbMotion3 = (CheckBox) view.findViewById(R.id.cbMotion3_device);
-			cbMotion4 = (CheckBox) view.findViewById(R.id.cbMotion4_device);
-			cbDoor1 = (CheckBox) view.findViewById(R.id.cbDoor1_device);
-			cbDoor2 = (CheckBox) view.findViewById(R.id.cbDoor2_device);
-			cbDoor3 = (CheckBox) view.findViewById(R.id.cbDoor3_device);
-			cbDoor4 = (CheckBox) view.findViewById(R.id.cbDoor4_device);
-
-			cbTemp1.setOnCheckedChangeListener(this);
-			cbTemp2.setOnCheckedChangeListener(this);
-			cbLight1.setOnCheckedChangeListener(this);
-			cbLight2.setOnCheckedChangeListener(this);
-			cbSmoke1.setOnCheckedChangeListener(this);
-			cbSmoke2.setOnCheckedChangeListener(this);
-			cbMotion1.setOnCheckedChangeListener(this);
-			cbMotion2.setOnCheckedChangeListener(this);
-			cbMotion3.setOnCheckedChangeListener(this);
-			cbMotion4.setOnCheckedChangeListener(this);
-			cbDoor1.setOnCheckedChangeListener(this);
-			cbDoor2.setOnCheckedChangeListener(this);
-			cbDoor3.setOnCheckedChangeListener(this);
-			cbDoor4.setOnCheckedChangeListener(this);
-
 			cbSmartEnergy.setOnCheckedChangeListener(this);
-
-			setDeviceChecked(cbSmartEnergy, false);
-			setDeviceChecked(cbTemp1, false);
-			setDeviceChecked(cbLight1, false);
-			setDeviceChecked(cbSmoke1, false);
-			setDeviceChecked(cbMotion1, false);
-			setDeviceChecked(cbMotion2, false);
-			setDeviceChecked(cbDoor1, false);
-			setDeviceChecked(cbDoor2, false);
-			setDeviceChecked(cbTemp2, false);
-			setDeviceChecked(cbLight2, false);
-			setDeviceChecked(cbSmoke2, false);
-			setDeviceChecked(cbMotion3, false);
-			setDeviceChecked(cbMotion4, false);
-			setDeviceChecked(cbDoor3, false);
-			setDeviceChecked(cbDoor4, false);
 			setDeviceChecked(cbSmartEnergy, false);
 
 			btnTurnWhen = (ImageButton) view.findViewById(R.id.btnSyncDevices);
@@ -612,42 +567,36 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 			Room room = (Room) uiEngine.getHouse().getRoomsById(roomId);
 
 			if (room != null) {
-				List<Sensor> listDevices = room.getSensors();
-				Device device = null;
-				int size = listDevices.size();
-				for (int i = 0; i < size; i++) {
-					device = listDevices.get(i);
-					int deviceId = device.getId();
-					if (deviceId == configManager.TEMPERATURE_1) {
-						cbTemp1.setText(device.getName());
-					} else if (deviceId == configManager.TEMPERATURE_2) {
-						cbTemp2.setText(device.getName());
-					} else if (deviceId == configManager.SMOKE_1) {
-						cbSmoke1.setText(device.getName());
-					} else if (deviceId == configManager.SMOKE_2) {
-						cbSmoke2.setText(device.getName());
-					} else if (deviceId == configManager.LIGHT_1) {
-						cbLight1.setText(device.getName());
-					} else if (deviceId == configManager.LIGHT_2) {
-						cbLight2.setText(device.getName());
-					} else if (deviceId == configManager.MOTION_1) {
-						cbMotion1.setText(device.getName());
-					} else if (deviceId == configManager.MOTION_2) {
-						cbMotion2.setText(device.getName());
-					} else if (deviceId == configManager.MOTION_3) {
-						cbMotion3.setText(device.getName());
-					} else if (deviceId == configManager.MOTION_4) {
-						cbMotion4.setText(device.getName());
-					} else if (deviceId == configManager.DOOR_STATUS_1) {
-						cbDoor1.setText(device.getName());
-					} else if (deviceId == configManager.DOOR_STATUS_2) {
-						cbDoor2.setText(device.getName());
-					} else if (deviceId == configManager.DOOR_STATUS_3) {
-						cbDoor3.setText(device.getName());
-					} else if (deviceId == configManager.DOOR_STATUS_4) {
-						cbDoor4.setText(device.getName());
+				listSensors = room.getSensors();
+
+				gvSensor = (GridView) view
+						.findViewById(R.id.gvSensor);
+				deviceAdapter = new SensorAdapter(mContext, listSensors, mSR);
+				deviceAdapter.setClickCallback(new ClickSensorCallback() {
+					
+					@Override
+					public void clickPosCallback(int pos) {
+						// TODO Auto-generated method stub
+						
 					}
-				}
+				});
+				gvSensor.setAdapter(deviceAdapter);
+				gvSensor.setOnItemClickListener(this);
+				int column = 5;
+				gvSensor.setNumColumns(column);
+
+				DisplayMetrics displaymetrics = new DisplayMetrics();
+				mContext.getWindowManager().getDefaultDisplay()
+						.getMetrics(displaymetrics);
+				int width = displaymetrics.widthPixels / column;
+
+				int sizeDevice = listSensors.size();
+				int row = sizeDevice / column + 1;
+				int height = width * row;
+				ViewGroup.LayoutParams params = gvSensor.getLayoutParams();
+				params.height = height;
+				gvSensor.setLayoutParams(params);
+
 			}
 		} else {
 			mlnDevice.setVisibility(View.GONE);
@@ -691,7 +640,6 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 			m_instance = new DetailDeviceScreen(titleId,
 					ScreenManager.DETAIL_DEVICE_TAG, mContext);
 		}
-		mSR = null;
 		return m_instance;
 	}
 
@@ -1133,6 +1081,7 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 	 */
 
 	private String saveTurnWhenDevice() {
+
 		StringBuffer relationTrigger = new StringBuffer();
 		boolean isChecked;
 
@@ -1141,47 +1090,47 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 		relationTrigger.append(configManager.COMMAS);
 
 		// 14_01 --> status 0-1
-		isChecked = Boolean.valueOf(cbTemp1.isChecked());
+		isChecked = Boolean.valueOf(mSR.isTemp1());
 		relationTrigger.append(isChecked ? 1 : 0);
 
-		isChecked = Boolean.valueOf(cbLight1.isChecked());
+		isChecked = Boolean.valueOf(mSR.isLight1());
 		relationTrigger.append(isChecked ? 1 : 0);
 
-		isChecked = Boolean.valueOf(cbSmoke1.isChecked());
+		isChecked = Boolean.valueOf(mSR.isSmoke1());
 		relationTrigger.append(isChecked ? 1 : 0);
 
-		isChecked = Boolean.valueOf(cbMotion1.isChecked());
+		isChecked = Boolean.valueOf(mSR.isMotion1());
 		relationTrigger.append(isChecked ? 1 : 0);
 
-		isChecked = Boolean.valueOf(cbMotion2.isChecked());
+		isChecked = Boolean.valueOf(mSR.isMotion2());
 		relationTrigger.append(isChecked ? 1 : 0);
 
-		isChecked = Boolean.valueOf(cbDoor1.isChecked());
+		isChecked = Boolean.valueOf(mSR.isDoor1());
 		relationTrigger.append(isChecked ? 1 : 0);
 
-		isChecked = Boolean.valueOf(cbDoor2.isChecked());
+		isChecked = Boolean.valueOf(mSR.isDoor2());
 		relationTrigger.append(isChecked ? 1 : 0);
 
 		// sensor 2
-		isChecked = Boolean.valueOf(cbTemp2.isChecked());
+		isChecked = Boolean.valueOf(mSR.isTemp2());
 		relationTrigger.append(isChecked ? 1 : 0);
 
-		isChecked = Boolean.valueOf(cbLight2.isChecked());
+		isChecked = Boolean.valueOf(mSR.isLight2());
 		relationTrigger.append(isChecked ? 1 : 0);
 
-		isChecked = Boolean.valueOf(cbSmoke2.isChecked());
+		isChecked = Boolean.valueOf(mSR.isSmoke2());
 		relationTrigger.append(isChecked ? 1 : 0);
 
-		isChecked = Boolean.valueOf(cbMotion3.isChecked());
+		isChecked = Boolean.valueOf(mSR.isMotion3());
 		relationTrigger.append(isChecked ? 1 : 0);
 
-		isChecked = Boolean.valueOf(cbMotion4.isChecked());
+		isChecked = Boolean.valueOf(mSR.isMotion4());
 		relationTrigger.append(isChecked ? 1 : 0);
 
-		isChecked = Boolean.valueOf(cbDoor3.isChecked());
+		isChecked = Boolean.valueOf(mSR.isDoor3());
 		relationTrigger.append(isChecked ? 1 : 0);
 
-		isChecked = Boolean.valueOf(cbDoor4.isChecked());
+		isChecked = Boolean.valueOf(mSR.isDoor4());
 		relationTrigger.append(isChecked ? 1 : 0);
 
 		return relationTrigger.toString();
@@ -1452,10 +1401,11 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 
 	@Override
 	public void recieveStatusRelationship(StatusRelationship sr) {
-		mSR = sr;
+		final StatusRelationship srtemp = sr;
 		mContext.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
+				setSR(srtemp);
 				Log.d(TAG, "recieveStatusRelationship");
 				refresh();
 			}
@@ -1484,30 +1434,12 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 		refreshSchedule03();
 		refreshSchedule04();
 
-		refreshSchduleDevice();
+		if (mIsDevice) {
+			setDeviceChecked(cbSmartEnergy, mSR.isSE());
+		}
 
 		DialogFragmentWrapper.removeDialog(getFragmentManager(),
 				configManager.DIALOG_PROCESS);
-	}
-
-	private void refreshSchduleDevice() {
-		if (mIsDevice) {
-			setDeviceChecked(cbTemp1, mSR.isTemp1());
-			setDeviceChecked(cbLight1, mSR.isLight1());
-			setDeviceChecked(cbSmoke1, mSR.isSmoke1());
-			setDeviceChecked(cbMotion1, mSR.isMotion1());
-			setDeviceChecked(cbMotion2, mSR.isMotion2());
-			setDeviceChecked(cbDoor1, mSR.isDoor1());
-			setDeviceChecked(cbDoor2, mSR.isDoor2());
-			setDeviceChecked(cbTemp2, mSR.isTemp2());
-			setDeviceChecked(cbLight2, mSR.isLight2());
-			setDeviceChecked(cbSmoke2, mSR.isSmoke2());
-			setDeviceChecked(cbMotion3, mSR.isMotion3());
-			setDeviceChecked(cbMotion4, mSR.isMotion4());
-			setDeviceChecked(cbDoor3, mSR.isDoor3());
-			setDeviceChecked(cbDoor4, mSR.isDoor4());
-			setDeviceChecked(cbSmartEnergy, mSR.isSE());
-		}
 	}
 
 	private void refreshSchedule01() {
@@ -1678,21 +1610,7 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		switch (buttonView.getId()) {
-		// Schedule devices
-		case R.id.cbTemp1_device:
-		case R.id.cbTemp2_device:
-		case R.id.cbLight1_device:
-		case R.id.cbLight2_device:
-		case R.id.cbSmoke1_device:
-		case R.id.cbSmoke2_device:
-		case R.id.cbMotion1_device:
-		case R.id.cbMotion2_device:
-		case R.id.cbMotion3_device:
-		case R.id.cbMotion4_device:
-		case R.id.cbDoor1_device:
-		case R.id.cbDoor2_device:
-		case R.id.cbDoor3_device:
-		case R.id.cbDoor4_device:
+		// Schedule devices		
 		case R.id.cbSmartEnergy_device:
 			CheckBox viewDevice = (CheckBox) buttonView;
 			setDeviceChecked(viewDevice, isChecked);
@@ -1731,6 +1649,7 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
+		
 		/*
 		 * ScheduleHolderView holderview = (ScheduleHolderView)view.getTag();
 		 * if(holderview== null) return; int visible =
@@ -2419,5 +2338,19 @@ public class DetailDeviceScreen extends RADialerMainScreenAbstract implements
 		rbChange.setOnCheckedChangeListener(this);
 		rbRelative.setOnCheckedChangeListener(this);
 
+	}
+
+	private void setSR(StatusRelationship sr) {
+		mSR = sr;
+		deviceAdapter = new SensorAdapter(mContext, listSensors, mSR);
+		gvSensor.setAdapter(deviceAdapter);
+		deviceAdapter.setClickCallback(new ClickSensorCallback() {
+			
+			@Override
+			public void clickPosCallback(int pos) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 }

@@ -287,21 +287,22 @@ public class configManager {
 	public static final int MOTION_2 = TEMPERATURE_1 + 9;
 	public static final int MOTION_3 = TEMPERATURE_1 + 10;
 	public static final int MOTION_4 = TEMPERATURE_1 + 11;
+	public static final int SMOKE_1 = TEMPERATURE_1 + 12;
+	public static final int SMOKE_2 = TEMPERATURE_1 + 13;
 
-	public static final int LAMP_1 = TEMPERATURE_1 + 12;
-	public static final int LAMP_2 = TEMPERATURE_1 + 13;
-	public static final int LAMP_3 = TEMPERATURE_1 + 14;
-	public static final int LAMP_4 = TEMPERATURE_1 + 15;
-	public static final int LAMP_5 = TEMPERATURE_1 + 16;
-	public static final int LAMP_6 = TEMPERATURE_1 + 17;
-	public static final int LAMP_7 = TEMPERATURE_1 + 18;
-	public static final int LAMP_8 = TEMPERATURE_1 + 19;
-	public static final int LAMP_9 = TEMPERATURE_1 + 20;
-	public static final int FAN_1 = TEMPERATURE_1 + 21;
-	public static final int DOOR_LOCK_1 = TEMPERATURE_1 + 22;
-	public static final int ROLLER_SHUTTER_1 = TEMPERATURE_1 + 23;
-	public static final int SMOKE_1 = TEMPERATURE_1 + 24;
-	public static final int SMOKE_2 = TEMPERATURE_1 + 25;
+	public static final int LAMP_1 = TEMPERATURE_1 + 14;
+	public static final int LAMP_2 = TEMPERATURE_1 + 15;
+	public static final int LAMP_3 = TEMPERATURE_1 + 16;
+	public static final int LAMP_4 = TEMPERATURE_1 + 17;
+	public static final int LAMP_5 = TEMPERATURE_1 + 18;
+	public static final int LAMP_6 = TEMPERATURE_1 + 19;
+	public static final int LAMP_7 = TEMPERATURE_1 + 20;
+	public static final int LAMP_8 = TEMPERATURE_1 + 21;
+	public static final int LAMP_9 = TEMPERATURE_1 + 22;
+	public static final int FAN_1 = TEMPERATURE_1 + 23;
+	public static final int DOOR_LOCK_1 = TEMPERATURE_1 + 24;
+	public static final int ROLLER_SHUTTER_1 = TEMPERATURE_1 + 25;
+	
 
 	public static final int CAMERA_1 = TEMPERATURE_1 + 26;
 	public static final int CAMERA_2 = TEMPERATURE_1 + 27;

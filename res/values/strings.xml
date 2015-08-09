@@ -206,5 +206,7 @@
     <string name="remote_tv">TV</string>
     <string name="remote_camera">Camera</string>
     <string name="remote_aircondition">Air Condition</string>
+    
+        <string name="title">Title</string>
 
 </resources>

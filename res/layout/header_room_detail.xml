@@ -4,12 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
+    <include
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="12dp"
-        android:text="To Do here" />
+        android:layout_height="match_parent"
+        layout="@layout/parameter_config_detail" />
 
     <TextView
         style="@android:style/TextAppearance.DeviceDefault.Medium"

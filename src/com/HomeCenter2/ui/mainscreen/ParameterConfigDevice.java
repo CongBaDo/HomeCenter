@@ -107,7 +107,7 @@ public class ParameterConfigDevice extends RADialerMainScreenAbstract implements
 			return null;
 		}
 		uiEngine.addLoginObserver(this);
-		uiEngine.addClockObserver(this);
+ 		uiEngine.addClockObserver(this);
 		getTimeServer();
 		refreshContentView();
 		return view;

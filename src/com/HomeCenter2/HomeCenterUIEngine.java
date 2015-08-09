@@ -824,9 +824,10 @@ public class HomeCenterUIEngine extends Handler {
 						room.addDevice(device);
 						objects.add(device);
 					}
-					
+
 					for (int k = 0; k < configManager.MAX_CONTROL_IN_ROOM; k++) {
-						device = initDevice(k+ configManager.MAX_SENSOR_IN_ROOM);
+						device = initDevice(k
+								+ configManager.MAX_SENSOR_IN_ROOM);
 						device.setName(device.getName() + (j + 1) + (k + 1));
 						device.setId(k);
 						room.addDevice(device);
@@ -1242,7 +1243,9 @@ public class HomeCenterUIEngine extends Handler {
 					Device device = null;
 					for (int i = 0; i < size; i++) {
 						device = devices.get(i);
-						setStatusForDevice(i + configManager.MAX_SENSOR_IN_ROOM, strStatusDevice, device);
+						setStatusForDevice(
+								i + configManager.MAX_SENSOR_IN_ROOM,
+								strStatusDevice, device);
 					}
 
 					List<Sensor> sensors = room.getSensors();
@@ -2018,20 +2021,24 @@ public class HomeCenterUIEngine extends Handler {
 		if (response.length >= 2) {
 			Room room = mHouse.getRoomsById(roomId);
 			DoorLock door = (DoorLock) room.getControlById(String
-					.valueOf(configManager.DOOR_LOCK_1 - configManager.MAX_SENSOR_IN_ROOM));
-			List<KeyDoorLock> keys = door.getKeys();
-			int size = keys.size();
-			String status = response[1];
-			int sizeStatus = status.length();
-			int value = 0;
-			KeyDoorLock keyIem = null;
-			for (int i = 0; i < size && i < sizeStatus; i++) {
-				keyIem = keys.get(i);
-				value = Integer.parseInt(String.valueOf(status.charAt(i)));
-				keyIem.setState(value == 1 ? true : false);
+					.valueOf(configManager.DOOR_LOCK_1
+							- configManager.MAX_SENSOR_IN_ROOM));
+			if (door != null) {
+				List<KeyDoorLock> keys = door.getKeys();
+				int size = keys.size();
+				String status = response[1];
+				int sizeStatus = status.length();
+				int value = 0;
+				KeyDoorLock keyIem = null;
+				for (int i = 0; i < size && i < sizeStatus; i++) {
+					keyIem = keys.get(i);
+					value = Integer.parseInt(String.valueOf(status.charAt(i)));
+					keyIem.setState(value == 1 ? true : false);
+				}
+				notifyKeyLockObserver();
+				return true;
 			}
-			notifyKeyLockObserver();
-			return true;
+			
 		}
 		return false;
 	}
@@ -2078,7 +2085,7 @@ public class HomeCenterUIEngine extends Handler {
 		if (receiveMessage == null) {
 			return false;
 		}
-		
+
 		Log.d(TAG, "getClock- receiveMessage the first: " + receiveMessage);
 		receiveMessage = receiveMessage.trim();
 		// Log.d(TAG, "getClock- receiveMessage: " + receiveMessage);

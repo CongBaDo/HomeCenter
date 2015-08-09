@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -19,7 +20,9 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +35,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -45,16 +52,23 @@ import com.HomeCenter2.RegisterService;
 import com.HomeCenter2.activity.DeviceProcessActivity;
 import com.HomeCenter2.customview.CategoryView;
 import com.HomeCenter2.customview.HeaderFooterGridView;
+import com.HomeCenter2.data.MyDate;
+import com.HomeCenter2.data.MyTime;
+import com.HomeCenter2.data.Password;
 import com.HomeCenter2.data.configManager;
 import com.HomeCenter2.house.Device;
 import com.HomeCenter2.house.DoorLock;
 import com.HomeCenter2.house.House;
 import com.HomeCenter2.house.KeyDoorLock;
 import com.HomeCenter2.house.Room;
+import com.HomeCenter2.ui.DatePickerFragment;
 import com.HomeCenter2.ui.DialogFragmentWrapper;
+import com.HomeCenter2.ui.TimePickerFragment;
 import com.HomeCenter2.ui.adapter.KeyDoorLockAdapter;
 import com.HomeCenter2.ui.adapter.KeyDoorLockAdapter.ClickCallback;
+import com.HomeCenter2.ui.listener.ClockListener;
 import com.HomeCenter2.ui.listener.GetStatusKeyLockListener;
+import com.HomeCenter2.ui.listener.LoginListener;
 import com.HomeCenter2.ui.slidingmenu.framework.RADialerMainScreenAbstract;
 import com.HomeCenter2.ui.slidingmenu.framework.ScreenManager;
 import com.HomeCenter2.ui.slidingmenu.framework.SlidingBaseActivity;
@@ -67,7 +81,7 @@ import com.HomeCenter2.utils.ImageProcessDialog.ImageDialogListener;
 public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 		DialogFragmentWrapper.OnCreateDialogFragmentListener,
 		OnItemClickListener, GetStatusKeyLockListener, OnItemLongClickListener,
-		OnClickListener {
+		OnClickListener, LoginListener, OnCheckedChangeListener, ClockListener {
 
 	private final int CHANGE_TYPE_DIALOG = 0;
 	public static final int MEDIA_TYPE_IMAGE = 1;
@@ -88,7 +102,7 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 		super(DetailDoorLockScreen.class, title, tag, context);
 	}
 
-	public static final String TAG = "TMT DetailDeviceScreen";
+	public static final String TAG = "TMT DetailDoorLockScreen";
 	public static Bundle mBundle;
 	public static DetailDoorLockScreen m_instance = null;
 	public DoorLock mDevice = null;
@@ -107,6 +121,19 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 	private ImageView imgThumbLeft, imgThumbRight;
 	private File leftFile, rightFile;
 
+	// Header
+	EditText mEditAdmin, mEditPassword, mEditLight, mEditSmoke, mEditTemp,
+			mEditPhone1, mEditPhone2, mEditPhone3, mEditGSM;
+
+	String[] mRoomIds;
+	List<Room> mRooms;
+
+	CheckBox cbShowPassword;
+
+	EditText mDay, mTime;
+
+	Button mSync;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -115,7 +142,7 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 		mDevice = (DoorLock) mBundle
 				.getSerializable(configManager.DEVICE_BUNDLE);
 		int roomId = mDevice.getRoomId();
-		Log.v(TAG, "onCreateConentView "+mDevice.getName());
+		Log.v(TAG, "onCreateConentView " + mDevice.getName());
 		HomeCenterUIEngine uiEngine = RegisterService.getHomeCenterUIEngine();
 		if (uiEngine != null) {
 			House mHouse = uiEngine.getHouse();
@@ -124,8 +151,8 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 			}
 		}
 		setHasOptionsMenu(true);
-		Log.v(TAG, "onCreateConentView "+mRoom.getName());
-		imageW = HomeScreenSetting.ScreenW / 2 - HomeScreenSetting.ScreenW/20;
+		Log.v(TAG, "onCreateConentView " + mRoom.getName());
+		imageW = HomeScreenSetting.ScreenW / 2 - HomeScreenSetting.ScreenW / 20;
 	}
 
 	@Override
@@ -140,18 +167,26 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 				container, false);
 		initUI(view, inflater);
 		initData();
+
+		uiEngine.addLoginObserver(this);
+		uiEngine.addClockObserver(this);
+		getTimeServer();
+		refreshContentView();
+
 		return view;
 	}
-	
-	private void initData(){
-//		Log.v(TAG, "initData "+)
-		
-		leftFile = new File(HCUtils.getFilePath(configManager.IMAGE_LEFT, mRoom.getName()));
-		rightFile = new File(HCUtils.getFilePath(configManager.IMAGE_RIGHT, mRoom.getName()));
-		
+
+	private void initData() {
+		// Log.v(TAG, "initData "+)
+
+		leftFile = new File(HCUtils.getFilePath(configManager.IMAGE_LEFT,
+				mRoom.getName()));
+		rightFile = new File(HCUtils.getFilePath(configManager.IMAGE_RIGHT,
+				mRoom.getName()));
+
 		loadBitFromPath(rightFile, IMAGE_POS.RIGHT);
 		loadBitFromPath(leftFile, IMAGE_POS.LEFT);
-		
+
 		getDetailDoorLock();
 	}
 
@@ -159,38 +194,61 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 		mKeyLV = (HeaderFooterGridView) view.findViewById(R.id.lvDoorLock);
 		header = inflater.inflate(R.layout.header_room_detail, null);
 		mKeyLV.addHeaderView(header);
-		
+
 		mKeyAdapter = new KeyDoorLockAdapter(mContext, mDevice);
 		mKeyLV.setAdapter(mKeyAdapter);
 		mKeyAdapter.setClickCallback(new ClickCallback() {
-			
+
 			@Override
 			public void clickPosCallback(int pos) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
 		mKeyLV.setOnItemClickListener(this);
 		mKeyLV.setNumColumns(5);
 		mKeyLV.setOnItemLongClickListener(this);
 
-		imgThumbLeft = (ImageView) header
-				.findViewById(R.id.image_thumb_left);
-		imgThumbRight = (ImageView) header
-				.findViewById(R.id.image_thumb_right);
-		
-		containLeft = (CategoryView)header.findViewById(R.id.contain_left);
-		containRight = (CategoryView)header.findViewById(R.id.contain_right);
-		
+		imgThumbLeft = (ImageView) header.findViewById(R.id.image_thumb_left);
+		imgThumbRight = (ImageView) header.findViewById(R.id.image_thumb_right);
+
+		containLeft = (CategoryView) header.findViewById(R.id.contain_left);
+		containRight = (CategoryView) header.findViewById(R.id.contain_right);
+
 		containLeft.setOnClickListener(this);
 		containRight.setOnClickListener(this);
 
 		imgThumbLeft.setOnClickListener(this);
 		imgThumbRight.setOnClickListener(this);
+
+		mEditAdmin = (EditText) header.findViewById(R.id.editAdmin);
+		mEditPassword = (EditText) header.findViewById(R.id.editPassword);
+		cbShowPassword = (CheckBox) header.findViewById(R.id.cbShowPassword);
+		cbShowPassword.setOnCheckedChangeListener(this);
+
+		mEditLight = (EditText) header.findViewById(R.id.editLightLevelTrigger);
+		mEditSmoke = (EditText) header.findViewById(R.id.editSmokeLevelTrigger);
+		mEditTemp = (EditText) header.findViewById(R.id.editTemperatureTrigger);
+		mEditPhone1 = (EditText) header.findViewById(R.id.editPhone01);
+		mEditPhone2 = (EditText) header.findViewById(R.id.editPhone02);
+		mEditPhone3 = (EditText) header.findViewById(R.id.editPhone03);
+		mEditGSM = (EditText) header.findViewById(R.id.editGSMMessage);
+
+		mDay = (EditText) header.findViewById(R.id.editDay);
+		mDay.setOnClickListener(this);
+
+		mTime = (EditText) header.findViewById(R.id.editTime);
+		mTime.setOnClickListener(this);
+
+		mSync = (Button) header.findViewById(R.id.btnSync);
+		mSync.setOnClickListener(this);
+
 	}
 
 	@Override
 	public void onScreenSlidingCompleted() {
+		getTimeServer();
+		refreshContentView();
 	}
 
 	@Override
@@ -233,8 +291,9 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 		HomeCenterUIEngine uiEngine = RegisterService.getHomeCenterUIEngine();
 		if (uiEngine != null) {
 			uiEngine.removeKeyLockObserver(this);
+			uiEngine.removeLoginObserver(this);
+			uiEngine.removeClockObserver(this);
 		}
-
 	}
 
 	@Override
@@ -319,13 +378,13 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		
-		Log.v(TAG, "onItemClick "+position);
-//		 KeyDoorLock key = (KeyDoorLock) mKeyAdapter.getItem(position);
-//		 if(key!= null){ 
-//			 key.setStatus(!key.isStatus());
-//			 setDetailDevice(key,!key.isStatus()); 
-//		 }
+
+		Log.v(TAG, "onItemClick " + position);
+		// KeyDoorLock key = (KeyDoorLock) mKeyAdapter.getItem(position);
+		// if(key!= null){
+		// key.setStatus(!key.isStatus());
+		// setDetailDevice(key,!key.isStatus());
+		// }
 		mKeyAdapter.setClickPos(position);
 		mKeyAdapter.notifyDataSetChanged();
 	}
@@ -346,6 +405,8 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 		switch (id) {
 		case configManager.DIALOG_CHANGE_ROOM_NAME:
 			return showContentDeviceDialog();
+		case configManager.DIALOG_SET_ON_OFF_DEVICE_FAIL:
+			return showSetOnOffDeviceFail();
 		default:
 			break;
 		}
@@ -462,21 +523,112 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 		case R.id.contain_right:
 			showDialog(IMAGE_POS.RIGHT);
 			break;
-
+		case R.id.editDay:
+			showDayPickerDialog((EditText) v);
+			break;
+		case R.id.editTime:
+			showTimePickerDialog((EditText) v);
+			break;
+		case R.id.btnSync:
+			syncTimeServer();
+			break;
 		default:
 			break;
 		}
 	}
 
+	public void showTimePickerDialog(EditText v) {
+		DialogFragment newFragment = new TimePickerFragment(v);
+		newFragment.show(getFragmentManager(), "timePicker");
+	}
+
+	public void showDayPickerDialog(EditText v) {
+		DialogFragment newFragment = new DatePickerFragment(v);
+		newFragment.show(getFragmentManager(), "datePicker");
+	}
+
+	public void syncTimeServer() {
+		MyTime time = (MyTime) mTime.getTag();
+
+		/*
+		 * 1717=123456789012 / :skOK
+		 * 
+		 * 1234 --> year (2014) 56 --> month (01-12) 78 --> day (01-31) 90 -->
+		 * hour (01-23) 12 --> minute (01-59)
+		 */
+
+		Bundle bundle = new Bundle();
+		StringBuffer strConfigBuffer = new StringBuffer();
+		MyDate date = (MyDate) mDay.getTag();
+		if (date != null) {
+			int year = date.getYear();
+			appendBufferYearByNumber(strConfigBuffer, year);
+			strConfigBuffer.append(year);
+
+			int month = date.getMonth();
+			appendBufferByNumber(strConfigBuffer, month);
+			strConfigBuffer.append(month);
+
+			int day = date.getDay();
+			appendBufferByNumber(strConfigBuffer, day);
+			strConfigBuffer.append(day);
+		}
+
+		if (time != null) {
+			int hour = time.getHour();
+			appendBufferByNumber(strConfigBuffer, hour);
+			strConfigBuffer.append(hour);
+
+			int min = time.getMinute();
+			appendBufferByNumber(strConfigBuffer, min);
+			strConfigBuffer.append(min);
+		}
+
+		Log.d(TAG, "syncTimeServer");
+		bundle.putString(configManager.SAVE_CLOCK, strConfigBuffer.toString());
+		HCRequest hc = new HCRequest();
+		hc.setRequestType(HCRequest.REQUEST_SET_TIME_SERVER);
+
+		Message message = Message.obtain();
+		message.setData(bundle);
+		message.what = HCRequest.REQUEST_SET_TIME_SERVER;
+		RegisterService.getHomeCenterUIEngine().sendMessage(message);
+	}
+
+	private void getTimeServer() {
+		Log.d(TAG, "getTimeServer");
+		Message message = Message.obtain();
+		message.what = HCRequest.REQUEST_GET_TIME_SERVER;
+		RegisterService.getHomeCenterUIEngine().sendMessage(message);
+	}
+
+	@Override
+	public void clockGot(boolean result) {
+		this.getActivity().runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				if (DetailDoorLockScreen.this.isVisible()) {
+					HomeCenterUIEngine uiEngine = RegisterService
+							.getHomeCenterUIEngine();
+					if (uiEngine == null) {
+						return;
+					}
+					House house = uiEngine.getHouse();
+					refershTimer(house);
+				}
+			}
+		});
+	}
+
 	private void showDialog(IMAGE_POS type) {
 		imagePos = type;
 		int typeDialog = ImageProcessDialog.TYPE_BLANK;
-		if(leftFile.exists() && type == IMAGE_POS.LEFT){
+		if (leftFile.exists() && type == IMAGE_POS.LEFT) {
 			typeDialog = ImageProcessDialog.TYPE_EXIST;
-		}else if(rightFile.exists() && type == IMAGE_POS.RIGHT){
+		} else if (rightFile.exists() && type == IMAGE_POS.RIGHT) {
 			typeDialog = ImageProcessDialog.TYPE_EXIST;
 		}
-		
+
 		ImageProcessDialog dialog = new ImageProcessDialog(getActivity(),
 				new ImageDialogListener() {
 
@@ -485,21 +637,26 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 					public void shareCallback(ACTION shareType) {
 						// TODO Auto-generated method stub
 						if (shareType == ACTION.DELETE_IMAGE) {
-							if(imagePos == IMAGE_POS.LEFT){
+							if (imagePos == IMAGE_POS.LEFT) {
 								FileUtils.deleteFile(leftFile);
-							}else{
+							} else {
 								FileUtils.deleteFile(rightFile);
 							}
-							
+
 							resetImageView(imagePos);
 						} else if (shareType == ACTION.EDIT_DEVICE) {
-							Intent intent = new Intent(getActivity(), DeviceProcessActivity.class);
-							if(imagePos == IMAGE_POS.LEFT){
-								intent.putExtra(configManager.INTENT_PATH_FILE, leftFile.getAbsolutePath());
-								intent.putExtra(configManager.INTENT_POS_FILE, configManager.IMAGE_LEFT);
-							}else{
-								intent.putExtra(configManager.INTENT_PATH_FILE, rightFile.getAbsolutePath());
-								intent.putExtra(configManager.INTENT_POS_FILE, configManager.IMAGE_RIGHT);
+							Intent intent = new Intent(getActivity(),
+									DeviceProcessActivity.class);
+							if (imagePos == IMAGE_POS.LEFT) {
+								intent.putExtra(configManager.INTENT_PATH_FILE,
+										leftFile.getAbsolutePath());
+								intent.putExtra(configManager.INTENT_POS_FILE,
+										configManager.IMAGE_LEFT);
+							} else {
+								intent.putExtra(configManager.INTENT_PATH_FILE,
+										rightFile.getAbsolutePath());
+								intent.putExtra(configManager.INTENT_POS_FILE,
+										configManager.IMAGE_RIGHT);
 							}
 							startActivity(intent);
 						} else if (shareType == ACTION.TAKE_PHOTO) {
@@ -517,11 +674,11 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 				});
 		dialog.showRadialDialog(typeDialog);
 	}
-	
-	public void resetImageView(IMAGE_POS type){
-		if(type == IMAGE_POS.LEFT){
+
+	public void resetImageView(IMAGE_POS type) {
+		if (type == IMAGE_POS.LEFT) {
 			imgThumbLeft.setImageBitmap(null);
-		}else{
+		} else {
 			imgThumbRight.setImageBitmap(null);
 		}
 	}
@@ -531,16 +688,17 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode != getActivity().RESULT_OK)
 			return;
-		File myDir = new File(configManager.FOLDERNAME + "/"+mRoom.getName().replace(" ", ""));
-		String fname = null;//"bbz_avatar.jpg";
-		if(this.imagePos == IMAGE_POS.LEFT){
+		File myDir = new File(configManager.FOLDERNAME + "/"
+				+ mRoom.getName().replace(" ", ""));
+		String fname = null;// "bbz_avatar.jpg";
+		if (this.imagePos == IMAGE_POS.LEFT) {
 			fname = configManager.IMAGE_LEFT;
 			leftFile = new File(myDir, fname);
-		}else{
+		} else {
 			fname = configManager.IMAGE_RIGHT;
 			rightFile = new File(myDir, fname);
 		}
-		
+
 		myDir.mkdirs();
 		File file = new File(myDir, fname);
 		if (file.exists()) {
@@ -602,7 +760,7 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 				bmAvatar.compress(Bitmap.CompressFormat.JPEG, 80, out);
 				out.flush();
 				out.close();
-				
+
 				loadBitFromPath(file, imagePos);
 
 			} catch (FileNotFoundException e) {
@@ -616,25 +774,28 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 			break;
 		}
 	}
-	
-	private void loadBitFromPath(File file, IMAGE_POS type){
+
+	private void loadBitFromPath(File file, IMAGE_POS type) {
 		FileInputStream fisR;
 		try {
 			fisR = new FileInputStream(file.getAbsoluteFile());
-			
+
 			Bitmap imageBitmapR = BitmapFactory.decodeStream(fisR);
-	        
-	        BitmapFactory.Options optionsR = new BitmapFactory.Options();
+
+			BitmapFactory.Options optionsR = new BitmapFactory.Options();
 			optionsR.inJustDecodeBounds = true;
-			BitmapFactory.decodeFile(file.getAbsolutePath(), optionsR);//decodeResource(getResources(), R.id.myimage, options);
+			BitmapFactory.decodeFile(file.getAbsolutePath(), optionsR);// decodeResource(getResources(),
+																		// R.id.myimage,
+																		// options);
 			int imageHeightR = optionsR.outHeight;
 			int imageWidthR = optionsR.outWidth;
-			
-			int imageHR = imageW*imageHeightR/imageWidthR;
 
-	        imageBitmapR = Bitmap.createScaledBitmap(imageBitmapR, imageW , imageHR, false);
+			int imageHR = imageW * imageHeightR / imageWidthR;
 
-	        if (type == IMAGE_POS.LEFT) {
+			imageBitmapR = Bitmap.createScaledBitmap(imageBitmapR, imageW,
+					imageHR, false);
+
+			if (type == IMAGE_POS.LEFT) {
 				imgThumbLeft.setImageBitmap(imageBitmapR);
 			} else {
 				imgThumbRight.setImageBitmap(imageBitmapR);
@@ -660,4 +821,224 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 				android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 		startActivityForResult(cameraIntent, PICK_FROM_CAMERA);
 	}
+
+	private void refershTimer(House house) {
+		MyTime time = house.getTime();
+		configManager.setTime(mTime, time.getMinute(), time.getHour());
+
+		MyDate date = house.getDate();
+		configManager.setDate(mDay, date.getDay(), date.getMonth(),
+				date.getYear());
+	}
+
+	private void refreshContentView() {
+		HomeCenterUIEngine uiEngine = RegisterService.getHomeCenterUIEngine();
+		if (uiEngine == null) {
+			return;
+		}
+
+		House house = uiEngine.getHouse();
+
+		mRoomIds = house.getDeviceID();
+		mRooms = house.getRooms();
+
+		refershTimer(house);
+
+		Log.e(TAG, "refreshContentView::" + house.getPassword().getName());
+		if (!TextUtils.isEmpty(house.getPassword().getName()))
+			mEditAdmin.setText(house.getPassword().getName());
+
+		if (!TextUtils.isEmpty(house.getPassword().getPassword()))
+			mEditPassword.setText(house.getPassword().getPassword());
+
+		String temp = null;
+		temp = String.valueOf(house.getLightLevelTrigger());
+		Log.d(TAG, "temp: " + temp);
+		if (!TextUtils.isEmpty(temp))
+			mEditLight.setText(temp);
+		else
+			mEditLight.setText("0");
+
+		temp = String.valueOf(String.valueOf(house.getSmokeLevelTrigger()));
+		if (!TextUtils.isEmpty(temp))
+			mEditSmoke.setText(temp);
+		else
+			mEditSmoke.setText(0);
+
+		temp = String.valueOf(String.valueOf(house.getTemperatureTrigger()));
+		if (!TextUtils.isEmpty(temp))
+			mEditTemp.setText(String.valueOf(house.getTemperatureTrigger()));
+		else
+			mEditTemp.setText(0);
+
+		if (!TextUtils.isEmpty(house.getPhone01()))
+			mEditPhone1.setText(house.getPhone01());
+
+		if (!TextUtils.isEmpty(house.getPhone02()))
+			mEditPhone2.setText(house.getPhone02());
+
+		if (!TextUtils.isEmpty(house.getPhone03()))
+			mEditPhone3.setText(house.getPhone03());
+
+		if (!TextUtils.isEmpty(house.getGsm()))
+			mEditGSM.setText(house.getGsm());
+
+		int i = 1;
+	}
+
+	@Override
+	public void eventLogined(boolean isConnected) {
+		mContext.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				if (DetailDoorLockScreen.this.isVisible()) {
+					refreshContentView();
+				}
+			}
+		});
+	}
+
+	public void saveConfig() {
+		RegisterService service = RegisterService.getService();
+		HomeCenterUIEngine uiEngine = null;
+		House house = null;
+		if (service != null) {
+			uiEngine = service.getUIEngine();
+			if (uiEngine != null) {
+				house = uiEngine.getHouse();
+				if (house != null) {
+					Password ps = house.getPassword();
+					ps.setName(mEditAdmin.getText().toString().trim());
+					ps.setPassword(mEditPassword.getText().toString().trim());
+				}
+			}
+		}
+		/*
+		 * if (uiEngine.isLogined() == false) { return; }
+		 */
+		Bundle bundle = new Bundle();
+		StringBuffer strConfigBuffer = new StringBuffer();
+
+		strConfigBuffer.append(mEditAdmin.getText().toString());
+		strConfigBuffer.append(",");
+		strConfigBuffer.append(mEditPassword.getText().toString());
+		strConfigBuffer.append(",");
+		strConfigBuffer.append(mEditLight.getText().toString());
+		strConfigBuffer.append(",");
+		strConfigBuffer.append(mEditSmoke.getText().toString());
+		strConfigBuffer.append(",");
+		strConfigBuffer.append(mEditTemp.getText().toString());
+		strConfigBuffer.append(",");
+		strConfigBuffer.append(mEditPhone1.getText().toString());
+		strConfigBuffer.append(",");
+		strConfigBuffer.append(mEditPhone2.getText().toString());
+		strConfigBuffer.append(",");
+		strConfigBuffer.append(mEditPhone3.getText().toString());
+		strConfigBuffer.append(",");
+		strConfigBuffer.append(mEditGSM.getText().toString());
+
+		bundle.putString(configManager.SAVE_CONFIG, strConfigBuffer.toString());
+		Log.d(TAG, "SaveDevices:" + " , config:" + strConfigBuffer.toString());
+		Message message = Message.obtain();
+		message.setData(bundle);
+		message.what = HCRequest.REQUEST_SET_CONFIG;
+		RegisterService.getHomeCenterUIEngine().sendMessage(message);
+
+	}
+
+	private void appendBufferByNumber(StringBuffer buffer, int value) {
+		if (value > 0 && value < 10) {
+			buffer.append('0');
+		}
+	}
+
+	private void appendBufferYearByNumber(StringBuffer buffer, int value) {
+		if (value > 0 && value < 10) {
+			buffer.append("000");
+		} else if (value >= 10 && value < 100) {
+			buffer.append("00");
+		} else if (value >= 100 && value < 1000) {
+			buffer.append('0');
+		}
+	}
+
+	private Dialog showSaveConfigSuccess(boolean isSaveSuccess) {
+		if (mDialog != null) {
+			mDialog.dismiss();
+		}
+		int message = (isSaveSuccess == true ? R.string.save_config_success
+				: R.string.save_config_fail);
+		mDialog = new AlertDialog.Builder(mContext)
+				.setTitle(R.string.warning)
+				.setMessage(message)
+				.setPositiveButton(R.string.ok,
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.dismiss();
+							}
+						}).create();
+		return mDialog;
+	}
+
+	public void showDialog(int action) {
+		DialogFragmentWrapper.showDialog(getFragmentManager(), this, action);
+	}
+
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		switch (buttonView.getId()) {
+		case R.id.cbShowPassword:
+			if (isChecked == true) {
+				mEditPassword.setInputType(InputType.TYPE_CLASS_TEXT
+						| InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+			} else {
+				mEditPassword.setInputType(InputType.TYPE_CLASS_TEXT
+						| InputType.TYPE_TEXT_VARIATION_PASSWORD);
+			}
+			return;
+		default:
+			break;
+		}
+		/*
+		 * Bundle bundle = new Bundle(); int roomId = 0;
+		 * bundle.putInt(configManager.ROOM_ID, roomId);
+		 * bundle.putString(configManager.DEVICE_ID, "00");
+		 * bundle.putBoolean(configManager.ON_OFF_ACTION, isChecked); Log.e(TAG,
+		 * "onCheckedChanged::room id: " + roomId + " , isOn: " + isChecked);
+		 * 
+		 * Message message = Message.obtain(); message.setData(bundle);
+		 * message.what= HCRequest.REQUEST_SET_DEVICE_STATUS;
+		 * RegisterService.getHomeCenterUIEngine().sendMessage(message);
+		 */
+	}
+
+	private Dialog showSetOnOffDeviceFail() {
+		if (mDialog != null) {
+			mDialog.dismiss();
+		}
+		mDialog = new AlertDialog.Builder(mContext)
+				.setTitle(R.string.warning)
+				.setMessage(R.string.set_on_off_fail)
+				.setPositiveButton(R.string.ok,
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.dismiss();
+							}
+						}).create();
+		return mDialog;
+	}
+
+	public void resultSetDevice(boolean isSetOnOffDevice) {
+		if (isSetOnOffDevice == false) {
+			DialogFragmentWrapper.showDialog(getFragmentManager(), this,
+					configManager.DIALOG_SET_ON_OFF_DEVICE_FAIL);
+		} else {
+
+		}
+	}
+
 }

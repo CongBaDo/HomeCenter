@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -45,7 +46,7 @@ public class MyAudioSystemScreen extends RADialerMainScreenAbstract implements
 	House mHouse = null;
 	LayoutInflater mInflater;
 
-	ListView mListView;
+	GridView mListView;
 	MyAudioAdapter mAdpater;
 	List<AudioHC> mAudioHC = null;
 	
@@ -138,7 +139,7 @@ public class MyAudioSystemScreen extends RADialerMainScreenAbstract implements
 		mRoomImg = (ImageView) view.findViewById(R.id.imgIcon);		
 		mRoomImg.setImageResource(R.drawable.ic_room_orange);
 		
-		mListView = (ListView) view.findViewById(R.id.lvAudio);
+		mListView = (GridView) view.findViewById(R.id.gvAudio);
 		mAdpater = new MyAudioAdapter(MyAudioSystemScreen.this, mContext, mAudioHC);
 		mListView.setAdapter(mAdpater);
 
@@ -324,7 +325,6 @@ public class MyAudioSystemScreen extends RADialerMainScreenAbstract implements
 				mListView.setAdapter(mAdpater);
 			}
 		});
-
 	}
 
 	@Override
@@ -338,8 +338,7 @@ public class MyAudioSystemScreen extends RADialerMainScreenAbstract implements
 			break;
 		default:
 			break;
-		}
-		
+		}		
 	}
 	
 	
@@ -364,7 +363,7 @@ public class MyAudioSystemScreen extends RADialerMainScreenAbstract implements
 		return isOpen;
 	}
 	
-	public View getViewByPosition(int pos, ListView listView) {
+	public View getViewByPosition(int pos, GridView listView) {
 	    final int firstListItemPosition = listView.getFirstVisiblePosition();
 	    final int lastListItemPosition = firstListItemPosition + listView.getChildCount() - 1;
 

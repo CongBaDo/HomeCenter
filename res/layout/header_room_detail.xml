@@ -4,6 +4,42 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <RelativeLayout style="@style/relative_parameter" >
+
+        <TextView
+            android:id="@+id/tvTitle"
+            style="@style/txt_parameter"
+            android:text="@string/title"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/editTitle"
+            style="@style/edt_parameter"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/tvTitle"
+            android:hint="@string/title"
+            android:inputType="textUri"
+            android:maxLength="24"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </RelativeLayout>
+
+    <RelativeLayout style="@style/relative_parameter" >
+
+        <TextView
+            android:id="@+id/tvRoomId"
+            style="@style/txt_parameter"
+            android:text="@string/rid"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/editPassword"
+            style="@style/edt_parameter"
+            android:layout_toRightOf="@+id/tvRoomId"
+            android:hint="@string/rid"
+            android:textAppearance="?android:attr/textAppearanceMedium" >
+        </EditText>
+    </RelativeLayout>
+
     <include
         android:layout_width="match_parent"
         android:layout_height="match_parent"

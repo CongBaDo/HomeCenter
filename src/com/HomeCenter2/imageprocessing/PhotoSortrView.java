@@ -508,24 +508,24 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 		
 		public Bitmap getBitmap(){
 			bit = convertToBitmap(drawable, width, height);
-			bit = zoomBitmap(bit, angle * 180.0f / (float) Math.PI, scaleX, scaleY);
+//			bit = zoomBitmap(bit, angle * 180.0f / (float) Math.PI, scaleX, scaleY);
 			
 			return bit;
 		}
 		
-		public Bitmap zoomBitmap(Bitmap bitmap, float degree, float scaleX, float scaleY){
+		private Bitmap zoomBitmap(Bitmap bitmap, float degree, float scaleX, float scaleY){
 			Log.i(TAG, "zoombitmap "+scaleX);
 			int width = bitmap.getWidth();
 			int height = bitmap.getHeight();
 			Matrix matrix = new Matrix();
-			matrix.postScale(scaleX, scaleY);
+//			matrix.postScale(scaleX, scaleY);
 //			matrix.postRotate(degree);
 //			matrix.get
 			Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
 			return resizedBitmap;
 		}
 		
-		public Bitmap convertToBitmap(Drawable drawable, int widthPixels, int heightPixels) {
+		private Bitmap convertToBitmap(Drawable drawable, int widthPixels, int heightPixels) {
 		    Bitmap mutableBitmap = Bitmap.createBitmap(widthPixels, heightPixels, Bitmap.Config.ARGB_8888);
 		    Canvas canvas = new Canvas(mutableBitmap);
 		    drawable.setBounds(0, 0, widthPixels, heightPixels);

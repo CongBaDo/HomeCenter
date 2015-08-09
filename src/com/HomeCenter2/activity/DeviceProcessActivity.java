@@ -62,7 +62,7 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 	private ScheduleImageView imgToolOn, imgToolOff;
 	private ImageView imgMic;
 	private ImageView imgMain;
-//	private PhotoSortrView photoSorter;
+	private PhotoSortrView photoSorter;
 	private RelativeLayout containPhotoSortView;
 	
 	@Override
@@ -80,14 +80,14 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 		
 		containPhotoSortView = (RelativeLayout)findViewById(R.id.contain_tools);
 		
-//		 photoSorter = new PhotoSortrView(getApplicationContext());
-//		 photoSorter.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-//		 photoSorter.setBackgroundColor(Color.TRANSPARENT);
-//		 
+		 photoSorter = new PhotoSortrView(getApplicationContext());
+		 photoSorter.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		 photoSorter.setBackgroundColor(Color.TRANSPARENT);
+		 
 //		 photoSorter.addImage(getResources().getDrawable( R.drawable.test_1_image), getResources());
 //		 photoSorter.addImage(getResources().getDrawable( R.drawable.test_2_image), getResources());
-//		 
-//		 containPhotoSortView.addView(photoSorter)
+		 
+		 containPhotoSortView.addView(photoSorter);
 		
 		mUiEngine = RegisterService.getHomeCenterUIEngine();
 		// mUiEngine.addStatusObserver(this);
@@ -258,8 +258,9 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 		    		  ViewGroup viewgroup = (ViewGroup) view.getParent();
 		    		  viewgroup.removeView(view);
 		           
-//		    		   containView = (RelativeLayout) v;
 		    		  containPhotoSortView.addView(view);
+		    		  
+		    		  photoSorter.addImage(view.getBackground(), getResources());
 		    		  view.setVisibility(View.VISIBLE);
 		    	  } else {
 		    		  View view = (View) event.getLocalState();

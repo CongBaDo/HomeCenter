@@ -1,6 +1,9 @@
 package com.HomeCenter2.activity;
 
 import android.animation.ObjectAnimator;
+import android.content.ClipData;
+import android.content.ClipDescription;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -8,14 +11,22 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.DragShadowBuilder;
 import android.view.View.OnClickListener;
+import android.view.View.OnDragListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.HomeCenter2.HomeCenterUIEngine;
 import com.HomeCenter2.HomeScreenSetting;
@@ -51,7 +62,7 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 	private ScheduleImageView imgToolOn, imgToolOff;
 	private ImageView imgMic;
 	private ImageView imgMain;
-	private PhotoSortrView photoSorter;
+//	private PhotoSortrView photoSorter;
 	private RelativeLayout containPhotoSortView;
 	
 	@Override
@@ -69,14 +80,14 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 		
 		containPhotoSortView = (RelativeLayout)findViewById(R.id.contain_tools);
 		
-		 photoSorter = new PhotoSortrView(getApplicationContext());
-		 photoSorter.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-		 photoSorter.setBackgroundColor(Color.TRANSPARENT);
-		 
-		 photoSorter.addImage(getResources().getDrawable( R.drawable.test_1_image), getResources());
-		 photoSorter.addImage(getResources().getDrawable( R.drawable.test_2_image), getResources());
-		 
-		 containPhotoSortView.addView(photoSorter);
+//		 photoSorter = new PhotoSortrView(getApplicationContext());
+//		 photoSorter.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+//		 photoSorter.setBackgroundColor(Color.TRANSPARENT);
+//		 
+//		 photoSorter.addImage(getResources().getDrawable( R.drawable.test_1_image), getResources());
+//		 photoSorter.addImage(getResources().getDrawable( R.drawable.test_2_image), getResources());
+//		 
+//		 containPhotoSortView.addView(photoSorter)
 		
 		mUiEngine = RegisterService.getHomeCenterUIEngine();
 		// mUiEngine.addStatusObserver(this);
@@ -131,7 +142,7 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 
 		gridToolLeft.setAdapter(adapterLeft);
 		gridToolRight.setAdapter(adapterRight);
-
+		
 		gridToolRight.post(new Runnable() {
 
 			@Override
@@ -145,6 +156,8 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 		Log.i(TAG, "onCreateView "+HCUtils.getFilePath(configManager.IMAGE_LEFT, room.getName()));
 		String filePath = getIntent().getExtras().getString(configManager.INTENT_PATH_FILE);
 		ImageLoader.getInstance().displayImage("file:///"+filePath, imgMain);
+		
+		findViewById(R.id.contain_tools).setOnDragListener(new MyDragListener());
 	}
 
 	@Override
@@ -211,4 +224,63 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 			translationLeft.start();
 		}
 	}
+	
+	class MyDragListener implements OnDragListener {
+		Drawable normalShape = getResources().getDrawable(R.drawable.normal_shape);
+		Drawable targetShape = getResources().getDrawable(R.drawable.target_shape);
+
+		@Override
+		public boolean onDrag(View v, DragEvent event) {
+	  
+			// Handles each of the expected events
+		    switch (event.getAction()) {
+		    
+		    //signal for the start of a drag and drop operation.
+		    case DragEvent.ACTION_DRAG_STARTED:
+		        // do nothing
+		        break;
+		        
+		    //the drag point has entered the bounding box of the View
+		    case DragEvent.ACTION_DRAG_ENTERED:
+		        //v.setBackground(targetShape);	//change the shape of the view
+		        break;
+		        
+		    //the user has moved the drag shadow outside the bounding box of the View
+		    case DragEvent.ACTION_DRAG_EXITED:
+		        //v.setBackground(normalShape);	//change the shape of the view back to normal
+		        break;
+		        
+		    //drag shadow has been released,the drag point is within the bounding box of the View
+		    case DragEvent.ACTION_DROP:
+		        // if the view is the bottomlinear, we accept the drag item
+		    	  if(v == findViewById(R.id.contain_tools)) {
+		    		  View view = (View) event.getLocalState();
+		    		  ViewGroup viewgroup = (ViewGroup) view.getParent();
+		    		  viewgroup.removeView(view);
+		           
+//		    		   containView = (RelativeLayout) v;
+		    		  containPhotoSortView.addView(view);
+		    		  view.setVisibility(View.VISIBLE);
+		    	  } else {
+		    		  View view = (View) event.getLocalState();
+		    		  view.setVisibility(View.VISIBLE);
+		    		  Context context = getApplicationContext();
+		    		  Toast.makeText(context, "You can't drop the image here", 
+                                                 Toast.LENGTH_LONG).show();
+		    		  break;
+		    	   }
+		    	  break;
+		    	  
+		    //the drag and drop operation has concluded.
+		    case DragEvent.ACTION_DRAG_ENDED:
+		        //v.setBackground(normalShape);	//go back to normal shape
+		    
+		    default:
+		        break;
+		    }
+		    return true;
+		}
+	}
+	
+	
 }

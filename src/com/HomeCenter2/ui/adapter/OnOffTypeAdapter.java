@@ -3,10 +3,14 @@ package com.HomeCenter2.ui.adapter;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipDescription;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.DragShadowBuilder;
+import android.view.View.OnLongClickListener;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
@@ -21,6 +25,16 @@ public class OnOffTypeAdapter extends BaseAdapter{
 	
 	private Context context;
 	private List<DeviceTypeOnOff> types;
+	
+	private interface LongCallback{
+		public void longCallback(View v);
+	}
+	
+	private LongCallback callback;
+	
+	public void setCallback(LongCallback callback){
+		this.callback = callback;
+	}
 	
 	public OnOffTypeAdapter(Context context, List<DeviceTypeOnOff> types){
 		this.context = context;
@@ -66,8 +80,38 @@ public class OnOffTypeAdapter extends BaseAdapter{
 		
         vh.imgTool.setBackgroundResource(types.get(position).getIconOn());
         vh.tv.setVisibility(View.GONE);
+        
+        vh.imgTool.setTag(position+"");
 		
+        vh.imgTool.setOnLongClickListener(new MyClickListener());
+        
 		return convertView;
+	}
+	
+	private final class MyClickListener implements OnLongClickListener {
+
+	    // called when the item is long-clicked
+		@Override
+		public boolean onLongClick(View view) {
+		// TODO Auto-generated method stub
+		
+			// create it from the object's tag
+			ClipData.Item item = new ClipData.Item((CharSequence)view.getTag());
+
+	        String[] mimeTypes = { ClipDescription.MIMETYPE_TEXT_PLAIN };
+	        ClipData data = new ClipData(view.getTag().toString(), mimeTypes, item);
+	        DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+	   
+	        view.startDrag( data, //data to be dragged
+	        				shadowBuilder, //drag shadow
+	        				view, //local data about the drag and drop operation
+	        				0   //no needed flags
+	        			  );
+	        
+	        
+	        view.setVisibility(View.INVISIBLE);
+	        return true;
+		}	
 	}
 	
 	static class ViewHolder {

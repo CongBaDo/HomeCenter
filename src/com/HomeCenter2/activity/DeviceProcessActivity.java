@@ -260,6 +260,8 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 		           
 		    		  containPhotoSortView.addView(view);
 		    		  
+		    		  
+		    		  
 		    		  photoSorter.addImage(view.getBackground(), getResources());
 		    		  view.setVisibility(View.VISIBLE);
 		    	  } else {

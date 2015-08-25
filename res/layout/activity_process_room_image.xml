@@ -65,14 +65,14 @@
             android:background="@drawable/boder_tool_room"
             android:orientation="vertical" >
 
-            <com.etsy.android.grid.StaggeredGridView
+           <!--  <com.etsy.android.grid.StaggeredGridView
                 android:id="@+id/grid_tool_left"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:columnWidth="@dimen/tool_column_width"
                 android:stretchMode="columnWidth"
                 app:column_count="1" >
-            </com.etsy.android.grid.StaggeredGridView>
+            </com.etsy.android.grid.StaggeredGridView> -->
         </LinearLayout>
 
         <LinearLayout

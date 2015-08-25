@@ -22,6 +22,7 @@ import android.view.View.OnLongClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -62,8 +63,8 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 	private ScheduleImageView imgToolOn, imgToolOff;
 	private ImageView imgMic;
 	private ImageView imgMain;
-	private PhotoSortrView photoSorter;
-	private RelativeLayout containPhotoSortView;
+	private PhotoSortrView magicView;
+	private RelativeLayout containMagicView;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -78,16 +79,16 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 		
 		setContentView(R.layout.activity_process_room_image);
 		
-		containPhotoSortView = (RelativeLayout)findViewById(R.id.contain_tools);
+		containMagicView = (RelativeLayout)findViewById(R.id.contain_tools);
 		
-		 photoSorter = new PhotoSortrView(getApplicationContext());
-		 photoSorter.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-		 photoSorter.setBackgroundColor(Color.TRANSPARENT);
+		 magicView = new PhotoSortrView(getApplicationContext());
+		 magicView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		 magicView.setBackgroundColor(Color.TRANSPARENT);
 		 
 //		 photoSorter.addImage(getResources().getDrawable( R.drawable.test_1_image), getResources());
 //		 photoSorter.addImage(getResources().getDrawable( R.drawable.test_2_image), getResources());
 		 
-		 containPhotoSortView.addView(photoSorter);
+		 containMagicView.addView(magicView);
 		
 		mUiEngine = RegisterService.getHomeCenterUIEngine();
 		// mUiEngine.addStatusObserver(this);
@@ -103,9 +104,19 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 		initData();
 	}
 	
+	private void loadGridToolLeftView(){
+		gridToolLeft = new StaggeredGridView(getApplicationContext());
+		gridToolLeft.setColumnCount(1);
+//		gridToolLeft.set÷
+		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		gridToolLeft.setLayoutParams(params);
+		containToolLeft.addView(gridToolLeft);
+	}
+	
 	private void initUI() {
 		tvTitle = (TextView) findViewById(R.id.title_room);
-		gridToolLeft = (StaggeredGridView) findViewById(R.id.grid_tool_left);
+		//gridToolLeft = (StaggeredGridView) findViewById(R.id.grid_tool_left);
+		
 		gridToolRight = (StaggeredGridView) findViewById(R.id.grid_tool_right);
 
 		imgProcessRight = (ImageView) findViewById(R.id.img_expand_close_right);
@@ -130,6 +141,8 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 
 		tvTitle.setOnClickListener(this);
 		imgProcessRight.setOnClickListener(this);
+		
+		loadGridToolLeftView();
 	}
 
 	private void initData() {
@@ -226,8 +239,6 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 	}
 	
 	class MyDragListener implements OnDragListener {
-		Drawable normalShape = getResources().getDrawable(R.drawable.normal_shape);
-		Drawable targetShape = getResources().getDrawable(R.drawable.target_shape);
 
 		@Override
 		public boolean onDrag(View v, DragEvent event) {
@@ -255,13 +266,17 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 		        // if the view is the bottomlinear, we accept the drag item
 		    	  if(v == findViewById(R.id.contain_tools)) {
 		    		  View view = (View) event.getLocalState();
-		    		  ViewGroup viewgroup = (ViewGroup) view.getParent();
-		    		  viewgroup.removeView(view);
+//		    		  ViewGroup viewgroup = (ViewGroup) view.getParent();
+//		    		  viewgroup.removeView(view);
 		           
-		    		  containPhotoSortView.addView(view);
+		    		  magicView.addImage(view.getBackground(), getResources());
+		    		  containToolLeft.removeAllViews();
 		    		  
-		    		  photoSorter.addImage(view.getBackground(), getResources());
-		    		  view.setVisibility(View.VISIBLE);
+		    		  loadGridToolLeftView();
+		    		  adapterLeft = new OnOffTypeAdapter(DeviceProcessActivity.this,
+		    					configManager.OnOffTypes);
+		    		  gridToolLeft.setAdapter(adapterLeft);
+		    		  
 		    	  } else {
 		    		  View view = (View) event.getLocalState();
 		    		  view.setVisibility(View.VISIBLE);

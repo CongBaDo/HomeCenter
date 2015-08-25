@@ -254,8 +254,8 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 		int n = mImages.size();
 		for (int i = 0; i < n; i++)
 			mImages.get(i).draw(canvas);
-		if (mShowDebugInfo)
-			drawMultitouchDebugMarks(canvas);
+//		if (mShowDebugInfo)
+//			drawMultitouchDebugMarks(canvas);
 	}
 
 	// ---------------------------------------------------------------------------------------------------
@@ -271,10 +271,10 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 			float[] ys = currTouchPoint.getYs();
 			float[] pressures = currTouchPoint.getPressures();
 			int numPoints = Math.min(currTouchPoint.getNumTouchPoints(), 2);
-			for (int i = 0; i < numPoints; i++)
-				canvas.drawCircle(xs[i], ys[i], 50 + pressures[i] * 80, mLinePaintTouchPointCircle);
-			if (numPoints == 2)
-				canvas.drawLine(xs[0], ys[0], xs[1], ys[1], mLinePaintTouchPointCircle);
+//			for (int i = 0; i < numPoints; i++)
+//				canvas.drawCircle(xs[i], ys[i], 50 + pressures[i] * 80, mLinePaintTouchPointCircle);
+//			if (numPoints == 2)
+//				canvas.drawLine(xs[0], ys[0], xs[1], ys[1], mLinePaintTouchPointCircle);
 		}
 	}
 

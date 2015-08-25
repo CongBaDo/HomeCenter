@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,7 @@ import com.HomeCenter2.house.Sensor;
 
 public class OnOffTypeAdapter extends BaseAdapter{
 
-	private static final String TAG = "ToolAdapter";
+	private static final String TAG = "OnOffTypeAdapter";
 	
 	private Context context;
 	private List<DeviceTypeOnOff> types;
@@ -37,6 +38,7 @@ public class OnOffTypeAdapter extends BaseAdapter{
 	}
 	
 	public OnOffTypeAdapter(Context context, List<DeviceTypeOnOff> types){
+		Log.e(TAG, "OnOffTypeAdapter");
 		this.context = context;
 		this.types = types;
 	}

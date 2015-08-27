@@ -247,6 +247,10 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 		    switch (event.getAction()) {
 		    
 		    //signal for the start of a drag and drop operation.
+		    
+		    case DragEvent.ACTION_DRAG_LOCATION:
+		    	//Log.e(TAG, "ACTION_DRAG_LOCATION "+ event.getX()+" "+event.getY());
+		    	break;
 		    case DragEvent.ACTION_DRAG_STARTED:
 		        // do nothing
 		        break;
@@ -266,10 +270,10 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 		        // if the view is the bottomlinear, we accept the drag item
 		    	  if(v == findViewById(R.id.contain_tools)) {
 		    		  View view = (View) event.getLocalState();
-//		    		  ViewGroup viewgroup = (ViewGroup) view.getParent();
-//		    		  viewgroup.removeView(view);
+		    		  
+		    		  Log.e(TAG, "Location "+ event.getX()+" "+event.getY()+ " "+view.getWidth()+" "+view.getHeight());
 		           
-		    		  magicView.addImage(view.getBackground(), getResources());
+		    		  magicView.addImage(view.getBackground(), getResources(), event.getX(), event.getY());
 		    		  containToolLeft.removeAllViews();
 		    		  
 		    		  loadGridToolLeftView();

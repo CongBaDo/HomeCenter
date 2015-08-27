@@ -55,31 +55,19 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 	
 	private static final String TAG = "PhotoSortrView";
 
-//	private static final int[] IMAGES = { R.drawable.m74hubble, R.drawable.catarina, R.drawable.tahiti, R.drawable.sunset, R.drawable.lake };
-//	private ArrayList<Integer> resIdImages;
 	Resources res;
-	private Bitmap bit;
 	private ArrayList<Img> mImages = new ArrayList<Img>();
-	
 	private int currentIndex = 0;
-
-	// --
 
 	private MultiTouchController<Img> multiTouchController = new MultiTouchController<Img>(this);
 
 	private PointInfo currTouchPoint = new PointInfo();
-
-	private boolean mShowDebugInfo = true;
-
 	private static final int UI_MODE_ROTATE = 1, UI_MODE_ANISOTROPIC_SCALE = 2;
 
 	private int mUIMode = UI_MODE_ROTATE;
 
-	// --
-
 	private Paint mLinePaintTouchPointCircle = new Paint();
-
-	// ---------------------------------------------------------------------------------------------------
+	
 
 	public PhotoSortrView(Context context) {
 		this(context, null);
@@ -94,13 +82,8 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 		init(context);
 	}
 	
-//	public void addImage(int resId){
-//		resIdImages.add(resId);
-//		mImages.add(new Img(resId, res));
-//	}
-	
-	public void addImage(Drawable drawable, Resources res){
-		mImages.add(new Img(drawable, res));
+	public void addImage(Drawable drawable, Resources res, float posX, float posY){
+		mImages.add(new Img(drawable, res, posX, posY));
 		currentIndex++;
 	}
 	
@@ -110,33 +93,23 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 		bit = drawTextToBitmap(bit, gText);
 		Drawable dra = new BitmapDrawable(getResources(), bit);
 		mImages.get(currentIndex-1).updateDrawable(dra);
-		
 	}
 	
 	private Bitmap drawTextToBitmap(Bitmap bit, String gText) {
 		float scale = getResources().getDisplayMetrics().density;
 
 		android.graphics.Bitmap.Config bitmapConfig = bit.getConfig();
-		// set default bitmap config if none
 		if (bitmapConfig == null) {
 			bitmapConfig = android.graphics.Bitmap.Config.ARGB_8888;
 		}
-		// resource bitmaps are imutable,
-		// so we need to convert it to mutable one
 		bit = bit.copy(bitmapConfig, true);
 
 		Canvas canvas = new Canvas(bit);
-//		canvas = new Canvas
-		// new antialised Paint
 		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		// text color - #3D3D3D
 		paint.setColor(Color.BLACK);
-		// text size in pixels
 		paint.setTextSize((int) (20 * scale));
-		// text shadow
 		paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
 
-		// draw text to the Canvas center
 		Rect bounds = new Rect();
 		paint.getTextBounds(gText, 0, gText.length(), bounds);
 		int x = (bit.getWidth() - bounds.width()) / 2 - 20;
@@ -265,19 +238,6 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 		invalidate();
 	}
 
-	private void drawMultitouchDebugMarks(Canvas canvas) {
-		if (currTouchPoint.isDown()) {
-			float[] xs = currTouchPoint.getXs();
-			float[] ys = currTouchPoint.getYs();
-			float[] pressures = currTouchPoint.getPressures();
-			int numPoints = Math.min(currTouchPoint.getNumTouchPoints(), 2);
-//			for (int i = 0; i < numPoints; i++)
-//				canvas.drawCircle(xs[i], ys[i], 50 + pressures[i] * 80, mLinePaintTouchPointCircle);
-//			if (numPoints == 2)
-//				canvas.drawLine(xs[0], ys[0], xs[1], ys[1], mLinePaintTouchPointCircle);
-		}
-	}
-
 	// ---------------------------------------------------------------------------------------------------
 
 	/** Pass touch events to the MT controller */
@@ -353,16 +313,15 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 		private float minX, maxX, minY, maxY;
 
 		private static final float SCREEN_MARGIN = 100;
-
-//		public Img(int resId, Resources res) {
-//			this.resId = resId;
-//			this.firstLoad = true;
-//			getMetrics(res);
-//		}
 		
-		public Img(Drawable drawable, Resources res){
+		private float posX, posY;
+		
+		public Img(Drawable drawable, Resources res, float posX, float posY){
 			this.drawable = drawable;
 			this.firstLoad = true;
+			this.posX = posX;
+			this.posY = posY;
+			
 			getMetrics(res);
 			
 			load(res);
@@ -394,17 +353,23 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 
 		/** Called by activity's onResume() method to load the images */
 		public void load(Resources res) {
+			
+			
 			getMetrics(res);
 //			this.drawable = res.getDrawable(resId);
 			this.width = drawable.getIntrinsicWidth();
 			this.height = drawable.getIntrinsicHeight();
 			float cx, cy, sx, sy;
 			if (firstLoad) {
-				cx = displayWidth/2;//SCREEN_MARGIN * 2 ;//+ (float) (Math.random() * (displayWidth - 2 * SCREEN_MARGIN));
-				cy = displayHeight/2 - 100;//SCREEN_MARGIN * 2;// + (float) (Math.random() * (displayHeight - 2 * SCREEN_MARGIN));
+				
+				
+				cx = posX;//displayWidth/2;//SCREEN_MARGIN * 2 ;//+ (float) (Math.random() * (displayWidth - 2 * SCREEN_MARGIN));
+				cy = posY;//displayHeight/2 - 100;//SCREEN_MARGIN * 2;// + (float) (Math.random() * (displayHeight - 2 * SCREEN_MARGIN));
 				float sc = 1;//(float) (Math.max(displayWidth, displayHeight) / (float) Math.max(width, height) * Math.random() * 0.3 + 0.2);
 				sx = sy = sc;
 				firstLoad = false;
+				
+				Log.e(TAG, "load First "+cx+" "+cy);
 			} else {
 				// Reuse position and scale information if it is available
 				// FIXME this doesn't actually work because the whole activity is torn down and re-created on rotate
@@ -422,6 +387,7 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 				else if (this.minY > displayHeight - SCREEN_MARGIN)
 					cy = displayHeight - SCREEN_MARGIN;
 			}
+			sx = sy = 1;
 			setPos(cx, cy, sx, sy, 0.0f);
 		}
 
@@ -477,24 +443,10 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 //			canvas.rotate(angle * 180.0f / (float) Math.PI);
 			canvas.translate(-dx, -dy);
 			drawable.draw(canvas);
-//			canvas.drawt
-//			drawable.
-//			minX = drawable.getBounds().left;
-//			minY = drawable.getBounds().top;
-//			width = 
-//			drawable
 			
 			canvas.restore();
 			
-//			float ws = (width / 2) * scaleX, hs = (height / 2) * scaleY;
-//			int newWidth = (int) (width*scaleX);
-//			float newMinX = centerX - ws, newMinY = centerY - hs, newMaxX = centerX + ws, newMaxY = centerY + hs;
-			
 			Log.e(TAG, "DRAW A "+minX+" "+maxX+" "+minY+" "+maxY + " CENTER "+ centerX+" "+centerY+" AGLE "+width*scaleX);
-//			bit = convertToBitmap(drawable, width, height);
-//			canvas.drawBitmap(bit, new Matrix(), new Paint());
-//			canvas.draw
-//			invalidate();
 		}
 
 		public Drawable getDrawable() {
@@ -511,18 +463,6 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 //			bit = zoomBitmap(bit, angle * 180.0f / (float) Math.PI, scaleX, scaleY);
 			
 			return bit;
-		}
-		
-		private Bitmap zoomBitmap(Bitmap bitmap, float degree, float scaleX, float scaleY){
-			Log.i(TAG, "zoombitmap "+scaleX);
-			int width = bitmap.getWidth();
-			int height = bitmap.getHeight();
-			Matrix matrix = new Matrix();
-//			matrix.postScale(scaleX, scaleY);
-//			matrix.postRotate(degree);
-//			matrix.get
-			Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
-			return resizedBitmap;
 		}
 		
 		private Bitmap convertToBitmap(Drawable drawable, int widthPixels, int heightPixels) {

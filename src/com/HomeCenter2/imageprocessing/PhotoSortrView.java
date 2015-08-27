@@ -446,7 +446,7 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 			
 			canvas.restore();
 			
-			Log.e(TAG, "DRAW A "+minX+" "+maxX+" "+minY+" "+maxY + " CENTER "+ centerX+" "+centerY+" AGLE "+width*scaleX);
+			Log.e(TAG, "DRAW A "+ " CENTER "+ centerX+" "+centerY);
 		}
 
 		public Drawable getDrawable() {

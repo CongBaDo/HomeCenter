@@ -434,17 +434,17 @@ public class MultiTouchController<T> {
         float deltaY = mCurrPt.getY() - mPrevPt.getY();
 
         // Calc new scale of object, if any
-        float newScale = mCurrXform.scale;
-        if (mMode == MODE_ST_GRAB) {
-            if (deltaX < 0.0f || deltaY < 0.0f) {
-                newScale = mCurrXform.scale - 0.04f;
-            } else {
-                newScale = mCurrXform.scale + 0.04f;
-            }
-            if (newScale < 0.35f) return;
-        } else {
-            newScale = startScaleOverPinchDiam * mCurrPtDiam;
-        }
+        float newScale = 1.0f;//mCurrXform.scale;
+//        if (mMode == MODE_ST_GRAB) {
+//            if (deltaX < 0.0f || deltaY < 0.0f) {
+//                newScale = mCurrXform.scale - 0.04f;
+//            } else {
+//                newScale = mCurrXform.scale + 0.04f;
+//            }
+//            if (newScale < 0.35f) return;
+//        } else {
+//            newScale = startScaleOverPinchDiam * mCurrPtDiam;
+//        }
 
         if (!mDragOccurred) {
             if (!pastThreshold(Math.abs(deltaX), Math.abs(deltaY), newScale)) {
@@ -457,8 +457,8 @@ public class MultiTouchController<T> {
             }
         }
 
-        float newScaleX = startScaleXOverPinchWidth * mCurrPtWidth;
-        float newScaleY = startScaleYOverPinchHeight * mCurrPtHeight;
+        float newScaleX = 1.0f;//startScaleXOverPinchWidth * mCurrPtWidth;
+        float newScaleY = 1.0f;//startScaleYOverPinchHeight * mCurrPtHeight;
         float newAngle = startAngleMinusPinchAngle + mCurrPtAng;
 
         // Set the new obj coords, scale, and angle as appropriate

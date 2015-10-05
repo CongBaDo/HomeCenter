@@ -31,6 +31,7 @@ import com.HomeCenter2.multitouch.controller.MultiTouchController;
 import com.HomeCenter2.multitouch.controller.MultiTouchController.MultiTouchObjectCanvas;
 import com.HomeCenter2.multitouch.controller.MultiTouchController.PointInfo;
 import com.HomeCenter2.multitouch.controller.MultiTouchController.PositionAndScale;
+import com.HomeCenter2.utils.FileUtils;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -68,6 +69,11 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 
 	private Paint mLinePaintTouchPointCircle = new Paint();
 	
+	private String savedData = "";
+	private String roomName;
+	private boolean startRecord = false;
+	private int width, height;
+	
 
 	public PhotoSortrView(Context context) {
 		this(context, null);
@@ -82,8 +88,18 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 		init(context);
 	}
 	
-	public void addImage(Drawable drawable, Resources res, float posX, float posY){
-		mImages.add(new Img(drawable, res, posX, posY));
+	/**
+	 * @param posX
+	 * @param posY
+	 * @param roomName
+	 * @param width
+	 * @param height
+	 * @param id*/
+	public void addImage(Drawable drawable, Resources res, float posX, float posY, String roomName, int width, int height, int id){
+		this.roomName = roomName;
+		this.width = width;
+		this.height = height;
+		mImages.add(new Img(drawable, res, posX, posY, id));
 		currentIndex++;
 	}
 	
@@ -225,8 +241,15 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 		int n = mImages.size();
-		for (int i = 0; i < n; i++)
+		for (int i = 0; i < n; i++){
 			mImages.get(i).draw(canvas);
+		}
+		
+		if(startRecord){
+			startRecord = false;
+			FileUtils.saveData2File(savedData, getContext(), roomName);
+			savedData = "";
+		}
 //		if (mShowDebugInfo)
 //			drawMultitouchDebugMarks(canvas);
 	}
@@ -243,6 +266,12 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 	/** Pass touch events to the MT controller */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
+		
+		if(event.getAction() == MotionEvent.ACTION_UP){
+			startRecord = true;
+			Log.e(TAG, "onTouchEvent "+event.getX()+" "+event.getY());
+		}
+		
 		return multiTouchController.onTouchEvent(event);
 	}
 
@@ -265,6 +294,9 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 	public void selectObject(Img img, PointInfo touchPoint) {
 		Log.i(TAG, "selectObject");
 		currTouchPoint.set(touchPoint);
+		
+		
+//		if(startRecord = tr)
 		if (img != null) {
 			// Move image to the top of the stack when selected
 			mImages.remove(img);
@@ -272,6 +304,7 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 		} else {
 			// Called with img == null when drag stops.
 		}
+		
 		invalidate();
 	}
 
@@ -302,6 +335,7 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 		ImgListener listener;
 		private int resId;
 
+		private int id;
 		private Drawable drawable;
 		private Bitmap bit;
 		private boolean firstLoad;
@@ -316,7 +350,7 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 		
 		private float posX, posY;
 		
-		public Img(Drawable drawable, Resources res, float posX, float posY){
+		public Img(Drawable drawable, Resources res, float posX, float posY, int id){
 			this.drawable = drawable;
 			this.firstLoad = true;
 			this.posX = posX;
@@ -326,14 +360,9 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 			
 			load(res);
 			invalidate();
+			this.id = id;
 //			selec
 		}
-		
-//		public Img(Drawable drawabel, Resources res){
-//			this.drawable = drawabel;
-//			this.firstLoad = true;
-//			getMetrics(res);
-//		}
 		
 		public void setListener(ImgListener listener){
 			this.listener = listener;
@@ -356,20 +385,16 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 			
 			
 			getMetrics(res);
-//			this.drawable = res.getDrawable(resId);
 			this.width = drawable.getIntrinsicWidth();
 			this.height = drawable.getIntrinsicHeight();
 			float cx, cy, sx, sy;
 			if (firstLoad) {
-				
 				
 				cx = posX;//displayWidth/2;//SCREEN_MARGIN * 2 ;//+ (float) (Math.random() * (displayWidth - 2 * SCREEN_MARGIN));
 				cy = posY;//displayHeight/2 - 100;//SCREEN_MARGIN * 2;// + (float) (Math.random() * (displayHeight - 2 * SCREEN_MARGIN));
 				float sc = 1;//(float) (Math.max(displayWidth, displayHeight) / (float) Math.max(width, height) * Math.random() * 0.3 + 0.2);
 				sx = sy = sc;
 				firstLoad = false;
-				
-				Log.e(TAG, "load First "+cx+" "+cy);
 			} else {
 				// Reuse position and scale information if it is available
 				// FIXME this doesn't actually work because the whole activity is torn down and re-created on rotate
@@ -403,8 +428,6 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 					: newImgPosAndScale.getScale(), newImgPosAndScale.getAngle());
 			// FIXME: anisotropic scaling jumps when axis-snapping
 			// FIXME: affine-ize
-			// return setPos(newImgPosAndScale.getXOff(), newImgPosAndScale.getYOff(), newImgPosAndScale.getScaleAnisotropicX(),
-			// newImgPosAndScale.getScaleAnisotropicY(), 0.0f);
 		}
 
 		/** Set the position and scale of an image in screen coordinates */
@@ -424,7 +447,6 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 			this.minY = newMinY;
 			this.maxX = newMaxX;
 			this.maxY = newMaxY;
-//			this.width = newWidth;
 			return true;
 		}
 
@@ -440,13 +462,19 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 			float dy = (maxY + minY) / 2;
 			drawable.setBounds((int) minX, (int) minY, (int) maxX, (int) maxY);
 			canvas.translate(dx, dy);
-//			canvas.rotate(angle * 180.0f / (float) Math.PI);
 			canvas.translate(-dx, -dy);
 			drawable.draw(canvas);
 			
 			canvas.restore();
 			
-			Log.e(TAG, "DRAW A "+ " CENTER "+ centerX+" "+centerY);
+			if(startRecord){
+				String data = this.id+";"+centerX +";"+centerY+";" +width+";"+height ;
+				savedData = savedData + data+"\n";
+				Log.e(TAG, "DRAW A "+ " CENTER "+ centerX+" "+centerY);
+				
+				
+			}
+//			
 		}
 
 		public Drawable getDrawable() {
@@ -460,8 +488,6 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 		
 		public Bitmap getBitmap(){
 			bit = convertToBitmap(drawable, width, height);
-//			bit = zoomBitmap(bit, angle * 180.0f / (float) Math.PI, scaleX, scaleY);
-			
 			return bit;
 		}
 		

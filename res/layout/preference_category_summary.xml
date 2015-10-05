@@ -1,10 +1,1 @@
-<!-- Layout used for PreferenceCategory + SUMMARY in a PreferenceActivity. -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent" android:layout_height="wrap_content"
-              android:orientation="vertical">
-    <com.HomeCenter2.ui.FontTextView  android:id="@+android:id/title" 
-              style="?android:attr/listSeparatorTextViewStyle"/>
-    <com.HomeCenter2.ui.FontTextView  android:id="@+android:id/summary"
-              android:paddingLeft="5dip" android:paddingRight="dip"
-              android:layout_width="match_parent" android:layout_height="wrap_content"/>
-</LinearLayout>
+<!-- Layout used for PreferenceCategory + SUMMARY in a PreferenceActivity. --><LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"    android:layout_width="match_parent"    android:layout_height="wrap_content"    android:orientation="vertical" >    <com.HomeCenter2.ui.FontTextView        android:id="@+android:id/title"        style="?android:attr/listSeparatorTextViewStyle" />    <com.HomeCenter2.ui.FontTextView        android:id="@+android:id/summary"        android:layout_width="match_parent"        android:layout_height="wrap_content"        android:paddingLeft="5dp"        android:paddingRight="5dp" /></LinearLayout>

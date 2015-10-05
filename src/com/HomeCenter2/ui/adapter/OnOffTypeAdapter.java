@@ -27,8 +27,8 @@ public class OnOffTypeAdapter extends BaseAdapter{
 	private Context context;
 	private List<DeviceTypeOnOff> types;
 	
-	private interface LongCallback{
-		public void longCallback(View v);
+	public interface LongCallback{
+		public void longCallback(int position, int id);
 	}
 	
 	private LongCallback callback;
@@ -82,23 +82,35 @@ public class OnOffTypeAdapter extends BaseAdapter{
 		
         vh.imgTool.setBackgroundResource(types.get(position).getIconOn());
         vh.tv.setVisibility(View.GONE);
-        
         vh.imgTool.setTag(position+"");
 		
-        vh.imgTool.setOnLongClickListener(new MyClickListener());
+        vh.imgTool.setOnLongClickListener(new MyClickListener(position));
+//        vh.imgTool.seton
         
 		return convertView;
 	}
 	
 	private final class MyClickListener implements OnLongClickListener {
+		
+		private int position;
+		public MyClickListener(int position2) {
+			// TODO Auto-generated constructor stub
+			position = position2;
+		}
 
-	    // called when the item is long-clicked
+		// called when the item is long-clicked
 		@Override
 		public boolean onLongClick(View view) {
 		// TODO Auto-generated method stub
+			
+			Log.i(TAG, "onLongClick "+position);
 		
+			if(callback != null){
+				callback.longCallback(position, types.get(position).getId());
+			}
 			// create it from the object's tag
 			ClipData.Item item = new ClipData.Item((CharSequence)view.getTag());
+//			item.
 
 	        String[] mimeTypes = { ClipDescription.MIMETYPE_TEXT_PLAIN };
 	        ClipData data = new ClipData(view.getTag().toString(), mimeTypes, item);
@@ -109,7 +121,6 @@ public class OnOffTypeAdapter extends BaseAdapter{
 	        				view, //local data about the drag and drop operation
 	        				0   //no needed flags
 	        			  );
-	        
 	        
 	        view.setVisibility(View.INVISIBLE);
 	        return true;

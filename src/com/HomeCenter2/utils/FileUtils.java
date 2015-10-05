@@ -1,8 +1,16 @@
 package com.HomeCenter2.utils;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
 
 import android.annotation.TargetApi;
@@ -16,466 +24,566 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.provider.DocumentsContract;
 import android.webkit.MimeTypeMap;
+
+import com.HomeCenter2.data.configManager;
 
 /**
  * @author congbado
  */
 public class FileUtils {
-    public static final String MIME_TYPE_AUDIO = "audio/*";
-    public static final String MIME_TYPE_TEXT = "text/*";
-    public static final String MIME_TYPE_IMAGE = "image/*";
-    public static final String MIME_TYPE_VIDEO = "video/*";
-    public static final String MIME_TYPE_APP = "application/*";
-    public static final String HIDDEN_PREFIX = ".";
-    public static FileFilter sFileFilter = new FileFilter() {
-        @Override
-        public boolean accept(File file) {
-            final String fileName = file.getName();
-            // Return files only (not directories) and skip hidden files
-            return file.isFile() && !fileName.startsWith(HIDDEN_PREFIX);
-        }
-    };
-    public static FileFilter sDirFilter = new FileFilter() {
-        @Override
-        public boolean accept(File file) {
-            final String fileName = file.getName();
-            // Return directories only and skip hidden directories
-            return file.isDirectory() && !fileName.startsWith(HIDDEN_PREFIX);
-        }
-    };
-    /**
-     * TAG for log messages.
-     */
-    static final String TAG = "FileUtils";
-    private static final boolean DEBUG = false; // Set to true to enable logging
-    /**
-     * File and folder comparator. TODO Expose sorting option method
-     *
-     */
-    public static Comparator<File> sComparator = new Comparator<File>() {
-        @Override
-        public int compare(File f1, File f2) {
-            // Sort alphabetically by lower case, which is much cleaner
-            return f1.getName().toLowerCase().compareTo(
-                    f2.getName().toLowerCase());
-        }
-    };
-    
-    public static void deleteFile(File file){
-    	if(file.exists()){
-    		file.delete();
-    	}
-    }
+	public static final String MIME_TYPE_AUDIO = "audio/*";
+	public static final String MIME_TYPE_TEXT = "text/*";
+	public static final String MIME_TYPE_IMAGE = "image/*";
+	public static final String MIME_TYPE_VIDEO = "video/*";
+	public static final String MIME_TYPE_APP = "application/*";
+	public static final String HIDDEN_PREFIX = ".";
+	
+	public static ArrayList<String> getDataFile(String path){
+		
+		ArrayList<String> values = new ArrayList<String>();
+		BufferedReader br = null;
 
-    private FileUtils() {
-    } //private constructor to enforce Singleton pattern
+		try {
 
-    /**
-     * Gets the extension of a file name, like ".png" or ".jpg".
-     *
-     * @param uri
-     * @return Extension including the dot("."); "" if there is no extension;
-     * null if uri was null.
-     */
-    public static String getExtension(String uri) {
-        if (uri == null) {
-            return null;
-        }
+			String sCurrentLine;
 
-        int dot = uri.lastIndexOf(".");
-        if (dot >= 0) {
-            return uri.substring(dot);
-        } else {
-            // No extension.
-            return "";
-        }
-    }
+			br = new BufferedReader(new FileReader(path));
 
-    /**
-     * @return Whether the URI is a local one.
-     */
-    public static boolean isLocal(String url) {
-        if (url != null && !url.startsWith("http://") && !url.startsWith("https://")) {
-            return true;
-        }
-        return false;
-    }
+			while ((sCurrentLine = br.readLine()) != null) {
+				System.out.println(sCurrentLine);
+				values.add(sCurrentLine);
+			}
 
-    /**
-     * @return True if Uri is a MediaStore Uri.
-     */
-    public static boolean isMediaUri(Uri uri) {
-        return "media".equalsIgnoreCase(uri.getAuthority());
-    }
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (br != null)br.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+		
+		return values;
+	}
+	
+	public static String readTextFile(String path){
+		BufferedReader br = null;
+		String data = "";
 
-    /**
-     * Convert File into Uri.
-     *
-     * @param file
-     * @return uri
-     */
-    public static Uri getUri(File file) {
-        if (file != null) {
-            return Uri.fromFile(file);
-        }
-        return null;
-    }
+		try {
 
-    /**
-     * Returns the path only (without file name).
-     *
-     * @param file
-     * @return
-     */
-    public static File getPathWithoutFilename(File file) {
-        if (file != null) {
-            if (file.isDirectory()) {
-                // no file to be split off. Return everything
-                return file;
-            } else {
-                String filename = file.getName();
-                String filepath = file.getAbsolutePath();
+			String sCurrentLine;
 
-                // Construct path without file name.
-                String pathwithoutname = filepath.substring(0,
-                        filepath.length() - filename.length());
-                if (pathwithoutname.endsWith("/")) {
-                    pathwithoutname = pathwithoutname.substring(0, pathwithoutname.length() - 1);
-                }
-                return new File(pathwithoutname);
-            }
-        }
-        return null;
-    }
+			br = new BufferedReader(new FileReader(path));
 
-    /**
-     * @return The MIME type for the given file.
-     */
-    public static String getMimeType(File file) {
+			while ((sCurrentLine = br.readLine()) != null) {
+				System.out.println(sCurrentLine);
+				data = data + sCurrentLine +"\n";
+			}
 
-        String extension = getExtension(file.getName());
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (br != null)br.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+		
+		return data;
+	}
 
-        if (extension.length() > 0)
-            return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.substring(1));
+	public static void saveData2File(String strWrite, Context context, String roomName) {
+		Log.i(TAG, "saveData2File " + roomName+" "+strWrite);
+		try {
+			
+			File myDir = new File(configManager.FOLDERNAME + "/"+ roomName.replace(" ", ""));
+			
+			myDir.mkdirs();
+			File file = new File(myDir, "data.txt");
+			if (file.exists()) {
+				Log.e(TAG, "Exist");
+				FileUtils.deleteRecursive(file);
+			}
 
-        return "application/octet-stream";
-    }
+			FileOutputStream fOut = new FileOutputStream(file);
+			OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+			myOutWriter.append(strWrite);
+			myOutWriter.close();
+			fOut.close();
+		} catch (Exception e) {
+			// do your stuff here
+			e.printStackTrace();
+		}
+	}
 
-    /**
-     * @return The MIME type for the give Uri.
-     */
-    public static String getMimeType(Context context, Uri uri) {
-        File file = new File(getPath(context, uri));
-        return getMimeType(file);
-    }
+	public static FileFilter sFileFilter = new FileFilter() {
+		@Override
+		public boolean accept(File file) {
+			final String fileName = file.getName();
+			// Return files only (not directories) and skip hidden files
+			return file.isFile() && !fileName.startsWith(HIDDEN_PREFIX);
+		}
+	};
+	public static FileFilter sDirFilter = new FileFilter() {
+		@Override
+		public boolean accept(File file) {
+			final String fileName = file.getName();
+			// Return directories only and skip hidden directories
+			return file.isDirectory() && !fileName.startsWith(HIDDEN_PREFIX);
+		}
+	};
+	/**
+	 * TAG for log messages.
+	 */
+	static final String TAG = "FileUtils";
+	private static final boolean DEBUG = false; // Set to true to enable logging
+	/**
+	 * File and folder comparator. TODO Expose sorting option method
+	 * 
+	 */
+	public static Comparator<File> sComparator = new Comparator<File>() {
+		@Override
+		public int compare(File f1, File f2) {
+			// Sort alphabetically by lower case, which is much cleaner
+			return f1.getName().toLowerCase()
+					.compareTo(f2.getName().toLowerCase());
+		}
+	};
+	
+	public static void deleteRecursive(File fileOrDirectory) {
+		if (fileOrDirectory.isDirectory())
+			for (File child : fileOrDirectory.listFiles())
+				deleteRecursive(child);
 
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is ExternalStorageProvider.
-     */
-    public static boolean isExternalStorageDocument(Uri uri) {
-        return "com.android.externalstorage.documents".equals(uri.getAuthority());
-    }
+		File to = new File(fileOrDirectory.getAbsolutePath() + System.currentTimeMillis());
+		fileOrDirectory.renameTo(to);
+		to.delete();
+		//fileOrDirectory.delete();
+	}
 
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is DownloadsProvider.
-     */
-    public static boolean isDownloadsDocument(Uri uri) {
-        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
-    }
+	private FileUtils() {
+	} // private constructor to enforce Singleton pattern
 
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is MediaProvider.
-     * @author paulburke
-     */
-    public static boolean isMediaDocument(Uri uri) {
-        return "com.android.providers.media.documents".equals(uri.getAuthority());
-    }
+	/**
+	 * Gets the extension of a file name, like ".png" or ".jpg".
+	 * 
+	 * @param uri
+	 * @return Extension including the dot("."); "" if there is no extension;
+	 *         null if uri was null.
+	 */
+	public static String getExtension(String uri) {
+		if (uri == null) {
+			return null;
+		}
 
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is Google Photos.
-     */
-    public static boolean isGooglePhotosUri(Uri uri) {
-        return "com.google.android.apps.photos.content".equals(uri.getAuthority());
-    }
+		int dot = uri.lastIndexOf(".");
+		if (dot >= 0) {
+			return uri.substring(dot);
+		} else {
+			// No extension.
+			return "";
+		}
+	}
 
-    /**
-     * Get the value of the data column for this Uri. This is useful for
-     * MediaStore Uris, and other file-based ContentProviders.
-     *
-     * @param context       The context.
-     * @param uri           The Uri to query.
-     * @param selection     (Optional) Filter used in the query.
-     * @param selectionArgs (Optional) Selection arguments used in the query.
-     * @return The value of the _data column, which is typically a file path.
-     */
-    public static String getDataColumn(Context context, Uri uri, String selection,
-                                       String[] selectionArgs) {
+	/**
+	 * @return Whether the URI is a local one.
+	 */
+	public static boolean isLocal(String url) {
+		if (url != null && !url.startsWith("http://")
+				&& !url.startsWith("https://")) {
+			return true;
+		}
+		return false;
+	}
 
-        Cursor cursor = null;
-        final String column = "_data";
-        final String[] projection = {
-                column
-        };
+	/**
+	 * @return True if Uri is a MediaStore Uri.
+	 */
+	public static boolean isMediaUri(Uri uri) {
+		return "media".equalsIgnoreCase(uri.getAuthority());
+	}
 
-        try {
-            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
-                    null);
-            if (cursor != null && cursor.moveToFirst()) {
-                if (DEBUG)
-                    DatabaseUtils.dumpCursor(cursor);
+	/**
+	 * Convert File into Uri.
+	 * 
+	 * @param file
+	 * @return uri
+	 */
+	public static Uri getUri(File file) {
+		if (file != null) {
+			return Uri.fromFile(file);
+		}
+		return null;
+	}
 
-                final int column_index = cursor.getColumnIndexOrThrow(column);
-                return cursor.getString(column_index);
-            }
-        } finally {
-            if (cursor != null)
-                cursor.close();
-        }
-        return null;
-    }
+	/**
+	 * Returns the path only (without file name).
+	 * 
+	 * @param file
+	 * @return
+	 */
+	public static File getPathWithoutFilename(File file) {
+		if (file != null) {
+			if (file.isDirectory()) {
+				// no file to be split off. Return everything
+				return file;
+			} else {
+				String filename = file.getName();
+				String filepath = file.getAbsolutePath();
 
-    /**
-     * Get a file path from a Uri. This will get the the path for Storage Access
-     * Framework Documents, as well as the _data field for the MediaStore and
-     * other file-based ContentProviders.<br>
-     * <br>
-     * Callers should check whether the path is local before assuming it
-     * represents a local file.
-     *
-     * @param context The context.
-     * @param uri     The Uri to query.
-     * @see #isLocal(String)
-     * @see #getFile(android.content.Context, android.net.Uri)
-     */
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    public static String getPath(final Context context, final Uri uri) {
+				// Construct path without file name.
+				String pathwithoutname = filepath.substring(0,
+						filepath.length() - filename.length());
+				if (pathwithoutname.endsWith("/")) {
+					pathwithoutname = pathwithoutname.substring(0,
+							pathwithoutname.length() - 1);
+				}
+				return new File(pathwithoutname);
+			}
+		}
+		return null;
+	}
 
-        if (DEBUG)
-            Log.d(TAG + " File -",
-                    "Authority: " + uri.getAuthority() +
-                            ", Fragment: " + uri.getFragment() +
-                            ", Port: " + uri.getPort() +
-                            ", Query: " + uri.getQuery() +
-                            ", Scheme: " + uri.getScheme() +
-                            ", Host: " + uri.getHost() +
-                            ", Segments: " + uri.getPathSegments().toString()
-            );
+	/**
+	 * @return The MIME type for the given file.
+	 */
+	public static String getMimeType(File file) {
 
-        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.BASE;
+		String extension = getExtension(file.getName());
 
-        // DocumentProvider
-        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
-            // ExternalStorageProvider
-            if (isExternalStorageDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
+		if (extension.length() > 0)
+			return MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+					extension.substring(1));
 
-                if ("primary".equalsIgnoreCase(type)) {
-                    return Environment.getExternalStorageDirectory() + "/" + split[1];
-                }
+		return "application/octet-stream";
+	}
 
-                // TODO handle non-primary volumes
-            }
-            // DownloadsProvider
-            else if (isDownloadsDocument(uri)) {
+	/**
+	 * @return The MIME type for the give Uri.
+	 */
+	public static String getMimeType(Context context, Uri uri) {
+		File file = new File(getPath(context, uri));
+		return getMimeType(file);
+	}
 
-                final String id = DocumentsContract.getDocumentId(uri);
-                final Uri contentUri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+	/**
+	 * @param uri
+	 *            The Uri to check.
+	 * @return Whether the Uri authority is ExternalStorageProvider.
+	 */
+	public static boolean isExternalStorageDocument(Uri uri) {
+		return "com.android.externalstorage.documents".equals(uri
+				.getAuthority());
+	}
 
-                return getDataColumn(context, contentUri, null, null);
-            }
-            // MediaProvider
-            else if (isMediaDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
+	/**
+	 * @param uri
+	 *            The Uri to check.
+	 * @return Whether the Uri authority is DownloadsProvider.
+	 */
+	public static boolean isDownloadsDocument(Uri uri) {
+		return "com.android.providers.downloads.documents".equals(uri
+				.getAuthority());
+	}
 
-                Uri contentUri = null;
-                if ("image".equals(type)) {
-                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                } else if ("video".equals(type)) {
-                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-                } else if ("audio".equals(type)) {
-                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                }
+	/**
+	 * @param uri
+	 *            The Uri to check.
+	 * @return Whether the Uri authority is MediaProvider.
+	 * @author paulburke
+	 */
+	public static boolean isMediaDocument(Uri uri) {
+		return "com.android.providers.media.documents".equals(uri
+				.getAuthority());
+	}
 
-                final String selection = "_id=?";
-                final String[] selectionArgs = new String[]{
-                        split[1]
-                };
+	/**
+	 * @param uri
+	 *            The Uri to check.
+	 * @return Whether the Uri authority is Google Photos.
+	 */
+	public static boolean isGooglePhotosUri(Uri uri) {
+		return "com.google.android.apps.photos.content".equals(uri
+				.getAuthority());
+	}
 
-                return getDataColumn(context, contentUri, selection, selectionArgs);
-            }
-        }
-        // MediaStore (and general)
-        else if ("content".equalsIgnoreCase(uri.getScheme())) {
+	/**
+	 * Get the value of the data column for this Uri. This is useful for
+	 * MediaStore Uris, and other file-based ContentProviders.
+	 * 
+	 * @param context
+	 *            The context.
+	 * @param uri
+	 *            The Uri to query.
+	 * @param selection
+	 *            (Optional) Filter used in the query.
+	 * @param selectionArgs
+	 *            (Optional) Selection arguments used in the query.
+	 * @return The value of the _data column, which is typically a file path.
+	 */
+	public static String getDataColumn(Context context, Uri uri,
+			String selection, String[] selectionArgs) {
 
-            // Return the remote address
-            if (isGooglePhotosUri(uri))
-                return uri.getLastPathSegment();
+		Cursor cursor = null;
+		final String column = "_data";
+		final String[] projection = { column };
 
-            return getDataColumn(context, uri, null, null);
-        }
-        // File
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            return uri.getPath();
-        }
+		try {
+			cursor = context.getContentResolver().query(uri, projection,
+					selection, selectionArgs, null);
+			if (cursor != null && cursor.moveToFirst()) {
+				if (DEBUG)
+					DatabaseUtils.dumpCursor(cursor);
 
-        return null;
-    }
+				final int column_index = cursor.getColumnIndexOrThrow(column);
+				return cursor.getString(column_index);
+			}
+		} finally {
+			if (cursor != null)
+				cursor.close();
+		}
+		return null;
+	}
 
-    /**
-     * Convert Uri into File, if possible.
-     *
-     * @return file A local file that the Uri was pointing to, or null if the
-     * Uri is unsupported or pointed to a remote resource.
-     * @see #getPath(android.content.Context, android.net.Uri)
-     */
-    public static File getFile(Context context, Uri uri) {
-        if (uri != null) {
-            String path = getPath(context, uri);
-            if (path != null && isLocal(path)) {
-                return new File(path);
-            }
-        }
-        return null;
-    }
+	/**
+	 * Get a file path from a Uri. This will get the the path for Storage Access
+	 * Framework Documents, as well as the _data field for the MediaStore and
+	 * other file-based ContentProviders.<br>
+	 * <br>
+	 * Callers should check whether the path is local before assuming it
+	 * represents a local file.
+	 * 
+	 * @param context
+	 *            The context.
+	 * @param uri
+	 *            The Uri to query.
+	 * @see #isLocal(String)
+	 * @see #getFile(android.content.Context, android.net.Uri)
+	 */
+	@TargetApi(Build.VERSION_CODES.KITKAT)
+	public static String getPath(final Context context, final Uri uri) {
 
-    /**
-     * Get the file size in a human-readable string.
-     *
-     * @param size
-     * @return
-     * @author paulburke
-     */
-    public static String getReadableFileSize(int size) {
-        final int BYTES_IN_KILOBYTES = 1024;
-        final DecimalFormat dec = new DecimalFormat("###.#");
-        final String KILOBYTES = " KB";
-        final String MEGABYTES = " MB";
-        final String GIGABYTES = " GB";
-        float fileSize = 0;
-        String suffix = KILOBYTES;
+		if (DEBUG)
+			Log.d(TAG + " File -",
+					"Authority: " + uri.getAuthority() + ", Fragment: "
+							+ uri.getFragment() + ", Port: " + uri.getPort()
+							+ ", Query: " + uri.getQuery() + ", Scheme: "
+							+ uri.getScheme() + ", Host: " + uri.getHost()
+							+ ", Segments: " + uri.getPathSegments().toString());
 
-        if (size > BYTES_IN_KILOBYTES) {
-            fileSize = size / BYTES_IN_KILOBYTES;
-            if (fileSize > BYTES_IN_KILOBYTES) {
-                fileSize = fileSize / BYTES_IN_KILOBYTES;
-                if (fileSize > BYTES_IN_KILOBYTES) {
-                    fileSize = fileSize / BYTES_IN_KILOBYTES;
-                    suffix = GIGABYTES;
-                } else {
-                    suffix = MEGABYTES;
-                }
-            }
-        }
-        return String.valueOf(dec.format(fileSize) + suffix);
-    }
+		final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.BASE;
 
-    /**
-     * Attempt to retrieve the thumbnail of given File from the MediaStore. This
-     * should not be called on the UI thread.
-     *
-     * @param context
-     * @param file
-     * @return
-     * @author paulburke
-     */
-    public static Bitmap getThumbnail(Context context, File file) {
-        return getThumbnail(context, getUri(file), getMimeType(file));
-    }
+		// DocumentProvider
+		if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+			// ExternalStorageProvider
+			if (isExternalStorageDocument(uri)) {
+				final String docId = DocumentsContract.getDocumentId(uri);
+				final String[] split = docId.split(":");
+				final String type = split[0];
 
-    /**
-     * Attempt to retrieve the thumbnail of given Uri from the MediaStore. This
-     * should not be called on the UI thread.
-     *
-     * @param context
-     * @param uri
-     * @return
-     * @author paulburke
-     */
-    public static Bitmap getThumbnail(Context context, Uri uri) {
-        return getThumbnail(context, uri, getMimeType(context, uri));
-    }
+				if ("primary".equalsIgnoreCase(type)) {
+					return Environment.getExternalStorageDirectory() + "/"
+							+ split[1];
+				}
 
-    /**
-     * Attempt to retrieve the thumbnail of given Uri from the MediaStore. This
-     * should not be called on the UI thread.
-     *
-     * @param context
-     * @param uri
-     * @param mimeType
-     * @return
-     * @author paulburke
-     */
-    public static Bitmap getThumbnail(Context context, Uri uri, String mimeType) {
-        if (DEBUG)
-            Log.d(TAG, "Attempting to get thumbnail");
+				// TODO handle non-primary volumes
+			}
+			// DownloadsProvider
+			else if (isDownloadsDocument(uri)) {
 
-        if (!isMediaUri(uri)) {
-            Log.e(TAG, "You can only retrieve thumbnails for images and videos.");
-            return null;
-        }
+				final String id = DocumentsContract.getDocumentId(uri);
+				final Uri contentUri = ContentUris.withAppendedId(
+						Uri.parse("content://downloads/public_downloads"),
+						Long.valueOf(id));
 
-        Bitmap bm = null;
-        if (uri != null) {
-            final ContentResolver resolver = context.getContentResolver();
-            Cursor cursor = null;
-            try {
-                cursor = resolver.query(uri, null, null, null, null);
-                if (cursor.moveToFirst()) {
-                    final int id = cursor.getInt(0);
-                    if (DEBUG)
-                        Log.d(TAG, "Got thumb ID: " + id);
+				return getDataColumn(context, contentUri, null, null);
+			}
+			// MediaProvider
+			else if (isMediaDocument(uri)) {
+				final String docId = DocumentsContract.getDocumentId(uri);
+				final String[] split = docId.split(":");
+				final String type = split[0];
 
-                    if (mimeType.contains("video")) {
-                        bm = MediaStore.Video.Thumbnails.getThumbnail(
-                                resolver,
-                                id,
-                                MediaStore.Video.Thumbnails.MINI_KIND,
-                                null);
-                    } else if (mimeType.contains(FileUtils.MIME_TYPE_IMAGE)) {
-                        bm = MediaStore.Images.Thumbnails.getThumbnail(
-                                resolver,
-                                id,
-                                MediaStore.Images.Thumbnails.MINI_KIND,
-                                null);
-                    }
-                }
-            } catch (Exception e) {
-                if (DEBUG)
-                    Log.e(TAG, "getThumbnail", e);
-            } finally {
-                if (cursor != null)
-                    cursor.close();
-            }
-        }
-        return bm;
-    }
+				Uri contentUri = null;
+				if ("image".equals(type)) {
+					contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+				} else if ("video".equals(type)) {
+					contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+				} else if ("audio".equals(type)) {
+					contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+				}
 
-    /**
-     * Get the Intent for selecting content to be used in an Intent Chooser.
-     *
-     * @return The intent for opening a file with Intent.createChooser()
-     * @author paulburke
-     */
-    public static Intent createGetContentIntent() {
-        // Implicitly allow the user to select a particular kind of data
-        final Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        // The MIME data type filter
-        intent.setType("*/*");
-        // Only return URIs that can be opened with ContentResolver
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        return intent;
-    }
+				final String selection = "_id=?";
+				final String[] selectionArgs = new String[] { split[1] };
+
+				return getDataColumn(context, contentUri, selection,
+						selectionArgs);
+			}
+		}
+		// MediaStore (and general)
+		else if ("content".equalsIgnoreCase(uri.getScheme())) {
+
+			// Return the remote address
+			if (isGooglePhotosUri(uri))
+				return uri.getLastPathSegment();
+
+			return getDataColumn(context, uri, null, null);
+		}
+		// File
+		else if ("file".equalsIgnoreCase(uri.getScheme())) {
+			return uri.getPath();
+		}
+
+		return null;
+	}
+
+	/**
+	 * Convert Uri into File, if possible.
+	 * 
+	 * @return file A local file that the Uri was pointing to, or null if the
+	 *         Uri is unsupported or pointed to a remote resource.
+	 * @see #getPath(android.content.Context, android.net.Uri)
+	 */
+	public static File getFile(Context context, Uri uri) {
+		if (uri != null) {
+			String path = getPath(context, uri);
+			if (path != null && isLocal(path)) {
+				return new File(path);
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Get the file size in a human-readable string.
+	 * 
+	 * @param size
+	 * @return
+	 * @author paulburke
+	 */
+	public static String getReadableFileSize(int size) {
+		final int BYTES_IN_KILOBYTES = 1024;
+		final DecimalFormat dec = new DecimalFormat("###.#");
+		final String KILOBYTES = " KB";
+		final String MEGABYTES = " MB";
+		final String GIGABYTES = " GB";
+		float fileSize = 0;
+		String suffix = KILOBYTES;
+
+		if (size > BYTES_IN_KILOBYTES) {
+			fileSize = size / BYTES_IN_KILOBYTES;
+			if (fileSize > BYTES_IN_KILOBYTES) {
+				fileSize = fileSize / BYTES_IN_KILOBYTES;
+				if (fileSize > BYTES_IN_KILOBYTES) {
+					fileSize = fileSize / BYTES_IN_KILOBYTES;
+					suffix = GIGABYTES;
+				} else {
+					suffix = MEGABYTES;
+				}
+			}
+		}
+		return String.valueOf(dec.format(fileSize) + suffix);
+	}
+
+	/**
+	 * Attempt to retrieve the thumbnail of given File from the MediaStore. This
+	 * should not be called on the UI thread.
+	 * 
+	 * @param context
+	 * @param file
+	 * @return
+	 * @author paulburke
+	 */
+	public static Bitmap getThumbnail(Context context, File file) {
+		return getThumbnail(context, getUri(file), getMimeType(file));
+	}
+
+	/**
+	 * Attempt to retrieve the thumbnail of given Uri from the MediaStore. This
+	 * should not be called on the UI thread.
+	 * 
+	 * @param context
+	 * @param uri
+	 * @return
+	 * @author paulburke
+	 */
+	public static Bitmap getThumbnail(Context context, Uri uri) {
+		return getThumbnail(context, uri, getMimeType(context, uri));
+	}
+
+	/**
+	 * Attempt to retrieve the thumbnail of given Uri from the MediaStore. This
+	 * should not be called on the UI thread.
+	 * 
+	 * @param context
+	 * @param uri
+	 * @param mimeType
+	 * @return
+	 * @author paulburke
+	 */
+	public static Bitmap getThumbnail(Context context, Uri uri, String mimeType) {
+		if (DEBUG)
+			Log.d(TAG, "Attempting to get thumbnail");
+
+		if (!isMediaUri(uri)) {
+			Log.e(TAG,
+					"You can only retrieve thumbnails for images and videos.");
+			return null;
+		}
+
+		Bitmap bm = null;
+		if (uri != null) {
+			final ContentResolver resolver = context.getContentResolver();
+			Cursor cursor = null;
+			try {
+				cursor = resolver.query(uri, null, null, null, null);
+				if (cursor.moveToFirst()) {
+					final int id = cursor.getInt(0);
+					if (DEBUG)
+						Log.d(TAG, "Got thumb ID: " + id);
+
+					if (mimeType.contains("video")) {
+						bm = MediaStore.Video.Thumbnails
+								.getThumbnail(resolver, id,
+										MediaStore.Video.Thumbnails.MINI_KIND,
+										null);
+					} else if (mimeType.contains(FileUtils.MIME_TYPE_IMAGE)) {
+						bm = MediaStore.Images.Thumbnails.getThumbnail(
+								resolver, id,
+								MediaStore.Images.Thumbnails.MINI_KIND, null);
+					}
+				}
+			} catch (Exception e) {
+				if (DEBUG)
+					Log.e(TAG, "getThumbnail", e);
+			} finally {
+				if (cursor != null)
+					cursor.close();
+			}
+		}
+		return bm;
+	}
+
+	/**
+	 * Get the Intent for selecting content to be used in an Intent Chooser.
+	 * 
+	 * @return The intent for opening a file with Intent.createChooser()
+	 * @author paulburke
+	 */
+	public static Intent createGetContentIntent() {
+		// Implicitly allow the user to select a particular kind of data
+		final Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+		// The MIME data type filter
+		intent.setType("*/*");
+		// Only return URIs that can be opened with ContentResolver
+		intent.addCategory(Intent.CATEGORY_OPENABLE);
+		return intent;
+	}
 }

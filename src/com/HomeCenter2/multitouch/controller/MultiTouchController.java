@@ -420,31 +420,11 @@ public class MultiTouchController<T> {
         float newPosX = mCurrPtX - startPosX * currScale;
         float newPosY = mCurrPtY - startPosY * currScale;
 
-        // Calc new angle of object, if any
-        //float newAngle = mCurrPtAng;
-        //if (mMode == MODE_ST_GRAB) {
-        //    // grabbed by single touch area
-        //    newAngle = (float) Math.atan2(newPosY-startPosY,
-        //            newPosX-startPosX) + mCurrPtAng;
-        //} else {
-        //    newAngle = startAngleMinusPinchAngle + mCurrPtAng;
-        //}
-
         float deltaX = mCurrPt.getX() - mPrevPt.getX();
         float deltaY = mCurrPt.getY() - mPrevPt.getY();
 
         // Calc new scale of object, if any
         float newScale = 1.0f;//mCurrXform.scale;
-//        if (mMode == MODE_ST_GRAB) {
-//            if (deltaX < 0.0f || deltaY < 0.0f) {
-//                newScale = mCurrXform.scale - 0.04f;
-//            } else {
-//                newScale = mCurrXform.scale + 0.04f;
-//            }
-//            if (newScale < 0.35f) return;
-//        } else {
-//            newScale = startScaleOverPinchDiam * mCurrPtDiam;
-//        }
 
         if (!mDragOccurred) {
             if (!pastThreshold(Math.abs(deltaX), Math.abs(deltaY), newScale)) {

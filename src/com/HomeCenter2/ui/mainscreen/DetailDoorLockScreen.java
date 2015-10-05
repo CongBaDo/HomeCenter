@@ -638,9 +638,9 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 						// TODO Auto-generated method stub
 						if (shareType == ACTION.DELETE_IMAGE) {
 							if (imagePos == IMAGE_POS.LEFT) {
-								FileUtils.deleteFile(leftFile);
+								FileUtils.deleteRecursive(leftFile);
 							} else {
-								FileUtils.deleteFile(rightFile);
+								FileUtils.deleteRecursive(rightFile);
 							}
 
 							resetImageView(imagePos);

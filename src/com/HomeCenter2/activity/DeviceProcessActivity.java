@@ -1,5 +1,8 @@
 package com.HomeCenter2.activity;
 
+import java.io.File;
+import java.util.ArrayList;
+
 import android.animation.ObjectAnimator;
 import android.content.ClipData;
 import android.content.ClipDescription;
@@ -39,7 +42,9 @@ import com.HomeCenter2.house.Room;
 import com.HomeCenter2.imageprocessing.PhotoSortrView;
 import com.HomeCenter2.ui.ScheduleImageView;
 import com.HomeCenter2.ui.adapter.OnOffTypeAdapter;
+import com.HomeCenter2.ui.adapter.OnOffTypeAdapter.LongCallback;
 import com.HomeCenter2.ui.adapter.ToolAdapter;
+import com.HomeCenter2.utils.FileUtils;
 import com.HomeCenter2.utils.HCUtils;
 import com.etsy.android.grid.StaggeredGridView;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -65,6 +70,8 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 	private ImageView imgMain;
 	private PhotoSortrView magicView;
 	private RelativeLayout containMagicView;
+	private int currentId = - 1;
+	private String rootDataPath;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -84,9 +91,6 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 		 magicView = new PhotoSortrView(getApplicationContext());
 		 magicView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		 magicView.setBackgroundColor(Color.TRANSPARENT);
-		 
-//		 photoSorter.addImage(getResources().getDrawable( R.drawable.test_1_image), getResources());
-//		 photoSorter.addImage(getResources().getDrawable( R.drawable.test_2_image), getResources());
 		 
 		 containMagicView.addView(magicView);
 		
@@ -150,10 +154,22 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 
 		adapterLeft = new OnOffTypeAdapter(this,
 				configManager.OnOffTypes);
+		adapterLeft.setCallback(new LongCallback() {
+			
+			@Override
+			public void longCallback(int pos, int id) {
+				// TODO Auto-generated method stub
+				Log.e(TAG, "longCallback "+pos);
+				currentId = id;
+			}
+		});
+//		adapterLeft.getItem(position)
 
 		adapterRight = new ToolAdapter(this, room.getSensors());
+		
 
 		gridToolLeft.setAdapter(adapterLeft);
+//		gridToolLeft.setOnItemClickListener(new )
 		gridToolRight.setAdapter(adapterRight);
 		
 		gridToolRight.post(new Runnable() {
@@ -168,15 +184,62 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 //		HCUtils.getFilePath("left.png", room.getName());
 		Log.i(TAG, "onCreateView "+HCUtils.getFilePath(configManager.IMAGE_LEFT, room.getName()));
 		String filePath = getIntent().getExtras().getString(configManager.INTENT_PATH_FILE);
+		ImageLoader.getInstance().clearDiskCache();
 		ImageLoader.getInstance().displayImage("file:///"+filePath, imgMain);
 		
 		findViewById(R.id.contain_tools).setOnDragListener(new MyDragListener());
+		
+		rootDataPath = configManager.FOLDERNAME + "/"
+				+ room.getName().replace(" ", "") + "/data.txt";
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		Log.d(TAG, "onResume");
+//		Log.d(TAG, "onResume");
+		
+		ArrayList<String> savedData = FileUtils.getDataFile(rootDataPath);
+		
+		Log.v(TAG, "onResume "+savedData.size());
+		
+		if(savedData.size() > 0){
+			for(int i = 0; i < savedData.size(); i++){
+				String[] values = savedData.get(i).split(";");
+				int id = Integer.parseInt(values[0]);
+				
+//				String data = currentId+";"+ event.getX()+";"+event.getY()+";"+view.getWidth()+";"+view.getHeight();
+	    		  
+				float coorX = Float.parseFloat(values[1]);
+				float coorY = Float.parseFloat(values[2]);
+				int width = Integer.parseInt(values[3]);
+				int height = Integer.parseInt(values[4]);
+				
+				Log.d(TAG, ""+id+" "+coorX+" "+coorY+" "+width+" "+height);
+				
+				addToolView(id, coorX, coorY, width, height);
+			}
+		}
+	}
+	
+	private void addToolView(int id, float margLeft, float margTop, int width, int height){
+		ImageView img = new ImageView(getApplicationContext());
+		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width, height);
+		params.setMargins((int)margLeft, (int)margTop, 0, 0);
+		img.setLayoutParams(params);
+//		containMagicView.addView(img);
+//		configManager.OnOffTypes
+		int resId = configManager.OnOffTypes.get(0).getIconOn();
+		for(int i = 0; i < configManager.OnOffTypes.size(); i++){
+			Log.v(TAG, "addToolView ID "+configManager.OnOffTypes.get(i).getId());
+			if(id == configManager.OnOffTypes.get(i).getId()){
+				Log.e(TAG, "addToolView ID "+id);
+				resId = configManager.OnOffTypes.get(i).getIconOn();
+//				break;
+			}
+		}
+		
+		Drawable draw = getResources().getDrawable(resId);
+		magicView.addImage(draw, getResources(), margLeft, margTop, room.getName(), width, height, resId);
 	}
 
 	@Override
@@ -269,16 +332,41 @@ public class DeviceProcessActivity extends FragmentActivity implements OnClickLi
 		    case DragEvent.ACTION_DROP:
 		        // if the view is the bottomlinear, we accept the drag item
 		    	  if(v == findViewById(R.id.contain_tools)) {
-		    		  View view = (View) event.getLocalState();
+		    		  	View view = (View) event.getLocalState();
 		    		  
-		    		  Log.e(TAG, "Location "+ event.getX()+" "+event.getY()+ " "+view.getWidth()+" "+view.getHeight());
+		    		  	String data = currentId+";"+ event.getX()+";"+event.getY()+";"+view.getWidth()+";"+view.getHeight();
+		    		  
+						File myDir = new File(configManager.FOLDERNAME + "/"
+								+ room.getName().replace(" ", ""));
+	
+						myDir.mkdirs();
+						File file = new File(myDir, "data.txt");
+						if (file.exists()) {
+							String content = FileUtils.readTextFile(rootDataPath);
+							Log.e(TAG, "Exist "+content);
+							data = content + data;
+						}
+
+						FileUtils.saveData2File(data, DeviceProcessActivity.this, room.getName());
+		    		  
+		    		  
+//		    		  Log.e(TAG, "Location "+ event.getX()+" "+event.getY()+ " "+view.getWidth()+" "+view.getHeight()+" "+view.getId());
 		           
-		    		  magicView.addImage(view.getBackground(), getResources(), event.getX(), event.getY());
+		    		  magicView.addImage(view.getBackground(), getResources(), event.getX(), event.getY(), room.getName(), view.getWidth(), view.getHeight(), currentId);
 		    		  containToolLeft.removeAllViews();
 		    		  
 		    		  loadGridToolLeftView();
 		    		  adapterLeft = new OnOffTypeAdapter(DeviceProcessActivity.this,
 		    					configManager.OnOffTypes);
+		    		  adapterLeft.setCallback(new LongCallback() {
+		    				
+		    				@Override
+		    				public void longCallback(int pos, int id) {
+		    					// TODO Auto-generated method stub
+		    					Log.e(TAG, "longCallback "+pos+" "+id);
+		    					currentId = id;
+		    				}
+		    			});
 		    		  gridToolLeft.setAdapter(adapterLeft);
 		    		  
 		    	  } else {

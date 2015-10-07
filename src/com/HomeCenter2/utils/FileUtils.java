@@ -99,14 +99,22 @@ public class FileUtils {
 		return data;
 	}
 
-	public static void saveData2File(String strWrite, Context context, String roomName) {
+	public static void saveData2File(String strWrite, Context context, String roomName, String leftOrRight) {
 		Log.i(TAG, "saveData2File " + roomName+" "+strWrite);
 		try {
 			
 			File myDir = new File(configManager.FOLDERNAME + "/"+ roomName.replace(" ", ""));
 			
 			myDir.mkdirs();
-			File file = new File(myDir, "data.txt");
+			
+			File file ;
+			if(leftOrRight.equals(configManager.ROOM_LEFT)){
+				file = new File(myDir, "left_data.txt");
+			}else{
+				file = new File(myDir, "right_data.txt");
+			}
+			
+			
 			if (file.exists()) {
 				Log.e(TAG, "Exist");
 				FileUtils.deleteRecursive(file);

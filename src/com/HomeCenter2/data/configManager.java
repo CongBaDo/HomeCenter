@@ -162,6 +162,10 @@ public class configManager {
 	public static final int DEVICE_TYPE = 0;
 	public static final int ROOM_TYPE = 1;
 	public static final int AREA_TYPE = 2;
+	
+	public static final String KEY_ROOM_SIDE = "room_side";
+	public static final String ROOM_LEFT = "room_left";
+	public static final String ROOM_RIGHT = "room_right";
 
 	public static List<DeviceTypeOnOff> OnOffTypes = null;
 

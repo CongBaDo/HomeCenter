@@ -648,11 +648,13 @@ public class DetailDoorLockScreen extends RADialerMainScreenAbstract implements
 							Intent intent = new Intent(getActivity(),
 									DeviceProcessActivity.class);
 							if (imagePos == IMAGE_POS.LEFT) {
+								intent.putExtra(configManager.KEY_ROOM_SIDE, configManager.ROOM_LEFT);
 								intent.putExtra(configManager.INTENT_PATH_FILE,
 										leftFile.getAbsolutePath());
 								intent.putExtra(configManager.INTENT_POS_FILE,
 										configManager.IMAGE_LEFT);
 							} else {
+								intent.putExtra(configManager.KEY_ROOM_SIDE, configManager.ROOM_RIGHT);
 								intent.putExtra(configManager.INTENT_PATH_FILE,
 										rightFile.getAbsolutePath());
 								intent.putExtra(configManager.INTENT_POS_FILE,

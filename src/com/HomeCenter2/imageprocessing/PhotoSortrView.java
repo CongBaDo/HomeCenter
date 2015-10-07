@@ -73,6 +73,7 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 	private String roomName;
 	private boolean startRecord = false;
 	private int width, height;
+	private String roomSide;
 	
 
 	public PhotoSortrView(Context context) {
@@ -95,12 +96,13 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 	 * @param width
 	 * @param height
 	 * @param id*/
-	public void addImage(Drawable drawable, Resources res, float posX, float posY, String roomName, int width, int height, int id){
+	public void addImage(Drawable drawable, Resources res, float posX, float posY, String roomName, int width, int height, int id, String roomSide){
 		this.roomName = roomName;
 		this.width = width;
 		this.height = height;
 		mImages.add(new Img(drawable, res, posX, posY, id));
 		currentIndex++;
+		this.roomSide = roomSide;
 	}
 	
 	public void drawText(String gText){
@@ -247,7 +249,7 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 		
 		if(startRecord){
 			startRecord = false;
-			FileUtils.saveData2File(savedData, getContext(), roomName);
+			FileUtils.saveData2File(savedData, getContext(), roomName, roomSide);
 			savedData = "";
 		}
 //		if (mShowDebugInfo)

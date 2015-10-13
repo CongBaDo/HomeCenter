@@ -9,16 +9,20 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.HomeCenter2.HomeCenter2Activity;
@@ -34,10 +38,12 @@ import com.HomeCenter2.house.House;
 import com.HomeCenter2.house.Room;
 import com.HomeCenter2.house.Sensor;
 import com.HomeCenter2.house.GroupBotoomTool.SPECIAL;
+import com.HomeCenter2.imageprocessing.PhotoSortrView;
 import com.HomeCenter2.ui.ScheduleImageView;
 import com.HomeCenter2.ui.adapter.BottomToolAdapter;
 import com.HomeCenter2.ui.adapter.OnOffTypeAdapter;
 import com.HomeCenter2.ui.adapter.ToolAdapter;
+import com.HomeCenter2.utils.FileUtils;
 import com.HomeCenter2.utils.HCUtils;
 import com.etsy.android.grid.StaggeredGridView;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -59,8 +65,6 @@ public class RoomManageFragment extends Fragment implements OnClickListener {
 	House mHouse = null;
 	HomeCenterUIEngine mUiEngine = null;
 	private View footerToolRight;
-	private ScheduleImageView imgToolOn, imgToolOff;
-	private ImageView imgMic;
 	private boolean isShowed = false;
 	private ImageView imgMain, imgThumb;
 	private enum IMAGE_THUMB{Left, Right, None};
@@ -68,6 +72,11 @@ public class RoomManageFragment extends Fragment implements OnClickListener {
 	private File fileRight, fileLeft;
 	private ArrayList<GroupBotoomTool> bottomTools;
 	private BottomToolAdapter adapterBottom;
+	private String rootDataPathLeft, rootDataPathRight;
+	private String roomSide;
+	
+	private PhotoSortrView magicView;
+	private RelativeLayout containMagicView;
 
 	public static RoomManageFragment newInstance(int position) {
 		RoomManageFragment f = new RoomManageFragment();
@@ -106,14 +115,25 @@ public class RoomManageFragment extends Fragment implements OnClickListener {
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_room_manager, container,
 				false);
-
+		
 		initUI(v);
 		initData(v);
+		
+		loadToolInRoom(rootDataPathLeft);
 
 		return v;
 	}
 
 	private void initUI(View view) {
+		containMagicView = (RelativeLayout) view.findViewById(R.id.contain_tools);
+		magicView = new PhotoSortrView(getActivity());
+		magicView.setTouch(false);
+		magicView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+				LayoutParams.MATCH_PARENT));
+		magicView.setBackgroundColor(Color.TRANSPARENT);
+
+		containMagicView.addView(magicView);
+		
 		tvTitle = (TextView) view.findViewById(R.id.title_room);
 
 		imgProcessRight = (ImageView) view
@@ -124,23 +144,12 @@ public class RoomManageFragment extends Fragment implements OnClickListener {
 		containToolRight = (LinearLayout) view
 				.findViewById(R.id.contain_tool_right);
 
-		LayoutInflater inflater = LayoutInflater.from(getActivity());
-		footerToolRight = inflater.inflate(R.layout.footer_tool_right, null);
-		imgMic = (ImageView) footerToolRight.findViewById(R.id.img_tool_mic);
-		imgToolOff = (ScheduleImageView) footerToolRight
-				.findViewById(R.id.img_tool_off);
-		imgToolOn = (ScheduleImageView) footerToolRight
-				.findViewById(R.id.img_tool_on);
 		imgMain = (ImageView)view.findViewById(R.id.image_showed);
 		imgThumb = (ImageView)view.findViewById(R.id.img_changable);
 		
 		horizonListToolBottom = (HorizontalListView)view.findViewById(R.id.grid_tool_right);
 		
 		imgThumb.setOnClickListener(this);
-
-		imgMic.setOnClickListener(this);
-		imgToolOff.setOnClickListener(this);
-		imgToolOn.setOnClickListener(this);
 
 		tvTitle.setOnClickListener(this);
 		imgProcessRight.setOnClickListener(this);
@@ -202,12 +211,75 @@ public class RoomManageFragment extends Fragment implements OnClickListener {
 		fileRight = new File(filePathRight);
 		fileLeft = new File(filePathLeft);
 		
+		rootDataPathLeft = configManager.FOLDERNAME + "/"
+				+ room.getName().replace(" ", "") + "/left_data.txt";
+		
+		
+		
 		if(fileRight.exists()){
 			v.findViewById(R.id.contain_thumb).setVisibility(View.VISIBLE);
 			loadBitFromPath(fileRight, thumbType);
+			
+			rootDataPathRight = configManager.FOLDERNAME + "/"
+					+ room.getName().replace(" ", "") + "/right_data.txt";
 		}else{
 			v.findViewById(R.id.contain_thumb).setVisibility(View.INVISIBLE);
 		}
+		
+			
+		
+	}
+	
+	private void loadToolInRoom(String rootDataPath){
+		magicView.reset();
+		ArrayList<String> savedData = FileUtils.getDataFile(rootDataPath);
+
+		Log.v(TAG, "loadToolInRoom " + savedData.size());
+
+		if (savedData.size() > 0) {
+			for (int i = 0; i < savedData.size(); i++) {
+				String[] values = savedData.get(i).split(";");
+				int id = Integer.parseInt(values[0]);
+
+				// String data = currentId+";"+
+				// event.getX()+";"+event.getY()+";"+view.getWidth()+";"+view.getHeight();
+
+				float coorX = Float.parseFloat(values[1]);
+				float coorY = Float.parseFloat(values[2]);
+				int width = Integer.parseInt(values[3]);
+				int height = Integer.parseInt(values[4]);
+
+				Log.d(TAG, "" + id + " " + coorX + " " + coorY + " " + width
+						+ " " + height);
+
+				addToolView(id, coorX, coorY, width, height);
+			}
+		}
+	}
+	
+	private void addToolView(int id, float margLeft, float margTop, int width,
+			int height) {
+		ImageView img = new ImageView(getActivity());
+		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+				width, height);
+		params.setMargins((int) margLeft, (int) margTop, 0, 0);
+		img.setLayoutParams(params);
+		// containMagicView.addView(img);
+		// configManager.OnOffTypes
+		int resId = configManager.OnOffTypes.get(0).getIconOn();
+		for (int i = 0; i < configManager.OnOffTypes.size(); i++) {
+			// Log.v(TAG,
+			// "addToolView ID "+configManager.OnOffTypes.get(i).getId());
+			if (id == configManager.OnOffTypes.get(i).getId()) {
+				// Log.e(TAG, "addToolView ID "+id);
+				resId = configManager.OnOffTypes.get(i).getIconOn();
+				// break;
+			}
+		}
+
+		Drawable draw = getResources().getDrawable(resId);
+		magicView.addImage(draw, getResources(), margLeft, margTop,
+				room.getName(), width, height, resId, roomSide);
 	}
 	
 	@Override
@@ -229,22 +301,12 @@ public class RoomManageFragment extends Fragment implements OnClickListener {
 			if(thumbType == IMAGE_THUMB.Left){
 				thumbType = IMAGE_THUMB.Right;
 				loadBitFromPath(fileRight, thumbType);
+				loadToolInRoom(rootDataPathRight);
 			}else{
 				thumbType = IMAGE_THUMB.Left;
 				loadBitFromPath(fileLeft, thumbType);
+				loadToolInRoom(rootDataPathLeft);
 			}
-			break;
-
-		case R.id.img_tool_mic:
-
-			break;
-
-		case R.id.img_tool_off:
-
-			break;
-
-		case R.id.img_tool_on:
-
 			break;
 
 		case R.id.img_expand_close_right:

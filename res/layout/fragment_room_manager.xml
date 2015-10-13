@@ -31,6 +31,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY" />
+            
+            <RelativeLayout
+                android:id="@+id/contain_tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent" />
 
             <RelativeLayout
                 android:id="@+id/contain_thumb"

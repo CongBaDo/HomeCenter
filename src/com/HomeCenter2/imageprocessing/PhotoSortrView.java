@@ -75,6 +75,15 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 	private int width, height;
 	private String roomSide;
 	
+	private boolean isTouch = false;
+
+	public boolean isTouch() {
+		return isTouch;
+	}
+
+	public void setTouch(boolean isTouch) {
+		this.isTouch = isTouch;
+	}
 
 	public PhotoSortrView(Context context) {
 		this(context, null);
@@ -268,6 +277,10 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 	/** Pass touch events to the MT controller */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
+		
+		if(!isTouch){
+			return false;
+		}
 		
 		if(event.getAction() == MotionEvent.ACTION_UP){
 			startRecord = true;
@@ -473,10 +486,7 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 				String data = this.id+";"+centerX +";"+centerY+";" +width+";"+height ;
 				savedData = savedData + data+"\n";
 				Log.e(TAG, "DRAW A "+ " CENTER "+ centerX+" "+centerY);
-				
-				
 			}
-//			
 		}
 
 		public Drawable getDrawable() {

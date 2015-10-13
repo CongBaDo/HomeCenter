@@ -36,11 +36,16 @@ import com.HomeCenter2.HomeCenterUIEngine;
 import com.HomeCenter2.HomeScreenSetting;
 import com.HomeCenter2.R;
 import com.HomeCenter2.RegisterService;
+import com.HomeCenter2.customview.HorizontalListView;
 import com.HomeCenter2.data.configManager;
+import com.HomeCenter2.house.GroupBotoomTool;
 import com.HomeCenter2.house.House;
 import com.HomeCenter2.house.Room;
+import com.HomeCenter2.house.Sensor;
+import com.HomeCenter2.house.GroupBotoomTool.SPECIAL;
 import com.HomeCenter2.imageprocessing.PhotoSortrView;
 import com.HomeCenter2.ui.ScheduleImageView;
+import com.HomeCenter2.ui.adapter.BottomToolAdapter;
 import com.HomeCenter2.ui.adapter.OnOffTypeAdapter;
 import com.HomeCenter2.ui.adapter.OnOffTypeAdapter.LongCallback;
 import com.HomeCenter2.ui.adapter.ToolAdapter;
@@ -56,11 +61,12 @@ public class DeviceProcessActivity extends FragmentActivity implements
 
 	private TextView tvTitle;
 	private int position;
-	private StaggeredGridView gridToolLeft, gridToolRight;
+	private StaggeredGridView gridToolLeft;
+	private HorizontalListView horizonListToolBottom;
 	private ImageView imgProcessRight;
 	private boolean isRightCollapse;
 	private OnOffTypeAdapter adapterLeft;
-	private ToolAdapter adapterRight;
+	private BottomToolAdapter adapterBottom;
 	private LinearLayout containToolLeft, containToolRight;
 	private Room room;
 	House mHouse = null;
@@ -74,6 +80,8 @@ public class DeviceProcessActivity extends FragmentActivity implements
 	private int currentId = -1;
 	private String rootDataPath;
 	private String roomSide;
+//	private ArrayList<Sensor[]> doubSensor;
+	private ArrayList<GroupBotoomTool> bottomTools;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -126,8 +134,7 @@ public class DeviceProcessActivity extends FragmentActivity implements
 		tvTitle = (TextView) findViewById(R.id.title_room);
 		// gridToolLeft = (StaggeredGridView) findViewById(R.id.grid_tool_left);
 
-		gridToolRight = (StaggeredGridView) findViewById(R.id.grid_tool_right);
-
+		horizonListToolBottom = (HorizontalListView) findViewById(R.id.grid_tool_right);
 		imgProcessRight = (ImageView) findViewById(R.id.img_expand_close_right);
 
 		containToolLeft = (LinearLayout) findViewById(R.id.contain_tool_left);
@@ -146,7 +153,7 @@ public class DeviceProcessActivity extends FragmentActivity implements
 		imgMic.setOnClickListener(this);
 		imgToolOff.setOnClickListener(this);
 		imgToolOn.setOnClickListener(this);
-		gridToolRight.addFooterView(footerToolRight);
+//		gridToolRight.addFooterView(footerToolRight);
 
 		tvTitle.setOnClickListener(this);
 		imgProcessRight.setOnClickListener(this);
@@ -167,15 +174,42 @@ public class DeviceProcessActivity extends FragmentActivity implements
 				currentId = id;
 			}
 		});
-		// adapterLeft.getItem(position)
 
-		adapterRight = new ToolAdapter(this, room.getSensors());
+		bottomTools = new ArrayList<GroupBotoomTool>();
+		
+		for(int i = 0; i < room.getSensors().size(); i++){
+			GroupBotoomTool tool = new GroupBotoomTool();
+			
+			Sensor[] sensor2 = new Sensor[2];
+			sensor2[0] = room.getSensors().get(i);
+			sensor2[1] = room.getSensors().get(i+1);
+			tool.setDoubSensor(sensor2);
+			tool.setSpecialToolType(SPECIAL.NONE);
+			bottomTools.add(tool);
+			i++;
+		}
+		
+		GroupBotoomTool tool = new GroupBotoomTool();
+		tool.setDoubSensor(null);
+		tool.setSpecialToolType(SPECIAL.MIC);
+		bottomTools.add(tool);
+		
+		tool = new GroupBotoomTool();
+		tool.setDoubSensor(null);
+		tool.setSpecialToolType(SPECIAL.ON);
+		bottomTools.add(tool);
+		
+		tool = new GroupBotoomTool();
+		tool.setDoubSensor(null);
+		tool.setSpecialToolType(SPECIAL.OFF);
+		bottomTools.add(tool);
+		
+		adapterBottom = new BottomToolAdapter(this, bottomTools);
 
 		gridToolLeft.setAdapter(adapterLeft);
 		// gridToolLeft.setOnItemClickListener(new )
-		gridToolRight.setAdapter(adapterRight);
-
-		gridToolRight.post(new Runnable() {
+		horizonListToolBottom.setAdapter(adapterBottom);
+		horizonListToolBottom.post(new Runnable() {
 
 			@Override
 			public void run() {
@@ -183,6 +217,8 @@ public class DeviceProcessActivity extends FragmentActivity implements
 				processRightView(containToolRight, isRightCollapse);
 			}
 		});
+		
+//		horizonListToolBottom.addView(footerToolRight);
 
 		// HCUtils.getFilePath("left.png", room.getName());
 		Log.i(TAG,
@@ -307,22 +343,31 @@ public class DeviceProcessActivity extends FragmentActivity implements
 
 	public void processRightView(View v, boolean isCollapse) {
 
-		float width = v.getWidth();
+		float height = v.getHeight();
 
-		Log.e(TAG, "processRightView " + width + " "
-				+ HomeScreenSetting.ScreenW);
+		Log.e(TAG, "processRightView " + height + " "
+				+ HomeScreenSetting.ScreenH);
 		if (isCollapse) {
-			ObjectAnimator translationRight = ObjectAnimator.ofFloat(v, "X",
-					HomeScreenSetting.ScreenW - width);
+			ObjectAnimator translationRight = ObjectAnimator.ofFloat(v, "Y",
+					HomeScreenSetting.ScreenH - height - 2*getActionBar().getHeight() - getStatusBarHeight());
 			translationRight.setDuration(500);
 			translationRight.start();
 		} else {
-			ObjectAnimator translationLeft = ObjectAnimator.ofFloat(v, "X",
-					HomeScreenSetting.ScreenW - width / 2);
+			ObjectAnimator translationLeft = ObjectAnimator.ofFloat(v, "Y",
+					HomeScreenSetting.ScreenH - 3*height/2 );
 			translationLeft.setDuration(500);
 			translationLeft.start();
 		}
 	}
+	
+	public int getStatusBarHeight() { 
+	      int result = 0;
+	      int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+	      if (resourceId > 0) {
+	          result = getResources().getDimensionPixelSize(resourceId);
+	      } 
+	      return result;
+	} 
 
 	class MyDragListener implements OnDragListener {
 

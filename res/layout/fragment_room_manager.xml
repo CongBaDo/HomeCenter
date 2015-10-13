@@ -71,11 +71,10 @@
 
         <LinearLayout
             android:id="@+id/contain_tool_right"
-            android:layout_width="@dimen/tool_width"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="135dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="80dp"
             android:background="@drawable/boder_tool_room"
             android:orientation="vertical" >
 
@@ -83,17 +82,14 @@
                 android:id="@+id/img_expand_close_right"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/icon_arrow_back"
-                android:padding="4dp" />
+                android:background="@drawable/icon_arrow_back" />
 
-            <com.etsy.android.grid.StaggeredGridView
+            <com.HomeCenter2.customview.HorizontalListView
                 android:id="@+id/grid_tool_right"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:columnWidth="@dimen/tool_column_width"
-                android:stretchMode="columnWidth"
-                app:column_count="2" >
-            </com.etsy.android.grid.StaggeredGridView>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+            </com.HomeCenter2.customview.HorizontalListView>
+
         </LinearLayout>
     </RelativeLayout>
 

@@ -3,6 +3,7 @@ package com.HomeCenter2.fragment;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 import android.animation.ObjectAnimator;
 import android.content.Intent;
@@ -26,10 +27,15 @@ import com.HomeCenter2.HomeScreenSetting;
 import com.HomeCenter2.R;
 import com.HomeCenter2.RegisterService;
 import com.HomeCenter2.activity.RoomListActivity;
+import com.HomeCenter2.customview.HorizontalListView;
 import com.HomeCenter2.data.configManager;
+import com.HomeCenter2.house.GroupBotoomTool;
 import com.HomeCenter2.house.House;
 import com.HomeCenter2.house.Room;
+import com.HomeCenter2.house.Sensor;
+import com.HomeCenter2.house.GroupBotoomTool.SPECIAL;
 import com.HomeCenter2.ui.ScheduleImageView;
+import com.HomeCenter2.ui.adapter.BottomToolAdapter;
 import com.HomeCenter2.ui.adapter.OnOffTypeAdapter;
 import com.HomeCenter2.ui.adapter.ToolAdapter;
 import com.HomeCenter2.utils.HCUtils;
@@ -44,11 +50,10 @@ public class RoomManageFragment extends Fragment implements OnClickListener {
 
 	private TextView tvTitle;
 	private int position;
-	private StaggeredGridView gridToolLeft, gridToolRight;
+	private HorizontalListView horizonListToolBottom;
 	private ImageView imgProcessRight;
 	private boolean isLeftCollapse, isRightCollapse;
 	private OnOffTypeAdapter adapterLeft;
-	private ToolAdapter adapterRight;
 	private LinearLayout containToolLeft, containToolRight;
 	private Room room;
 	House mHouse = null;
@@ -61,6 +66,8 @@ public class RoomManageFragment extends Fragment implements OnClickListener {
 	private enum IMAGE_THUMB{Left, Right, None};
 	private IMAGE_THUMB thumbType = IMAGE_THUMB.None;
 	private File fileRight, fileLeft;
+	private ArrayList<GroupBotoomTool> bottomTools;
+	private BottomToolAdapter adapterBottom;
 
 	public static RoomManageFragment newInstance(int position) {
 		RoomManageFragment f = new RoomManageFragment();
@@ -108,10 +115,6 @@ public class RoomManageFragment extends Fragment implements OnClickListener {
 
 	private void initUI(View view) {
 		tvTitle = (TextView) view.findViewById(R.id.title_room);
-		gridToolLeft = (StaggeredGridView) view
-				.findViewById(R.id.grid_tool_left);
-		gridToolRight = (StaggeredGridView) view
-				.findViewById(R.id.grid_tool_right);
 
 		imgProcessRight = (ImageView) view
 				.findViewById(R.id.img_expand_close_right);
@@ -130,12 +133,14 @@ public class RoomManageFragment extends Fragment implements OnClickListener {
 				.findViewById(R.id.img_tool_on);
 		imgMain = (ImageView)view.findViewById(R.id.image_showed);
 		imgThumb = (ImageView)view.findViewById(R.id.img_changable);
+		
+		horizonListToolBottom = (HorizontalListView)view.findViewById(R.id.grid_tool_right);
+		
 		imgThumb.setOnClickListener(this);
 
 		imgMic.setOnClickListener(this);
 		imgToolOff.setOnClickListener(this);
 		imgToolOn.setOnClickListener(this);
-		gridToolRight.addFooterView(footerToolRight);
 
 		tvTitle.setOnClickListener(this);
 		imgProcessRight.setOnClickListener(this);
@@ -147,25 +152,39 @@ public class RoomManageFragment extends Fragment implements OnClickListener {
 
 	private void initData(View v) {
 		tvTitle.setText(room.getName());
+		bottomTools = new ArrayList<GroupBotoomTool>();
+		
+		for(int i = 0; i < room.getSensors().size(); i++){
+			GroupBotoomTool tool = new GroupBotoomTool();
+			
+			Sensor[] sensor2 = new Sensor[2];
+			sensor2[0] = room.getSensors().get(i);
+			sensor2[1] = room.getSensors().get(i+1);
+			tool.setDoubSensor(sensor2);
+			tool.setSpecialToolType(SPECIAL.NONE);
+			bottomTools.add(tool);
+			i++;
+		}
+		
+		GroupBotoomTool tool = new GroupBotoomTool();
+		tool.setDoubSensor(null);
+		tool.setSpecialToolType(SPECIAL.MIC);
+		bottomTools.add(tool);
+		
+		tool = new GroupBotoomTool();
+		tool.setDoubSensor(null);
+		tool.setSpecialToolType(SPECIAL.ON);
+		bottomTools.add(tool);
+		
+		tool = new GroupBotoomTool();
+		tool.setDoubSensor(null);
+		tool.setSpecialToolType(SPECIAL.OFF);
+		bottomTools.add(tool);
+		
+		adapterBottom = new BottomToolAdapter(getActivity(), bottomTools);
 
-		adapterLeft = new OnOffTypeAdapter(getActivity(),
-				configManager.OnOffTypes);
-
-		adapterRight = new ToolAdapter(getActivity(), room.getSensors());
-
-		gridToolLeft.setAdapter(adapterLeft);
-		gridToolRight.setAdapter(adapterRight);
-
-		gridToolLeft.post(new Runnable() {
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				processLeftView(containToolLeft, isLeftCollapse);
-			}
-		});
-
-		gridToolRight.post(new Runnable() {
+		horizonListToolBottom.setAdapter(adapterBottom);
+		horizonListToolBottom.post(new Runnable() {
 
 			@Override
 			public void run() {
@@ -249,22 +268,32 @@ public class RoomManageFragment extends Fragment implements OnClickListener {
 	}
 
 	public void processRightView(View v, boolean isCollapse) {
-		
-		float width = v.getWidth();
-		
-		Log.e(TAG, "processRightView "+width+" "+HomeScreenSetting.ScreenW);
+
+		float height = v.getHeight();
+
+		Log.e(TAG, "processRightView " + height + " "
+				+ HomeScreenSetting.ScreenH);
 		if (isCollapse) {
-			ObjectAnimator translationRight = ObjectAnimator.ofFloat(v, "X",
-					HomeScreenSetting.ScreenW - width);
+			ObjectAnimator translationRight = ObjectAnimator.ofFloat(v, "Y",
+					HomeScreenSetting.ScreenH - height - 2*getActivity().getActionBar().getHeight() - getStatusBarHeight());
 			translationRight.setDuration(500);
 			translationRight.start();
 		} else {
-			ObjectAnimator translationLeft = ObjectAnimator.ofFloat(v, "X",
-					HomeScreenSetting.ScreenW - width / 2);
+			ObjectAnimator translationLeft = ObjectAnimator.ofFloat(v, "Y",
+					HomeScreenSetting.ScreenH - 3*height/2 );
 			translationLeft.setDuration(500);
 			translationLeft.start();
 		}
 	}
+	
+	public int getStatusBarHeight() { 
+	      int result = 0;
+	      int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+	      if (resourceId > 0) {
+	          result = getResources().getDimensionPixelSize(resourceId);
+	      } 
+	      return result;
+	} 
 
 	public void processLeftView(View v, boolean isCollapse) {
 		float width = v.getWidth();

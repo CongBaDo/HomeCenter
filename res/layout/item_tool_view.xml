@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.HomeCenter2.customview.ContainToolView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="@dimen/tool_column_width"
+    android:layout_height="@dimen/tool_column_width"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="8dp" >
+    android:padding="4dp" >
 
     <com.HomeCenter2.customview.ToolImageView
         android:id="@+id/img_tool"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/tool_column_width"
+     android:layout_height="@dimen/tool_column_width"
         android:layout_centerInParent="true"
         android:layout_gravity="center" />
 
@@ -20,8 +20,8 @@
         android:layout_centerInParent="true"
         android:gravity="center"
         android:text="30"
-        android:textSize="25sp"
         android:textColor="@color/black"
+        android:textSize="25sp"
         android:textStyle="bold" />
 
 </com.HomeCenter2.customview.ContainToolView>

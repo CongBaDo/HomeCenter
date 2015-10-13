@@ -245,6 +245,11 @@ public class PhotoSortrView extends View implements MultiTouchObjectCanvas<Photo
 		currentIndex = 0;
 		mImages.clear();
 	}
+	
+	public void unloadImage(int index){
+		mImages.get(index).unload();
+		mImages.remove(index);
+	}
 
 	// ---------------------------------------------------------------------------------------------------
 

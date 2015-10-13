@@ -103,6 +103,7 @@ public class DeviceProcessActivity extends FragmentActivity implements
 				LayoutParams.MATCH_PARENT));
 		magicView.setBackgroundColor(Color.TRANSPARENT);
 
+		magicView.setTouch(true);
 		containMagicView.addView(magicView);
 
 		mUiEngine = RegisterService.getHomeCenterUIEngine();

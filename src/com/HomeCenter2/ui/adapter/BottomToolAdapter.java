@@ -6,6 +6,7 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.test.suitebuilder.annotation.Smoke;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,7 +100,7 @@ public class BottomToolAdapter extends BaseAdapter{
             	vh.tvTool.setVisibility(View.GONE);
             }
         }else{
-        	
+        	Log.e(TAG, "SPRCUAL "+devices.get(position).getSpecialToolType());
         	if(devices.get(position).getSpecialToolType() == SPECIAL.MIC){
         		vh.imgSpecial.setBackgroundResource(R.drawable.ic_micro);
         	}else if(devices.get(position).getSpecialToolType() == SPECIAL.ON){

@@ -39,7 +39,6 @@
         android:id="@+id/img_tool_on"
         android:layout_width="@dimen/tool_column_width"
         android:layout_height="@dimen/tool_column_width"
-        android:layout_centerVertical="true"
-        android:src="@drawable/btn_on_icon" />
+        android:layout_centerVertical="true"/>
 
 </RelativeLayout>
